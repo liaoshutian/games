@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="sandbox-v4.css" />
   <link rel="stylesheet" href="responsive-theme.css" />
   <link rel="stylesheet" href="ipad-landscape.css" />
+  <link rel="stylesheet" href="control-interactions.css" />
 </head>
 <body>
   <main class="app">
@@ -69,7 +70,7 @@
       <div class="root-cross"></div>
 
       <div class="tree-columns" id="treeColumns"></div>
-      <div class="tree-foot">点击任何圆形因子即可调整五档参数。iPhone / iPad 竖屏从底部展开；iPad mini 横屏固定为左侧因子树 + 右侧调控面板。</div>
+      <div class="tree-foot">点击任何圆形因子即可调整五档参数。五个档位本身也可以直接点击；iPhone / iPad 竖屏从底部展开，iPad mini 横屏固定为左侧因子树 + 右侧调控面板。</div>
     </section>
 
     <section class="method-card card">
@@ -77,7 +78,7 @@
       <div class="method-grid">
         <div><b>利润端</b><span>330亿基准归母净利 + 各经营因子的确定性增减额</span></div>
         <div><b>估值端</b><span>基准 PE × 无风险利率 / 风险偏好 / 股东回报 / 信用等乘数</span></div>
-        <div><b>最终股价</b><span>EPS(HKD) × 模型 PE；所有滑杆都进入同一条公式</span></div>
+        <div><b>最终股价</b><span>EPS(HKD) × 模型 PE；所有滑杆和五档按钮都进入同一条公式</span></div>
       </div>
       <div class="disclaimer">敏感度基于你提供的 2026H1 数据与公开口径做模型化估算；“精确”指同一组输入会按明确公式得到确定结果，不代表市场真实目标价。</div>
     </section>
@@ -90,7 +91,7 @@
       <div>
         <div class="sheet-kicker" id="sheetKicker">因子调节</div>
         <h2 id="sheetTitle">铝价</h2>
-        <p id="sheetSubtitle">五档均对应具体数值，并实时进入股价模型。</p>
+        <p id="sheetSubtitle">五档均对应具体数值；可拖动滑杆，也可直接点击任一档位。</p>
       </div>
       <button class="sheet-close" id="sheetClose" aria-label="关闭">×</button>
     </div>
@@ -105,5 +106,6 @@
 
   <script src="sandbox-v5.js"></script>
   <script src="dual-pane.js"></script>
+  <script src="clickable-levels.js"></script>
 </body>
 </html>
