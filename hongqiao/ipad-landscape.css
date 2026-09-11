@@ -1,5 +1,5 @@
 /* iPad mini landscape: left = factor tree, right = live control panel */
-@media (min-width:700px) and (max-width:1180px) and (orientation:landscape){
+@media (min-width:700px) and (max-width:1180px) and (min-height:600px) and (orientation:landscape){
   html,body{height:100%;overflow-x:hidden}
   body{background:var(--bg)}
 
@@ -63,7 +63,7 @@
   .group-control{padding:11px}
 }
 
-@media (min-width:700px) and (max-width:1180px) and (orientation:landscape) and (prefers-color-scheme:dark){
+@media (min-width:700px) and (max-width:1180px) and (min-height:600px) and (orientation:landscape) and (prefers-color-scheme:dark){
   .sheet{box-shadow:-14px 0 38px rgba(0,0,0,.34)}
   .sheet-head,.sheet-summary{background:var(--card)}
 }
