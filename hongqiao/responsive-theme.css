@@ -1,0 +1,75 @@
+:root{color-scheme:light dark}
+
+/* iPhone / iPad safe-area + typography */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100dvh;overscroll-behavior-y:none}
+button,input{touch-action:manipulation}
+.circle-node,.scenario,.sheet-close,.tree-head button{min-height:44px}
+
+/* iPad mini portrait/landscape: use the extra canvas without making the tree feel sparse */
+@media (min-width:700px){
+  .app{max-width:960px;padding-left:18px;padding-right:18px;padding-bottom:190px}
+  .topbar{padding-top:12px;padding-bottom:14px}
+  .topbar h1{font-size:32px}
+  .topbar p{font-size:13px;max-width:720px}
+  .scenario-card,.price-card,.calc-strip,.method-card{padding:14px}
+  .scenario{padding:12px 8px}.scenario span{font-size:14px}.scenario b{font-size:11px}
+  .price-card{gap:12px}.spot-box,.result-box{padding:14px}.spot-box>span,.result-box>span{font-size:11px}.spot-input input,.result-box strong{font-size:28px}
+  .calc-strip{gap:8px}.calc-strip div{padding:10px 7px}.calc-strip span{font-size:9px}.calc-strip b{font-size:12px}
+  .tree-card{padding:14px 12px 18px}.tree-head b{font-size:15px}.tree-head span{font-size:10px}.tree-columns{gap:10px}.branch-label{font-size:9px}
+  .circle-node .w{font-size:7px}.circle-node .name{font-size:9px}.circle-node .val{font-size:7.5px}
+  .sheet{left:50%;right:auto;width:min(760px,calc(100vw - 32px));transform:translate(-50%,110%);border-radius:24px 24px 0 0;padding-left:18px;padding-right:18px;max-height:64dvh}
+  .sheet.open{transform:translate(-50%,0)}
+  .sheet h2{font-size:20px}.sheet-head p{font-size:10px}.dim-name{font-size:12px}.dim-current{font-size:12px}.dim-desc{font-size:9px}.level-chip b{font-size:7.5px}.level-chip span{font-size:7px}
+}
+
+/* iPhone mini / narrow widths: keep the 3-column causal tree visible */
+@media (max-width:430px){
+  .app{padding-left:max(6px,env(safe-area-inset-left));padding-right:max(6px,env(safe-area-inset-right));padding-bottom:175px}
+  .topbar{padding-top:4px}.topbar h1{font-size:23px}.topbar p{font-size:10.5px}
+  .card{border-radius:17px;margin-bottom:8px}
+  .scenario-row{gap:5px}.scenario{padding:8px 3px}.scenario span{font-size:11px}
+  .price-card{gap:6px;padding:8px}.spot-box,.result-box{padding:9px}.spot-input input,.result-box strong{font-size:21px}
+  .tree-card{padding:9px 3px 12px}.root-node{width:142px;height:102px}.root-node strong{font-size:18px}
+  .tree-columns{gap:0}.branch-label{font-size:7.5px}.factor-line{min-height:47px}.child-pair{gap:1px}
+  .circle-node .w{font-size:6px}.circle-node .name{font-size:7px}.circle-node .val{font-size:5.9px}
+  .sheet{max-height:74dvh;padding-left:8px;padding-right:8px}.sheet-summary{grid-template-columns:auto 1fr;row-gap:4px}.sheet-summary>b{grid-column:1/-1}
+  .dimension{padding:8px}.levels{gap:2px}.level-chip{padding:5px 1px}.level-chip b{font-size:5.9px}.level-chip span{font-size:5.6px}
+}
+
+/* Automatic dark mode follows iOS/iPadOS system appearance. */
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1110;--card:#151a18;--ink:#eef4f1;--muted:#96a39d;--line:#2b3430;
+    --red:#ff7d83;--red2:#ff9ca1;--redBg:#2a1719;--redLine:#673337;
+    --blue:#74adff;--blueBg:#111e2d;--blueLine:#2c5683;
+    --green:#6bd69b;--green2:#86e3ad;--greenBg:#102219;--greenLine:#2b6747;
+    --shadow:0 12px 32px rgba(0,0,0,.28)
+  }
+  html,body{background:var(--bg);color:var(--ink)}
+  .card{background:var(--card);border-color:var(--line);box-shadow:var(--shadow)}
+  .eyebrow,.section-label,.tree-head span,.branch-label,.tree-foot,.disclaimer,.sheet-kicker,.sheet-head p,.dim-meta{color:#8f9d96}
+  .scenario{background:#171d1a;color:#c7d1cc;border-color:var(--line)}
+  .scenario b{color:#89968f}
+  .spot-box,.calc-strip div,.method-grid div{background:#111613}
+  .spot-box>span,.result-box>span,.calc-strip span{color:#8e9c95}
+  .spot-input input{color:var(--ink)}
+  .result-box,.root-node{background:#07100c;color:#f4f8f6}
+  .tree-head button,.sheet-close,.level-chip,.group-levels button{background:#1a211e;color:#dce5e1;border-color:var(--line)}
+  .root-trunk,.root-cross,.root-cross:before,.root-cross:after,.branch-col:before,.branch-spine:before,.factor-line:before,.child-pair:before{background:#3a4540}
+  .circle-node{color:var(--ink)}
+  .circle-node .w{color:#83918a}.circle-node .val{color:#a7b3ad}
+  .circle-node.red{background:var(--redBg);border-color:var(--redLine)}
+  .circle-node.blue{background:var(--blueBg);border-color:var(--blueLine)}
+  .circle-node.green{background:var(--greenBg);border-color:var(--greenLine)}
+  .method-grid span,.sheet-summary>span:nth-child(2),.dim-desc{color:#9aa7a0}
+  .sheet-scrim{background:rgba(0,0,0,.35)}
+  .sheet{background:rgba(18,23,21,.98);border-color:#303a35;box-shadow:0 -18px 48px rgba(0,0,0,.42)}
+  .grab{background:#46514c}
+  .dimension{background:#121714;border-color:var(--line)}
+  .dimension.red{background:#241719;border-color:#5a3033}.dimension.blue{background:#111b27;border-color:#294a6c}.dimension.green{background:#102018;border-color:#285a40}
+  .level-chip{background:#171d1a;border-color:#313a36}.level-chip span{color:#98a59e}.level-chip.on{border-color:#5e9ee7;box-shadow:0 0 0 1px rgba(116,173,255,.14)}
+  .group-control{background:#121714;border-color:var(--line)}
+  .state-pill.red{background:var(--redBg);border-color:var(--redLine)}.state-pill.blue{background:var(--blueBg);border-color:var(--blueLine)}.state-pill.green{background:var(--greenBg);border-color:var(--greenLine)}
+  input[type="range"]{color-scheme:dark}
+}
