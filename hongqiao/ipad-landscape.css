@@ -1,0 +1,69 @@
+/* iPad mini landscape: left = factor tree, right = live control panel */
+@media (min-width:700px) and (max-width:1180px) and (orientation:landscape){
+  html,body{height:100%;overflow-x:hidden}
+  body{background:var(--bg)}
+
+  /* Left research / tree pane */
+  .app{
+    max-width:none;
+    width:60vw;
+    margin:0;
+    padding-top:calc(10px + env(safe-area-inset-top));
+    padding-left:max(14px,env(safe-area-inset-left));
+    padding-right:10px;
+    padding-bottom:18px;
+  }
+  .topbar{padding:2px 4px 8px}
+  .topbar h1{font-size:25px;margin-top:3px}
+  .topbar p{font-size:10.5px;max-width:640px}
+  .scenario-card{padding:9px;margin-bottom:8px}
+  .scenario{padding:8px 6px;min-height:42px}
+  .scenario span{font-size:12px}.scenario b{font-size:9px}
+  .price-card{padding:9px;gap:7px;margin-bottom:8px}
+  .spot-box,.result-box{padding:9px}.spot-input input,.result-box strong{font-size:22px}
+  .calc-strip{padding:7px;gap:4px;margin-bottom:8px}.calc-strip div{padding:6px 4px}
+  .tree-card{padding:10px 7px 13px;margin-bottom:8px}
+  .tree-columns{gap:3px}.tree-head{padding-bottom:6px}.tree-head b{font-size:13px}.tree-head span{font-size:8.5px}
+  .root-node{width:145px;height:102px}.root-node strong{font-size:18px}
+  .circle-node .name{font-size:7.6px}.circle-node .val{font-size:6.5px}.circle-node .w{font-size:6.2px}
+  .factor-line{min-height:47px}
+  .method-card{padding:9px;margin-bottom:0}.method-grid{grid-template-columns:repeat(3,1fr);gap:4px}.method-grid div{padding:6px}.method-grid span{font-size:7.3px}
+
+  /* Right control pane: always present in landscape */
+  .sheet-scrim{display:none!important}
+  .sheet{
+    display:block!important;
+    position:fixed;
+    z-index:40;
+    top:max(10px,env(safe-area-inset-top));
+    right:max(10px,env(safe-area-inset-right));
+    bottom:max(10px,env(safe-area-inset-bottom));
+    left:auto;
+    width:38.5vw;
+    height:auto;
+    max-height:none;
+    transform:none!important;
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:14px 14px 14px;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    box-shadow:-12px 0 34px rgba(22,42,34,.12);
+  }
+  .sheet.open{transform:none!important}
+  .sheet .grab,.sheet-close{display:none!important}
+  .sheet-head{position:sticky;top:-14px;z-index:4;margin:-14px -14px 0;padding:14px 14px 9px;background:var(--card);border-bottom:1px solid var(--line)}
+  .sheet-kicker:before{content:'右侧调控面板 · ';font-weight:900}
+  .sheet h2{font-size:19px}.sheet-head p{font-size:9.5px}
+  .sheet-summary{position:sticky;top:69px;z-index:3;background:var(--card);margin:0 -14px 9px;padding:9px 14px;border-bottom:1px solid var(--line)}
+  .dimension-list{gap:9px}.dimension{padding:10px}.dim-name{font-size:11.5px}.dim-current{font-size:11.5px}.dim-desc{font-size:8.5px}
+  .range{height:28px;margin:7px 0 3px}
+  .level-chip{padding:5px 2px}.level-chip b{font-size:6.7px}.level-chip span{font-size:6.2px}
+  .group-control{padding:11px}
+}
+
+@media (min-width:700px) and (max-width:1180px) and (orientation:landscape) and (prefers-color-scheme:dark){
+  .sheet{box-shadow:-14px 0 38px rgba(0,0,0,.34)}
+  .sheet-head,.sheet-summary{background:var(--card)}
+}
