@@ -1,5 +1,5 @@
 (()=>{
-  const mq=window.matchMedia('(min-width:700px) and (max-width:1180px) and (orientation:landscape)');
+  const mq=window.matchMedia('(min-width:700px) and (max-width:1180px) and (min-height:600px) and (orientation:landscape)');
   let lastFactor='铝价';
 
   function factorButtonByName(name){
