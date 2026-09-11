@@ -1,0 +1,51 @@
+/* Five-level chips are direct controls on both iPhone and iPad. */
+.level-chip{
+  cursor:pointer;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:manipulation;
+  transition:transform .12s ease,border-color .12s ease,background .12s ease,box-shadow .12s ease;
+}
+.level-chip:active{transform:scale(.97)}
+.level-chip:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.level-chip.on{font-weight:900}
+.level-chip.on b{font-weight:950}
+
+/* Landscape iPad mini: spend horizontal space on values, not container padding. */
+@media (min-width:700px) and (max-width:1180px) and (min-height:600px) and (orientation:landscape){
+  .sheet{
+    padding-left:5px!important;
+    padding-right:5px!important;
+  }
+  .sheet-head{
+    margin-left:-5px!important;
+    margin-right:-5px!important;
+    padding-left:7px!important;
+    padding-right:7px!important;
+  }
+  .sheet-summary{
+    margin-left:-5px!important;
+    margin-right:-5px!important;
+    padding-left:7px!important;
+    padding-right:7px!important;
+  }
+  .dimension-list{gap:6px!important}
+  .dimension{padding:8px 5px!important;border-radius:12px}
+  .dim-top{gap:4px}
+  .dim-name,.dim-current{font-size:10.5px!important}
+  .dim-meta{font-size:7.2px}
+  .range{margin:5px 0 2px!important}
+  .levels{gap:2px!important}
+  .level-chip{
+    padding:5px 0!important;
+    min-width:0;
+    border-radius:8px;
+  }
+  .level-chip b{font-size:6.5px!important}
+  .level-chip span{font-size:6px!important;word-break:normal!important}
+  .dim-desc{margin-top:4px!important;font-size:8px!important}
+  .dim-impact{margin-top:3px!important}
+  .group-control{padding:8px 5px!important}
+  .group-levels{gap:2px!important}
+  .group-levels button{padding:7px 1px!important}
+}
