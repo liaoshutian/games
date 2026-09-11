@@ -2,109 +2,202 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
 <meta name="theme-color" content="#f5f7f6">
-<title>中国宏桥 · 金融沙盒传导链</title>
-<link rel="stylesheet" href="style.css">
+<title>中国宏桥 · 金融沙盒股价推演</title>
+<style>
+:root{--bg:#f4f6f5;--card:#fff;--ink:#14211c;--muted:#7c8a84;--line:#dfe6e2;--green:#16ad66;--green2:#087f49;--red:#df5b55;--amber:#e59a2e;--soft:#edf7f2;--shadow:0 10px 28px rgba(24,44,36,.07)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Microsoft YaHei",sans-serif}button,input{font:inherit}.app{max-width:720px;margin:auto;padding:calc(14px + env(safe-area-inset-top)) 10px 60px}.head{padding:8px 4px 12px}.eyebrow{font-size:10px;letter-spacing:.14em;color:#8b9893;font-weight:800}.head h1{margin:5px 0 4px;font-size:27px;letter-spacing:-.04em}.head p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);margin-bottom:10px}
+.quick{padding:12px}.quick-title{font-size:11px;font-weight:850;color:#72817b;margin-bottom:8px}.quick-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.scenario{border:1px solid var(--line);border-radius:13px;background:#fff;padding:11px 6px;font-size:12px;font-weight:900;color:#53615c}.scenario.active{background:#17251f;color:#fff;border-color:#17251f}.scenario[data-mode="bear"].active{background:#a9433f;border-color:#a9433f}.scenario[data-mode="bull"].active{background:#0b8b50;border-color:#0b8b50}
+.pricebar{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px}.metric{border-radius:15px;background:#f8faf9;padding:11px}.metric span{display:block;font-size:10px;color:#81908a}.spotline{display:flex;align-items:baseline;margin-top:5px}.spotline i{font-size:12px;font-style:normal;font-weight:800}.spotline input{width:86px;border:0;background:transparent;font-size:23px;font-weight:950;color:var(--ink);outline:none;padding:0 0 0 3px}.metric.result{background:linear-gradient(145deg,#0d9556,#1ab66b);color:#fff}.metric.result span{color:rgba(255,255,255,.74)}.metric.result strong{display:block;font-size:23px;margin-top:4px}.metric.result em{font-style:normal;font-size:11px;font-weight:900}
+.treecard{padding:12px;overflow:hidden}.tree-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}.tree-head b{font-size:14px}.tree-head span{display:block;color:var(--muted);font-size:9px;margin-top:3px}.tree-head button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 9px;font-size:10px;font-weight:800}.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:9px;color:#80908a;margin:5px 0 12px}.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}.lg1{background:#17251f}.lg2{background:#dff4e8}.lg3{background:#eef2f0}.lg4{background:#fff;border:1px solid #ccd7d2}
+.rootwrap{display:flex;justify-content:center}.node{border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px 7px;text-align:center;position:relative;transition:.18s}.node small{display:block;color:#84918c;font-size:8px;margin-bottom:3px}.node b{display:block;font-size:10px;line-height:1.25}.node strong{display:block;font-size:13px;margin-top:4px}.node.root{width:150px;background:#17251f;color:#fff;border-color:#17251f;padding:10px}.node.root small{color:#9eb0a8}.node.root b{font-size:12px}.node.root strong{font-size:20px}.node.root em{font-size:9px;font-style:normal;color:#b9daca}.trunk{height:22px;width:1px;background:#bdcac4;margin:auto}.cross{height:1px;background:#bdcac4;width:68%;margin:auto;position:relative}.cross:before,.cross:after{content:"";position:absolute;width:1px;height:10px;background:#bdcac4;top:0}.cross:before{left:0}.cross:after{right:0}
+.directs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}.branch{min-width:0;position:relative}.branch:before{content:"";position:absolute;left:50%;top:-9px;width:1px;height:9px;background:#bdcac4}.node.direct{background:#e8f6ee;border-color:#cfe8da}.node.direct strong{color:var(--green2)}.downline{height:12px;width:1px;background:#ccd6d1;margin:auto}.midblock{margin-bottom:7px}.node.mid{background:#f5f8f6}.midleaves{position:relative;margin-top:5px;padding-top:6px}.midleaves:before{content:"";position:absolute;left:50%;top:0;width:1px;height:6px;background:#d4dcd8}.leaf{width:100%;border:1px solid #dbe3df;background:#fff;border-radius:9px;padding:7px 5px;margin-bottom:5px;text-align:left;display:flex;justify-content:space-between;gap:4px;align-items:center;color:#384640;cursor:pointer}.leaf b{font-size:9px;line-height:1.2}.leaf span{font-size:8px;font-weight:900;color:#84918c;white-space:nowrap}.leaf.on{border-color:var(--green);box-shadow:0 0 0 2px rgba(22,173,102,.12);background:#f3fbf7}.leaf.pos span{color:var(--green2)}.leaf.neg span{color:var(--red)}.node.hot{border-color:var(--green);box-shadow:0 0 0 2px rgba(22,173,102,.11)}.node.dim{opacity:.34}.path-tip{margin-top:10px;border-top:1px solid var(--line);padding-top:9px;font-size:10px;color:#6d7c76;line-height:1.45}.path-tip b{color:#24322d}
+.drawer{position:fixed;z-index:30;right:0;top:0;height:100dvh;width:154px;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-left:1px solid var(--line);box-shadow:-14px 0 36px rgba(22,39,32,.12);padding:calc(18px + env(safe-area-inset-top)) 12px calc(16px + env(safe-area-inset-bottom));transform:translateX(110%);transition:.22s ease;display:flex;flex-direction:column;align-items:center}.drawer.open{transform:translateX(0)}.close{align-self:flex-end;width:30px;height:30px;border:1px solid var(--line);border-radius:50%;background:#fff;font-size:17px}.drawer-label{font-size:9px;color:#84918c;margin-top:10px}.drawer h2{font-size:14px;text-align:center;margin:4px 0 2px;line-height:1.25}.drawer p{font-size:9px;color:#80908a;text-align:center;line-height:1.35;margin:0 0 8px}.drawer-value{font-size:18px;font-weight:950;margin:4px 0;color:var(--green2)}.railwrap{flex:1;min-height:260px;display:flex;gap:5px;align-items:center;justify-content:center;position:relative;width:100%}.rail-scale{height:270px;display:flex;flex-direction:column;justify-content:space-between;font-size:8px;color:#92a099;text-align:right}.vslider{writing-mode:vertical-lr;direction:rtl;width:34px;height:270px;accent-color:var(--green);cursor:pointer}.zero{position:absolute;left:38px;right:20px;top:50%;height:1px;background:#cfd9d4;pointer-events:none}.zero span{position:absolute;right:-2px;top:-9px;font-size:7px;color:#9aa59f;background:#fff;padding-left:2px}.drawer-impact{width:100%;border-top:1px solid var(--line);padding-top:9px;font-size:9px;color:#74827d;line-height:1.45}.drawer-impact strong{display:block;font-size:14px;color:var(--ink);margin-top:2px}.drawer-actions{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}.drawer-actions button{border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px 2px;font-size:9px;font-weight:850}.scrim{position:fixed;z-index:25;inset:0;background:rgba(20,30,26,.08);opacity:0;pointer-events:none;transition:.2s}.scrim.show{opacity:1;pointer-events:auto}.footer-note{font-size:9px;color:#8b9893;text-align:center;line-height:1.5;padding:2px 12px 12px}
+@media(max-width:390px){.app{padding-left:7px;padding-right:7px}.treecard{padding:10px 7px}.directs{gap:4px}.node{padding:7px 4px}.node b{font-size:9px}.node strong{font-size:11px}.leaf{padding:6px 4px}.leaf b{font-size:8px}.leaf span{font-size:7px}.cross{width:67%}.head h1{font-size:24px}}
+</style>
 </head>
 <body>
-<div class="app">
-  <header class="header">
-    <div><div class="kicker">金融世界沙盒 · 传导链推演</div><h1>中国宏桥股价沙盒</h1><div class="underline"></div><div class="sub">从股价 → 直接因子 → 间接因子 → 底层变量</div></div>
-    <div class="live">手机版</div>
+<main class="app">
+  <header class="head">
+    <div class="eyebrow">FINANCIAL SANDBOX · 01378.HK</div>
+    <h1>中国宏桥股价推演</h1>
+    <p>金融沙盒，不是游戏。顶部股价向下拆成直接、间接和底层因子；点底层因子，在右侧竖向挂杆调节。</p>
   </header>
 
-  <section class="card hero">
-    <div class="hero-top">
-      <div><div class="hero-label">模型情景价格</div><div class="price" id="fairPrice">HK$22.50</div><div class="ret" id="returnText">+0.0%</div></div>
-      <div class="price-input-wrap"><span>当前股价（可改）</span><input id="currentPrice" class="price-input" type="number" step="0.01" value="22.50" oninput="renderAll()"></div>
-    </div>
-    <div class="hero-metrics">
-      <div class="hm"><span>盈利/EPS</span><b id="profitIndex">100</b></div>
-      <div class="hm"><span>估值倍数</span><b id="valuationIndex">100</b></div>
-      <div class="hm"><span>股东回报</span><b id="returnIndex">100</b></div>
-    </div>
-    <div class="seg" id="strengthSeg">
-      <button onclick="setStrength(0.72,this)">保守</button>
-      <button class="active" onclick="setStrength(1,this)">标准</button>
-      <button onclick="setStrength(1.32,this)">激进</button>
+  <section class="card quick">
+    <div class="quick-title">快捷场景</div>
+    <div class="quick-row" id="scenarioButtons">
+      <button class="scenario active" data-mode="base">基准</button>
+      <button class="scenario" data-mode="bear">悲观</button>
+      <button class="scenario" data-mode="bull">乐观</button>
     </div>
   </section>
 
-  <section class="card">
-    <div class="card-head"><div class="card-title">快速情景</div><div class="hint">点击按钮立即重算<br>无需刷新页面</div></div>
-    <div class="tabs" id="presetTabs">
-      <button class="chip active" data-preset="base" onclick="applyPreset('base',this)">基准</button>
-      <button class="chip" data-preset="bull" onclick="applyPreset('bull',this)">利润扩张</button>
-      <button class="chip" data-preset="bear" onclick="applyPreset('bear',this)">成本+需求双杀</button>
-      <button class="chip" data-preset="rerate" onclick="applyPreset('rerate',this)">高股息重估</button>
-      <button class="chip" data-preset="riskoff" onclick="applyPreset('riskoff',this)">港股风险偏好下降</button>
+  <section class="card pricebar">
+    <div class="metric"><span>当前股价</span><div class="spotline"><i>HK$</i><input id="currentPrice" type="number" step="0.01" inputmode="decimal" value="22.50"></div></div>
+    <div class="metric result"><span>沙盒推演价</span><strong id="scenarioPrice">HK$22.50</strong><em id="scenarioReturn">+0.0%</em></div>
+  </section>
+
+  <section class="card treecard">
+    <div class="tree-head"><div><b>倒树型传导链</b><span>股价 → 直接因子 → 间接因子 → 底层变量</span></div><button id="resetBtn">恢复基准</button></div>
+    <div class="legend"><span><i class="lg1"></i>股价</span><span><i class="lg2"></i>直接影响</span><span><i class="lg3"></i>间接影响</span><span><i class="lg4"></i>底层可调</span></div>
+
+    <div class="rootwrap"><div class="node root" id="node-price"><small>股价</small><b>中国宏桥 01378.HK</b><strong id="rootPrice">HK$22.50</strong><em id="rootRet">+0.0%</em></div></div>
+    <div class="trunk"></div><div class="cross"></div>
+
+    <div class="directs">
+      <section class="branch">
+        <div class="node direct" id="node-profit"><small>直接因子</small><b>EPS / 净利润</b><strong id="direct-profit">0.0%</strong></div>
+        <div class="downline"></div>
+        <div class="midblock">
+          <div class="node mid" id="node-margin"><b>吨铝利润</b><strong id="mid-margin">0.0%</strong></div>
+          <div class="midleaves">
+            <button class="leaf" data-driver="aluminum"><b>铝价</b><span id="v-aluminum">0%</span></button>
+            <button class="leaf" data-driver="alumina"><b>氧化铝价</b><span id="v-alumina">0%</span></button>
+            <button class="leaf" data-driver="energy"><b>电价 / 煤价</b><span id="v-energy">0%</span></button>
+            <button class="leaf" data-driver="bauxite"><b>铝土矿供应</b><span id="v-bauxite">0</span></button>
+          </div>
+        </div>
+        <div class="midblock">
+          <div class="node mid" id="node-volume"><b>销量 / 利用率</b><strong id="mid-volume">0.0%</strong></div>
+          <div class="midleaves">
+            <button class="leaf" data-driver="demand"><b>地产 / 基建</b><span id="v-demand">0%</span></button>
+            <button class="leaf" data-driver="newenergy"><b>汽车 / 光伏 / 电网</b><span id="v-newenergy">0%</span></button>
+            <button class="leaf" data-driver="overseas"><b>海外项目进展</b><span id="v-overseas">0</span></button>
+          </div>
+        </div>
+        <div class="midblock">
+          <div class="node mid" id="node-finance"><b>财务费用</b><strong id="mid-finance">0.0%</strong></div>
+          <div class="midleaves">
+            <button class="leaf" data-driver="rates"><b>美元利率</b><span id="v-rates">0bp</span></button>
+            <button class="leaf" data-driver="fx"><b>人民币 / 美元</b><span id="v-fx">0%</span></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="branch">
+        <div class="node direct" id="node-valuation"><small>直接因子</small><b>估值倍数</b><strong id="direct-valuation">0.0%</strong></div>
+        <div class="downline"></div>
+        <div class="midblock">
+          <div class="node mid" id="node-balance"><b>行业供需</b><strong id="mid-balance">0.0%</strong></div>
+          <div class="midleaves">
+            <button class="leaf" data-driver="policy"><b>产能 / 双碳约束</b><span id="v-policy">0</span></button>
+            <button class="leaf" data-driver="guinea"><b>几内亚矿运</b><span id="v-guinea">0</span></button>
+          </div>
+        </div>
+        <div class="midblock">
+          <div class="node mid" id="node-risk"><b>风险溢价</b><strong id="mid-risk">0.0%</strong></div>
+          <div class="midleaves">
+            <button class="leaf" data-driver="risk"><b>港股风险偏好</b><span id="v-risk">0</span></button>
+            <button class="leaf" data-driver="debt"><b>降杠杆 / 债务优化</b><span id="v-debt">0</span></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="branch">
+        <div class="node direct" id="node-shareholder"><small>直接因子</small><b>股东回报</b><strong id="direct-shareholder">0.0%</strong></div>
+        <div class="downline"></div>
+        <div class="midblock">
+          <div class="node mid" id="node-fcf"><b>自由现金流</b><strong id="mid-fcf">0.0%</strong></div>
+          <div class="midleaves">
+            <button class="leaf" data-driver="capitalreturn"><b>分红 / 回购</b><span id="v-capitalreturn">0</span></button>
+          </div>
+        </div>
+        <div class="midblock">
+          <div class="node mid" id="node-credit"><b>资产负债表</b><strong id="mid-credit">0.0%</strong></div>
+          <div class="midleaves">
+            <button class="leaf" data-driver="redeem"><b>高息债赎回</b><span id="v-redeem">0</span></button>
+          </div>
+        </div>
+      </section>
     </div>
+
+    <div class="path-tip" id="pathTip">点击任一底层因子，系统会高亮它的传导路径，并在右侧打开<strong>竖向挂杆调节器</strong>。</div>
   </section>
+  <div class="footer-note">沙盒用于研究变量传导与情景敏感性，不代表精确目标价或投资建议。</div>
+</main>
 
-  <section class="card" id="chainCard">
-    <div class="card-head"><div class="card-title">股价传导链</div><div class="hint">从上往下拆解<br>点击底层因子可高亮整条链</div></div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer">
+  <button class="close" id="closeDrawer">×</button>
+  <div class="drawer-label">正在调节</div>
+  <h2 id="drawerName">铝价</h2>
+  <p id="drawerDesc">成品铝价格变化</p>
+  <div class="drawer-value" id="drawerValue">0%</div>
+  <div class="railwrap">
+    <div class="rail-scale"><span id="maxLabel">+20%</span><span>中性</span><span id="minLabel">-20%</span></div>
+    <input class="vslider" id="verticalSlider" type="range" min="-20" max="20" step="1" value="0">
+    <div class="zero"><span>0</span></div>
+  </div>
+  <div class="drawer-impact">当前对模型股价的独立影响<strong id="drawerImpact">0.0%</strong><span id="drawerPath">铝价 → 吨铝利润 → EPS → 股价</span></div>
+  <div class="drawer-actions"><button id="zeroBtn">归零</button><button id="closeBtn2">完成</button></div>
+</aside>
 
-    <div class="layer-label">顶层 · 股价结果</div>
-    <div class="chain-top" id="node-price"><div class="name">中国宏桥 01378.HK</div><div class="v" id="chainPrice">HK$22.50</div><div class="s" id="chainPriceSub">基准 = 当前股价</div></div>
-
-    <div class="down"><span>↓ 直接由盈利、估值与股东回报共同作用</span></div>
-    <div class="layer-label">第一层 · 直接影响股价</div>
-    <div class="node-grid">
-      <div class="node direct" id="node-profit"><div class="nlabel">归母净利润 / EPS</div><div class="nval" id="direct-profit">0.0%</div><div class="ndesc">利润变化直接改变每股盈利</div></div>
-      <div class="node direct" id="node-valuation"><div class="nlabel">估值倍数</div><div class="nval" id="direct-valuation">0.0%</div><div class="ndesc">PE/PB、风险溢价与周期重估</div></div>
-      <div class="node direct" id="node-shareholder"><div class="nlabel">股东回报溢价</div><div class="nval" id="direct-shareholder">0.0%</div><div class="ndesc">分红、回购与现金回报确定性</div></div>
-    </div>
-
-    <div class="down"><span>↓ 由经营与财务变量传导</span></div>
-    <div class="layer-label">第二层 · 间接影响因子</div>
-    <div class="node-grid two">
-      <div class="node intermediate" id="node-margin"><div class="nlabel">吨铝利润 / 毛利</div><div class="nval" id="mid-margin">0.0%</div><div class="ndesc">铝价 − 氧化铝 − 能源 − 矿端成本</div></div>
-      <div class="node intermediate" id="node-volume"><div class="nlabel">销量 / 产能利用率</div><div class="nval" id="mid-volume">0.0%</div><div class="ndesc">地产、基建、新能源与产能释放</div></div>
-      <div class="node intermediate" id="node-finance"><div class="nlabel">财务费用改善</div><div class="nval" id="mid-finance">0.0%</div><div class="ndesc">正值 = 利息/汇兑压力下降</div></div>
-      <div class="node intermediate" id="node-fcf"><div class="nlabel">自由现金流 / 净负债</div><div class="nval" id="mid-fcf">0.0%</div><div class="ndesc">盈利质量决定去杠杆和分红能力</div></div>
-      <div class="node intermediate" id="node-balance"><div class="nlabel">行业供需格局</div><div class="nval" id="mid-balance">0.0%</div><div class="ndesc">产能约束、矿端供给与终端需求</div></div>
-      <div class="node intermediate" id="node-risk"><div class="nlabel">风险溢价改善</div><div class="nval" id="mid-risk">0.0%</div><div class="ndesc">正值 = 资本成本下降、估值环境改善</div></div>
-    </div>
-
-    <div class="down"><span>↓ 最底层可调变量</span></div>
-    <div class="layer-label">第三层 · 底层影响因子</div>
-    <div class="link-note">下方每一个变量都可以调节。<b>点一下因子名称</b>，系统会在上面高亮它经过的“间接因子 → 直接因子 → 股价”完整路径。</div>
-    <div class="trace" id="traceBox"><div class="trace-title">当前追踪链</div><div class="trace-path" id="tracePath"><span class="trace-pill">铝价</span><span class="trace-arrow">→</span><span class="trace-pill">吨铝利润</span><span class="trace-arrow">→</span><span class="trace-pill">EPS</span><span class="trace-arrow">→</span><span class="trace-pill">股价</span></div></div>
-  </section>
-
-  <section class="card">
-    <div class="card-head"><div class="card-title">底层变量调节器</div><div class="hint">− / + / 滑杆都可操作<br>实时重算整条链</div></div>
-    <div id="driverContainer"></div>
-  </section>
-
-  <section class="card">
-    <div class="card-head"><div class="card-title">事件冲击</div><div class="hint">把新闻直接翻译成变量变化</div></div>
-    <div class="events">
-      <button class="evt" onclick="applyEvent('redeem')"><b>高息债提前赎回</b><span>对应你刚才那条 7.05% 美元债新闻</span><strong>债务优化 ↑</strong></button>
-      <button class="evt" onclick="applyEvent('alup')"><b>铝价上涨 10%</b><span>先传导至吨铝利润，再传至 EPS</span><strong>利润链 ↑</strong></button>
-      <button class="evt" onclick="applyEvent('aluminadown')"><b>氧化铝下跌 15%</b><span>原料成本下降，改善吨铝利润</span><strong>成本链 ↑</strong></button>
-      <button class="evt" onclick="applyEvent('guinea')"><b>几内亚供给扰动</b><span>矿端成本上升，同时改变行业供需</span><strong>双向冲击</strong></button>
-      <button class="evt" onclick="applyEvent('stimulus')"><b>稳增长 / 基建加码</b><span>需求回暖，同时改善周期风险偏好</span><strong>需求链 ↑</strong></button>
-      <button class="evt" onclick="applyEvent('ratecut')"><b>美元降息 100bp</b><span>降低财务费用和资本成本</span><strong>估值链 ↑</strong></button>
-    </div>
-  </section>
-
-  <section class="card">
-    <div class="card-head"><div class="card-title">底层因子股价贡献</div><div class="hint">单因子独立冲击估算</div></div>
-    <div class="contrib" id="contribList"></div>
-  </section>
-
-  <section class="card">
-    <div class="card-head"><div class="card-title">当前情景解读</div><div class="hint">模型自动生成</div></div>
-    <div class="explain" id="summaryText">当前为基准情景。</div>
-    <div class="note">模型用于理解“变量如何传导”，不是精确目标价或投资建议。敏感度均为研究型假设，并对极端输入做了上限约束。</div>
-  </section>
-</div>
-
-<div class="bottom"><button class="action secondary" onclick="resetAll()">恢复基准</button><button class="action primary" onclick="copySummary()">复制当前推演</button></div>
-<div class="toast" id="toast">已更新</div>
-
-<script src="app.js"></script>
+<script>
+'use strict';
+const defs={
+ aluminum:{name:'铝价',desc:'成品铝价格变化',min:-20,max:20,step:1,unit:'%',path:['margin','profit'],pathText:'铝价 → 吨铝利润 → EPS → 股价'},
+ alumina:{name:'氧化铝价格',desc:'核心原料成本变化',min:-30,max:30,step:1,unit:'%',path:['margin','profit'],pathText:'氧化铝价格 → 吨铝利润 → EPS → 股价'},
+ energy:{name:'电价 / 煤价',desc:'能源成本变化',min:-30,max:30,step:1,unit:'%',path:['margin','profit'],pathText:'能源成本 → 吨铝利润 → EPS → 股价'},
+ bauxite:{name:'铝土矿供应',desc:'正值表示供应更稳定、更充足',min:-100,max:100,step:10,unit:'分',path:['margin','profit'],pathText:'铝土矿供应 → 原料成本 → 吨铝利润 → EPS → 股价'},
+ demand:{name:'地产 / 基建需求',desc:'传统铝消费需求变化',min:-20,max:20,step:1,unit:'%',path:['volume','profit'],pathText:'地产/基建 → 销量利用率 → EPS → 股价'},
+ newenergy:{name:'汽车 / 光伏 / 电网',desc:'新能源相关铝需求变化',min:-30,max:30,step:1,unit:'%',path:['volume','profit'],pathText:'新能源需求 → 销量利用率 → EPS → 股价'},
+ overseas:{name:'海外项目进展',desc:'正值表示投产和资源兑现更顺利',min:-100,max:100,step:10,unit:'分',path:['volume','profit'],pathText:'海外项目 → 产量/利用率 → EPS → 股价'},
+ rates:{name:'美元利率',desc:'正值表示利率上升，负值表示降息',min:-200,max:200,step:25,unit:'bp',path:['finance','profit','risk','valuation'],pathText:'美元利率 → 财务费用/资本成本 → EPS/估值 → 股价'},
+ fx:{name:'人民币兑美元',desc:'正值表示人民币升值',min:-10,max:10,step:1,unit:'%',path:['finance','profit'],pathText:'汇率 → 财务费用/汇兑 → EPS → 股价'},
+ policy:{name:'产能 / 双碳约束',desc:'正值表示供给约束更强',min:-100,max:100,step:10,unit:'分',path:['balance','valuation'],pathText:'产能政策 → 行业供需 → 估值倍数 → 股价'},
+ guinea:{name:'几内亚矿运',desc:'正值表示政策及运输更稳定',min:-100,max:100,step:10,unit:'分',path:['balance','valuation'],pathText:'几内亚矿运 → 供给预期 → 行业供需 → 估值 → 股价'},
+ risk:{name:'港股风险偏好',desc:'正值表示周期股估值环境改善',min:-100,max:100,step:10,unit:'分',path:['risk','valuation'],pathText:'市场风险偏好 → 风险溢价 → 估值倍数 → 股价'},
+ debt:{name:'降杠杆 / 债务优化',desc:'高息债减少、信用改善程度',min:-100,max:100,step:10,unit:'分',path:['risk','valuation'],pathText:'债务优化 → 信用/风险溢价 → 估值 → 股价'},
+ capitalreturn:{name:'分红 / 回购',desc:'正值表示股东回报更积极',min:-100,max:100,step:10,unit:'分',path:['fcf','shareholder'],pathText:'分红/回购 → 股东回报确定性 → 股价'},
+ redeem:{name:'高息债赎回',desc:'模拟提前赎回高息美元债的影响',min:0,max:100,step:10,unit:'分',path:['credit','shareholder'],pathText:'高息债赎回 → 资产负债表/现金回报能力 → 股东回报 → 股价'}
+};
+const baseState=()=>Object.fromEntries(Object.keys(defs).map(k=>[k,0]));
+const scenarios={
+ base:{},
+ bear:{aluminum:-10,alumina:12,energy:10,bauxite:-30,demand:-8,newenergy:-5,overseas:-20,rates:75,fx:-3,policy:-10,guinea:-40,risk:-50,debt:-10,capitalreturn:-15,redeem:0},
+ bull:{aluminum:10,alumina:-15,energy:-8,bauxite:30,demand:6,newenergy:12,overseas:30,rates:-75,fx:2,policy:30,guinea:25,risk:30,debt:45,capitalreturn:40,redeem:40}
+};
+let state=baseState(),selected=null;
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function signed(x,d=1){return `${x>0?'+':''}${x.toFixed(d)}%`}
+function fmt(id,v){const d=defs[id];if(d.unit==='%')return `${v>0?'+':''}${v}%`;if(d.unit==='bp')return `${v>0?'+':''}${v}bp`;return `${v>0?'+':''}${v}`}
+function model(s=state){
+ const margin=.78*s.aluminum-.30*s.alumina-.13*s.energy+.035*s.bauxite;
+ const volume=.34*s.demand+.24*s.newenergy+.055*s.overseas;
+ const finance=.34*s.fx-.0075*s.rates+.012*s.redeem;
+ const balance=.060*s.policy+.028*s.guinea+.12*s.demand+.06*s.newenergy;
+ const risk=.075*s.risk+.017*s.debt-.0045*s.rates+.016*s.redeem;
+ const fcf=.28*margin+.18*volume+.018*s.debt+.030*s.capitalreturn+.010*s.redeem;
+ const credit=.040*s.debt+.050*s.redeem;
+ let profit=clamp((.72*margin+.38*volume+finance+.12*balance)/100,-.42,.55);
+ let valuation=clamp((risk+.28*balance+.02*s.overseas)/100,-.30,.38);
+ let shareholder=clamp((.10*fcf+.040*s.capitalreturn+.025*credit)/100,-.10,.16);
+ return {margin,volume,finance,balance,risk,fcf,credit,profit,valuation,shareholder,mult:(1+profit)*(1+valuation)*(1+shareholder)};
+}
+function singleImpact(id){const s=baseState();s[id]=state[id];return model(s).mult-1}
+function setClass(node,x){node.classList.remove('pos','neg');if(x>.001)node.classList.add('pos');if(x<-.001)node.classList.add('neg')}
+function render(){
+ const m=model();const spot=Math.max(.01,Number(document.getElementById('currentPrice').value)||22.5);const fair=spot*m.mult;const ret=m.mult-1;
+ scenarioPrice.textContent=`HK$${fair.toFixed(2)}`;scenarioReturn.textContent=signed(ret*100);rootPrice.textContent=`HK$${fair.toFixed(2)}`;rootRet.textContent=signed(ret*100);
+ direct_profit.textContent=signed(m.profit*100);direct_valuation.textContent=signed(m.valuation*100);direct_shareholder.textContent=signed(m.shareholder*100);
+ mid_margin.textContent=signed(m.margin);mid_volume.textContent=signed(m.volume);mid_finance.textContent=signed(m.finance);mid_balance.textContent=signed(m.balance);mid_risk.textContent=signed(m.risk);mid_fcf.textContent=signed(m.fcf);mid_credit.textContent=signed(m.credit);
+ Object.keys(defs).forEach(id=>{const el=document.getElementById(`v-${id}`);if(el)el.textContent=fmt(id,state[id]);const leaf=document.querySelector(`.leaf[data-driver="${id}"]`);if(leaf){leaf.classList.toggle('pos',state[id]>0);leaf.classList.toggle('neg',state[id]<0);leaf.classList.toggle('on',selected===id)}});
+ if(selected) refreshDrawer();highlightPath();
+ try{localStorage.setItem('hongqiao-sandbox-v4',JSON.stringify({state,spot}))}catch(e){}
+}
+function highlightPath(){document.querySelectorAll('.node').forEach(n=>n.classList.remove('hot','dim'));if(!selected)return;const d=defs[selected];const ids=['price',...d.path];document.querySelectorAll('.node').forEach(n=>{if(ids.some(x=>n.id===`node-${x}`))n.classList.add('hot');else n.classList.add('dim')});pathTip.innerHTML=`当前链路：<b>${d.pathText}</b>`}
+function openDriver(id){selected=id;const d=defs[id];drawerName.textContent=d.name;drawerDesc.textContent=d.desc;verticalSlider.min=d.min;verticalSlider.max=d.max;verticalSlider.step=d.step;verticalSlider.value=state[id];maxLabel.textContent=fmt(id,d.max);minLabel.textContent=fmt(id,d.min);drawer.classList.add('open');scrim.classList.add('show');render()}
+function closeDriver(){drawer.classList.remove('open');scrim.classList.remove('show')}
+function refreshDrawer(){if(!selected)return;drawerValue.textContent=fmt(selected,state[selected]);const imp=singleImpact(selected);drawerImpact.textContent=signed(imp*100);drawerImpact.style.color=imp>=0?'var(--green2)':'var(--red)';drawerPath.textContent=defs[selected].pathText;verticalSlider.value=state[selected]}
+function applyScenario(mode){state=baseState();Object.assign(state,scenarios[mode]);selected=null;closeDriver();document.querySelectorAll('.scenario').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));pathTip.innerHTML='点击任一底层因子，系统会高亮它的传导路径，并在右侧打开<strong>竖向挂杆调节器</strong>。';render()}
+document.querySelectorAll('.leaf').forEach(b=>b.addEventListener('click',()=>openDriver(b.dataset.driver)));
+document.querySelectorAll('.scenario').forEach(b=>b.addEventListener('click',()=>applyScenario(b.dataset.mode)));
+verticalSlider.addEventListener('input',e=>{if(!selected)return;state[selected]=Number(e.target.value);document.querySelectorAll('.scenario').forEach(b=>b.classList.remove('active'));render()});
+currentPrice.addEventListener('input',render);closeDrawer.addEventListener('click',closeDriver);closeBtn2.addEventListener('click',closeDriver);scrim.addEventListener('click',closeDriver);zeroBtn.addEventListener('click',()=>{if(selected){state[selected]=0;render()}});resetBtn.addEventListener('click',()=>applyScenario('base'));
+try{const saved=JSON.parse(localStorage.getItem('hongqiao-sandbox-v4')||'null');if(saved&&saved.state)state={...state,...saved.state};if(saved&&saved.spot)currentPrice.value=saved.spot}catch(e){}
+render();
+</script>
 </body>
 </html>
