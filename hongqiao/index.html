@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#f5f7f6">
+<title>中国宏桥 · 金融沙盒传导链</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="header">
+    <div><div class="kicker">金融世界沙盒 · 传导链推演</div><h1>中国宏桥股价沙盒</h1><div class="underline"></div><div class="sub">从股价 → 直接因子 → 间接因子 → 底层变量</div></div>
+    <div class="live">手机版</div>
+  </header>
+
+  <section class="card hero">
+    <div class="hero-top">
+      <div><div class="hero-label">模型情景价格</div><div class="price" id="fairPrice">HK$22.50</div><div class="ret" id="returnText">+0.0%</div></div>
+      <div class="price-input-wrap"><span>当前股价（可改）</span><input id="currentPrice" class="price-input" type="number" step="0.01" value="22.50" oninput="renderAll()"></div>
+    </div>
+    <div class="hero-metrics">
+      <div class="hm"><span>盈利/EPS</span><b id="profitIndex">100</b></div>
+      <div class="hm"><span>估值倍数</span><b id="valuationIndex">100</b></div>
+      <div class="hm"><span>股东回报</span><b id="returnIndex">100</b></div>
+    </div>
+    <div class="seg" id="strengthSeg">
+      <button onclick="setStrength(0.72,this)">保守</button>
+      <button class="active" onclick="setStrength(1,this)">标准</button>
+      <button onclick="setStrength(1.32,this)">激进</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="card-title">快速情景</div><div class="hint">点击按钮立即重算<br>无需刷新页面</div></div>
+    <div class="tabs" id="presetTabs">
+      <button class="chip active" data-preset="base" onclick="applyPreset('base',this)">基准</button>
+      <button class="chip" data-preset="bull" onclick="applyPreset('bull',this)">利润扩张</button>
+      <button class="chip" data-preset="bear" onclick="applyPreset('bear',this)">成本+需求双杀</button>
+      <button class="chip" data-preset="rerate" onclick="applyPreset('rerate',this)">高股息重估</button>
+      <button class="chip" data-preset="riskoff" onclick="applyPreset('riskoff',this)">港股风险偏好下降</button>
+    </div>
+  </section>
+
+  <section class="card" id="chainCard">
+    <div class="card-head"><div class="card-title">股价传导链</div><div class="hint">从上往下拆解<br>点击底层因子可高亮整条链</div></div>
+
+    <div class="layer-label">顶层 · 股价结果</div>
+    <div class="chain-top" id="node-price"><div class="name">中国宏桥 01378.HK</div><div class="v" id="chainPrice">HK$22.50</div><div class="s" id="chainPriceSub">基准 = 当前股价</div></div>
+
+    <div class="down"><span>↓ 直接由盈利、估值与股东回报共同作用</span></div>
+    <div class="layer-label">第一层 · 直接影响股价</div>
+    <div class="node-grid">
+      <div class="node direct" id="node-profit"><div class="nlabel">归母净利润 / EPS</div><div class="nval" id="direct-profit">0.0%</div><div class="ndesc">利润变化直接改变每股盈利</div></div>
+      <div class="node direct" id="node-valuation"><div class="nlabel">估值倍数</div><div class="nval" id="direct-valuation">0.0%</div><div class="ndesc">PE/PB、风险溢价与周期重估</div></div>
+      <div class="node direct" id="node-shareholder"><div class="nlabel">股东回报溢价</div><div class="nval" id="direct-shareholder">0.0%</div><div class="ndesc">分红、回购与现金回报确定性</div></div>
+    </div>
+
+    <div class="down"><span>↓ 由经营与财务变量传导</span></div>
+    <div class="layer-label">第二层 · 间接影响因子</div>
+    <div class="node-grid two">
+      <div class="node intermediate" id="node-margin"><div class="nlabel">吨铝利润 / 毛利</div><div class="nval" id="mid-margin">0.0%</div><div class="ndesc">铝价 − 氧化铝 − 能源 − 矿端成本</div></div>
+      <div class="node intermediate" id="node-volume"><div class="nlabel">销量 / 产能利用率</div><div class="nval" id="mid-volume">0.0%</div><div class="ndesc">地产、基建、新能源与产能释放</div></div>
+      <div class="node intermediate" id="node-finance"><div class="nlabel">财务费用改善</div><div class="nval" id="mid-finance">0.0%</div><div class="ndesc">正值 = 利息/汇兑压力下降</div></div>
+      <div class="node intermediate" id="node-fcf"><div class="nlabel">自由现金流 / 净负债</div><div class="nval" id="mid-fcf">0.0%</div><div class="ndesc">盈利质量决定去杠杆和分红能力</div></div>
+      <div class="node intermediate" id="node-balance"><div class="nlabel">行业供需格局</div><div class="nval" id="mid-balance">0.0%</div><div class="ndesc">产能约束、矿端供给与终端需求</div></div>
+      <div class="node intermediate" id="node-risk"><div class="nlabel">风险溢价改善</div><div class="nval" id="mid-risk">0.0%</div><div class="ndesc">正值 = 资本成本下降、估值环境改善</div></div>
+    </div>
+
+    <div class="down"><span>↓ 最底层可调变量</span></div>
+    <div class="layer-label">第三层 · 底层影响因子</div>
+    <div class="link-note">下方每一个变量都可以调节。<b>点一下因子名称</b>，系统会在上面高亮它经过的“间接因子 → 直接因子 → 股价”完整路径。</div>
+    <div class="trace" id="traceBox"><div class="trace-title">当前追踪链</div><div class="trace-path" id="tracePath"><span class="trace-pill">铝价</span><span class="trace-arrow">→</span><span class="trace-pill">吨铝利润</span><span class="trace-arrow">→</span><span class="trace-pill">EPS</span><span class="trace-arrow">→</span><span class="trace-pill">股价</span></div></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="card-title">底层变量调节器</div><div class="hint">− / + / 滑杆都可操作<br>实时重算整条链</div></div>
+    <div id="driverContainer"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="card-title">事件冲击</div><div class="hint">把新闻直接翻译成变量变化</div></div>
+    <div class="events">
+      <button class="evt" onclick="applyEvent('redeem')"><b>高息债提前赎回</b><span>对应你刚才那条 7.05% 美元债新闻</span><strong>债务优化 ↑</strong></button>
+      <button class="evt" onclick="applyEvent('alup')"><b>铝价上涨 10%</b><span>先传导至吨铝利润，再传至 EPS</span><strong>利润链 ↑</strong></button>
+      <button class="evt" onclick="applyEvent('aluminadown')"><b>氧化铝下跌 15%</b><span>原料成本下降，改善吨铝利润</span><strong>成本链 ↑</strong></button>
+      <button class="evt" onclick="applyEvent('guinea')"><b>几内亚供给扰动</b><span>矿端成本上升，同时改变行业供需</span><strong>双向冲击</strong></button>
+      <button class="evt" onclick="applyEvent('stimulus')"><b>稳增长 / 基建加码</b><span>需求回暖，同时改善周期风险偏好</span><strong>需求链 ↑</strong></button>
+      <button class="evt" onclick="applyEvent('ratecut')"><b>美元降息 100bp</b><span>降低财务费用和资本成本</span><strong>估值链 ↑</strong></button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="card-title">底层因子股价贡献</div><div class="hint">单因子独立冲击估算</div></div>
+    <div class="contrib" id="contribList"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="card-title">当前情景解读</div><div class="hint">模型自动生成</div></div>
+    <div class="explain" id="summaryText">当前为基准情景。</div>
+    <div class="note">模型用于理解“变量如何传导”，不是精确目标价或投资建议。敏感度均为研究型假设，并对极端输入做了上限约束。</div>
+  </section>
+</div>
+
+<div class="bottom"><button class="action secondary" onclick="resetAll()">恢复基准</button><button class="action primary" onclick="copySummary()">复制当前推演</button></div>
+<div class="toast" id="toast">已更新</div>
+
+<script src="app.js"></script>
+</body>
+</html>
