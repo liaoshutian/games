@@ -173,7 +173,7 @@
     }
 
     .segmented button,
-    .reset-button {
+    .reset-button, .toggle-button {
       min-height: 31px;
       padding: 5px 10px;
       border: 0;
@@ -187,7 +187,7 @@
     }
 
     .segmented button:hover,
-    .reset-button:hover { color: var(--text); background: rgba(255,255,255,.055); }
+    .reset-button:hover, .toggle-button:hover { color: var(--text); background: rgba(255,255,255,.055); }
 
     .segmented button[aria-pressed="true"] {
       color: #f4f9ff;
@@ -205,6 +205,13 @@
     }
 
     .reset-button svg { width: 14px; height: 14px; }
+
+    .toggle-button {
+      min-height: 37px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 9px;
+      color: var(--muted); background: rgba(255,255,255,.018); cursor: pointer;
+      font-size: .78rem; font-weight: 650;
+    }
+    .toggle-button[aria-pressed="true"] { color: #08121f; background: var(--old); border-color: var(--old); }
 
     .stats {
       display: grid;
@@ -391,6 +398,9 @@
       background: rgba(7, 20, 34, .72);
     }
 
+    .view-panel { border-color: rgba(246, 185, 74, .15); }
+    .view-panel input[type="range"] { accent-color: var(--old); }
+
     .shift-title { font-size: .82rem; font-weight: 650; }
     .shift-sub { margin-top: 4px; color: var(--muted-2); font-size: .72rem; }
 
@@ -529,6 +539,12 @@
             <button type="button" data-mode="normalized" aria-pressed="true">峰值 = 100</button>
             <button type="button" data-mode="price" aria-pressed="false">前复权价</button>
           </div>
+          <span class="control-label">拖动对象</span>
+          <div class="segmented" id="moveControl" aria-label="选择要移动的 K 线">
+            <button type="button" data-series="A" aria-pressed="false">移动 A</button>
+            <button type="button" data-series="B" aria-pressed="true">移动 B</button>
+          </div>
+          <button class="toggle-button" id="maToggle" type="button" aria-pressed="false">MA200（200周）</button>
           <span class="control-label">完整数据</span>
           <span class="ticker" id="dataRangeTag">2020 至今 · 完整周 K</span>
         </div>
@@ -548,26 +564,35 @@
         </div>
         <div class="chart-hint">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 11V6.8a1.8 1.8 0 0 1 3.6 0V10m0-2.6a1.8 1.8 0 0 1 3.6 0V10m0-1.3a1.8 1.8 0 0 1 3.6 0v4.7c0 4.2-2.6 7.1-6.6 7.1H11c-2.5 0-4.2-1-5.5-2.8L3.7 15a1.8 1.8 0 0 1 3-2l1.3 1.5V11Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          在图上左右拖动蓝色轨迹；方向键可微调
+          滚轮缩放时间区间；拖动当前选中的 A / B
         </div>
       </div>
 
       <div class="chart-wrap" id="chartWrap">
-        <canvas id="chart" tabindex="0" role="img" aria-label="腾讯控股两段前复权周 K 线叠加图；可左右拖动近一年轨迹"></canvas>
+        <canvas id="chart" tabindex="0" role="img" aria-label="腾讯控股两条完整前复权周 K 线叠加图；支持时间缩放并分别移动 A、B"></canvas>
         <div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
       </div>
 
       <div class="shift-panel">
         <div>
-          <div class="shift-title">K线 B 横向位移</div>
+          <div class="shift-title" id="shiftTitle">K线 B 横向位移</div>
           <div class="shift-sub">负数向左，正数向右</div>
         </div>
         <div class="range-wrap">
-          <span class="control-label">−52</span>
-          <input id="shiftRange" type="range" min="-52" max="52" step="1" value="0" aria-label="K线 B 横向位移周数">
-          <span class="control-label">+52</span>
+          <span class="control-label">−104</span>
+          <input id="shiftRange" type="range" min="-104" max="104" step="1" value="0" aria-label="K线 B 横向位移周数">
+          <span class="control-label">+104</span>
         </div>
         <output class="shift-value" id="shiftValue" for="shiftRange">对齐 0 周</output>
+      </div>
+
+      <div class="shift-panel view-panel">
+        <div><div class="shift-title">时间缩放 / K线宽度</div><div class="shift-sub">放大后可拖动下方滑块浏览区间</div></div>
+        <div class="range-wrap"><span class="control-label">全景</span><input id="zoomRange" type="range" min="1" max="10" step="0.1" value="1" aria-label="缩放 K 线时间区间"><span class="control-label">10×</span></div>
+        <output class="shift-value" id="zoomValue" for="zoomRange">1.0×</output>
+        <div></div>
+        <div class="range-wrap"><span class="control-label">较早</span><input id="viewRange" type="range" min="0" max="1000" step="1" value="500" aria-label="移动可视时间区间"><span class="control-label">较近</span></div>
+        <output class="shift-value" id="viewValue" for="viewRange">全区间</output>
       </div>
 
       <details class="data-note">
@@ -575,13 +600,13 @@
         <div class="note-content">
           <div><strong>行情来源</strong><a href="https://finance.yahoo.com/quote/0700.HK/history/" target="_blank" rel="noreferrer">Yahoo Finance · 0700.HK 历史行情</a>。页面内置逐日真实 OHLC 数据聚合后的周线快照。</div>
           <div><strong>前复权算法</strong>以每日 Adj Close ÷ Close 得到复权因子，同步调整 Open / High / Low / Close，再按香港交易周聚合；最新价格保持不变。</div>
-          <div><strong>对齐口径</strong>A、B 均绘制 2020 至今全部 350 根周 K。A 以 2021 自然年最高周为 X=0；B 以截止日前滚动 12 个月最高周为 X=0。</div>
+          <div><strong>对齐口径</strong>A、B 均绘制 2020 至今全部 350 根周 K。A 以 2021 自然年最高周为 X=0；B 以截止日前滚动 12 个月最高周为 X=0。MA200 为前复权周收盘价的 200 周简单移动平均。</div>
         </div>
       </details>
     </section>
 
     <footer class="footer">
-      <span>横轴为相对峰值周数：负数在峰值前，正数在峰值后；拖动仅改变 B 的时间对齐。</span>
+      <span>横轴为相对峰值周数；滚轮或缩放条改变可视时间与 K 线宽度，先选 A / B 再拖动。</span>
       <span>仅作历史路径研究，不构成投资建议。</span>
     </footer>
   </main>
@@ -608,10 +633,16 @@
     const wrap = $("#chartWrap");
     const range = $("#shiftRange");
     const shiftValue = $("#shiftValue");
+    const zoomRange = $("#zoomRange");
+    const viewRange = $("#viewRange");
 
     const state = {
       mode: "normalized",
-      offset: 0,
+      selectedSeries: "B",
+      offsets: { A: 0, B: 0 },
+      showMA200: false,
+      zoom: 1,
+      viewCenter: 0,
       hoverWeek: null,
       dragging: false,
       dragStartX: 0,
@@ -635,6 +666,21 @@
       min: Math.min(-peak2021Index, -recentPeakIndex) - domainPadding,
       max: Math.max(WEEKLY_DATA.length - 1 - peak2021Index, WEEKLY_DATA.length - 1 - recentPeakIndex) + domainPadding
     };
+    state.viewCenter = (baseDomain.min + baseDomain.max) / 2;
+    const MA200 = WEEKLY_DATA.map((row, i) => {
+      if (i < 199) return null;
+      let total = 0;
+      for (let j = i - 199; j <= i; j++) total += WEEKLY_DATA[j].c;
+      return total / 200;
+    });
+
+    function visibleDomain() {
+      const fullSpan = baseDomain.max - baseDomain.min;
+      const span = fullSpan / state.zoom;
+      const half = span / 2;
+      state.viewCenter = Math.max(baseDomain.min + half, Math.min(baseDomain.max - half, state.viewCenter));
+      return { min: state.viewCenter - half, max: state.viewCenter + half };
+    }
 
     function findPeakIndex(predicate) {
       let index = -1;
@@ -723,13 +769,17 @@
 
     function calculateBounds() {
       const values = [];
-      const collect = (series, peak) => {
-        series.forEach((row) => {
+      const domain = visibleDomain();
+      const collect = (series, peak, anchorIndex, offset) => {
+        series.forEach((row, i) => {
+          const week = i - anchorIndex + offset;
+          if (week < domain.min || week > domain.max) return;
           values.push(valueOf(row, peak, "h"), valueOf(row, peak, "l"));
         });
       };
-      collect(oldSeries, peak2021);
-      collect(recentSeries, recentPeak);
+      collect(oldSeries, peak2021, peak2021Index, state.offsets.A);
+      collect(recentSeries, recentPeak, recentPeakIndex, state.offsets.B);
+      if (!values.length) values.push(0, 100);
       let min = Math.min(...values);
       let max = Math.max(...values);
       const span = Math.max(1, max - min);
@@ -757,15 +807,19 @@
       plot.bounds = bounds;
       state.plot = plot;
 
-      plot.domain = baseDomain;
-      const xAt = (week) => plot.x + ((week - baseDomain.min) / (baseDomain.max - baseDomain.min)) * plot.w;
+      plot.domain = visibleDomain();
+      const xAt = (week) => plot.x + ((week - plot.domain.min) / (plot.domain.max - plot.domain.min)) * plot.w;
       const yAt = (value) => plot.y + (1 - (value - bounds.min) / (bounds.max - bounds.min)) * plot.h;
       plot.xAt = xAt;
       plot.yAt = yAt;
 
       drawGrid(plot, bounds, xAt, yAt);
-      drawSeries(oldSeries, peak2021, peak2021Index, 0, COLORS.old, plot, xAt, yAt);
-      drawSeries(recentSeries, recentPeak, recentPeakIndex, state.offset, COLORS.recent, plot, xAt, yAt);
+      drawSeries(oldSeries, peak2021, peak2021Index, state.offsets.A, COLORS.old, plot, xAt, yAt);
+      drawSeries(recentSeries, recentPeak, recentPeakIndex, state.offsets.B, COLORS.recent, plot, xAt, yAt);
+      if (state.showMA200) {
+        drawMA200(peak2021, peak2021Index, state.offsets.A, COLORS.old, plot, xAt, yAt);
+        drawMA200(recentPeak, recentPeakIndex, state.offsets.B, COLORS.recent, plot, xAt, yAt);
+      }
 
       if (state.hoverWeek !== null && !state.dragging) drawCrosshair(state.hoverWeek, plot, xAt);
     }
@@ -792,11 +846,11 @@
       }
 
       const targetTicks = plot.w < 540 ? 5 : 9;
-      const rawStep = (baseDomain.max - baseDomain.min) / targetTicks;
-      const candidates = [26, 52, 78, 104, 156];
+      const rawStep = (plot.domain.max - plot.domain.min) / targetTicks;
+      const candidates = [1, 2, 4, 8, 13, 26, 52, 78, 104, 156];
       const step = candidates.reduce((a, b) => Math.abs(b - rawStep) < Math.abs(a - rawStep) ? b : a);
-      const firstTick = Math.ceil(baseDomain.min / step) * step;
-      for (let week = firstTick; week <= baseDomain.max; week += step) {
+      const firstTick = Math.ceil(plot.domain.min / step) * step;
+      for (let week = firstTick; week <= plot.domain.max; week += step) {
         const x = xAt(week);
         ctx.beginPath();
         ctx.strokeStyle = week === 0 ? COLORS.gridStrong : COLORS.grid;
@@ -809,18 +863,13 @@
         ctx.fillText(week === 0 ? "X=0" : `${week > 0 ? "+" : ""}${week}周`, x, plot.y + plot.h + 12);
       }
 
-      const zeroX = xAt(0);
-      ctx.setLineDash([6, 5]);
-      ctx.strokeStyle = "rgba(232, 241, 252, .48)";
-      ctx.beginPath();
-      ctx.moveTo(zeroX, plot.y);
-      ctx.lineTo(zeroX, plot.y + plot.h);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle = COLORS.textBright;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "top";
-      ctx.fillText("峰值轴 X=0", zeroX, plot.y + 7);
+      if (plot.domain.min <= 0 && plot.domain.max >= 0) {
+        const zeroX = xAt(0);
+        ctx.setLineDash([6, 5]); ctx.strokeStyle = "rgba(232, 241, 252, .48)";
+        ctx.beginPath(); ctx.moveTo(zeroX, plot.y); ctx.lineTo(zeroX, plot.y + plot.h); ctx.stroke();
+        ctx.setLineDash([]); ctx.fillStyle = COLORS.textBright; ctx.textAlign = "center"; ctx.textBaseline = "top";
+        ctx.fillText("峰值轴 X=0", zeroX, plot.y + 7);
+      }
 
       if (state.mode === "normalized" && bounds.min <= 100 && bounds.max >= 100) {
         const y = yAt(100);
@@ -841,14 +890,14 @@
     }
 
     function drawSeries(series, peak, anchorIndex, offset, color, plot, xAt, yAt) {
-      const slot = plot.w / Math.max(1, baseDomain.max - baseDomain.min);
-      const candleW = Math.max(.9, Math.min(5, slot * .72));
+      const slot = plot.w / Math.max(1, plot.domain.max - plot.domain.min);
+      const candleW = Math.max(.9, Math.min(14, slot * .72));
       ctx.save();
       ctx.lineWidth = Math.max(.65, Math.min(1.15, slot * .55));
 
       series.forEach((row, i) => {
         const week = i - anchorIndex + offset;
-        if (week < baseDomain.min || week > baseDomain.max) return;
+        if (week < plot.domain.min || week > plot.domain.max) return;
         const x = xAt(week);
         const open = valueOf(row, peak, "o");
         const high = valueOf(row, peak, "h");
@@ -879,6 +928,20 @@
       ctx.restore();
     }
 
+    function drawMA200(peak, anchorIndex, offset, color, plot, xAt, yAt) {
+      ctx.save(); ctx.strokeStyle = color; ctx.globalAlpha = .95; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+      ctx.beginPath(); let started = false;
+      MA200.forEach((ma, i) => {
+        if (ma === null) return;
+        const week = i - anchorIndex + offset;
+        if (week < plot.domain.min || week > plot.domain.max) { started = false; return; }
+        const value = state.mode === "normalized" ? ma / peak.h * 100 : ma;
+        const x = xAt(week), y = yAt(value);
+        if (!started) { ctx.moveTo(x, y); started = true; } else ctx.lineTo(x, y);
+      });
+      ctx.stroke(); ctx.restore();
+    }
+
     function drawCrosshair(week, plot, xAt) {
       const x = xAt(week);
       ctx.save();
@@ -906,10 +969,10 @@
         hideTooltip();
         return;
       }
-      const week = Math.max(baseDomain.min, Math.min(baseDomain.max, Math.round(baseDomain.min + (localX - plot.x) / plot.w * (baseDomain.max - baseDomain.min))));
+      const week = Math.max(plot.domain.min, Math.min(plot.domain.max, Math.round(plot.domain.min + (localX - plot.x) / plot.w * (plot.domain.max - plot.domain.min))));
       state.hoverWeek = week;
-      const oldRow = rowAt(oldSeries, peak2021Index, week, 0);
-      const recentRow = rowAt(recentSeries, recentPeakIndex, week, state.offset);
+      const oldRow = rowAt(oldSeries, peak2021Index, week, state.offsets.A);
+      const recentRow = rowAt(recentSeries, recentPeakIndex, week, state.offsets.B);
       const rows = [
         oldRow && tooltipRow("old-color", "K线 A", oldRow, peak2021),
         recentRow && tooltipRow("new-color", "K线 B", recentRow, recentPeak)
@@ -940,12 +1003,51 @@
     }
 
     function setOffset(value, announce = false) {
-      state.offset = Math.max(-52, Math.min(52, Math.round(value)));
-      range.value = String(state.offset);
-      shiftValue.value = state.offset === 0 ? "对齐 0 周" : `${state.offset > 0 ? "+" : ""}${state.offset} 周`;
+      const key = state.selectedSeries;
+      state.offsets[key] = Math.max(-104, Math.min(104, Math.round(value)));
+      range.value = String(state.offsets[key]);
+      shiftValue.value = state.offsets[key] === 0 ? "对齐 0 周" : `${state.offsets[key] > 0 ? "+" : ""}${state.offsets[key]} 周`;
       shiftValue.textContent = shiftValue.value;
-      if (announce) canvas.setAttribute("aria-label", `腾讯控股两段前复权周 K 线叠加图；近一年轨迹位移 ${state.offset} 周`);
+      if (announce) canvas.setAttribute("aria-label", `腾讯控股两条完整前复权周 K 线叠加图；K线 ${key} 位移 ${state.offsets[key]} 周`);
       draw();
+    }
+
+    function selectSeries(key) {
+      if (!["A", "B"].includes(key)) throw new Error("series 必须是 A 或 B");
+      state.selectedSeries = key;
+      $$("#moveControl button").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.series === key)));
+      $("#shiftTitle").textContent = `K线 ${key} 横向位移`;
+      range.setAttribute("aria-label", `K线 ${key} 横向位移周数`);
+      setOffset(state.offsets[key]);
+    }
+
+    function updateViewControls() {
+      zoomRange.value = String(state.zoom);
+      $("#zoomValue").textContent = `${state.zoom.toFixed(1)}×`;
+      const domain = visibleDomain();
+      const available = Math.max(0, (baseDomain.max - baseDomain.min) - (domain.max - domain.min));
+      viewRange.value = available ? String(Math.round((domain.min - baseDomain.min) / available * 1000)) : "500";
+      viewRange.disabled = state.zoom <= 1.001;
+      $("#viewValue").textContent = state.zoom <= 1.001 ? "全区间" : `X ${Math.round(domain.min)} ～ ${Math.round(domain.max)}`;
+    }
+
+    function setZoom(value, focusWeek = state.viewCenter) {
+      const old = visibleDomain();
+      const ratio = (focusWeek - old.min) / Math.max(1, old.max - old.min);
+      state.zoom = Math.max(1, Math.min(10, Number(value)));
+      const newSpan = (baseDomain.max - baseDomain.min) / state.zoom;
+      state.viewCenter = focusWeek + (.5 - ratio) * newSpan;
+      visibleDomain();
+      updateViewControls();
+      draw();
+    }
+
+    function setViewPosition(value) {
+      const fullSpan = baseDomain.max - baseDomain.min;
+      const span = fullSpan / state.zoom;
+      const available = fullSpan - span;
+      state.viewCenter = baseDomain.min + span / 2 + available * (Number(value) / 1000);
+      updateViewControls(); draw();
     }
 
     function setMode(mode) {
@@ -956,14 +1058,34 @@
     }
 
     $$("#modeControl button").forEach((button) => button.addEventListener("click", () => setMode(button.dataset.mode)));
-    $("#resetButton").addEventListener("click", () => setOffset(0, true));
+    $$("#moveControl button").forEach((button) => button.addEventListener("click", () => selectSeries(button.dataset.series)));
+    $("#maToggle").addEventListener("click", () => {
+      state.showMA200 = !state.showMA200;
+      $("#maToggle").setAttribute("aria-pressed", String(state.showMA200));
+      draw();
+    });
+    $("#resetButton").addEventListener("click", () => {
+      state.offsets = { A: 0, B: 0 }; state.zoom = 1;
+      state.viewCenter = (baseDomain.min + baseDomain.max) / 2;
+      selectSeries("B"); updateViewControls(); draw();
+    });
     range.addEventListener("input", () => setOffset(Number(range.value)));
+    zoomRange.addEventListener("input", () => setZoom(Number(zoomRange.value)));
+    viewRange.addEventListener("input", () => setViewPosition(viewRange.value));
+    canvas.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      if (!state.plot) return;
+      const rect = canvas.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left - state.plot.x) / state.plot.w));
+      const focus = state.plot.domain.min + ratio * (state.plot.domain.max - state.plot.domain.min);
+      setZoom(state.zoom * Math.exp(-event.deltaY * .0015), focus);
+    }, { passive: false });
 
     canvas.addEventListener("pointerdown", (event) => {
       if (!state.plot) return;
       state.dragging = true;
       state.dragStartX = event.clientX;
-      state.dragStartOffset = state.offset;
+      state.dragStartOffset = state.offsets[state.selectedSeries];
       canvas.setPointerCapture(event.pointerId);
       tooltip.classList.remove("visible");
     });
@@ -973,7 +1095,7 @@
         showTooltip(event.clientX, event.clientY);
         return;
       }
-      const pxPerWeek = state.plot.w / Math.max(1, baseDomain.max - baseDomain.min);
+      const pxPerWeek = state.plot.w / Math.max(1, state.plot.domain.max - state.plot.domain.min);
       const delta = Math.round((event.clientX - state.dragStartX) / pxPerWeek);
       setOffset(state.dragStartOffset + delta);
     });
@@ -981,7 +1103,7 @@
     canvas.addEventListener("pointerup", (event) => {
       state.dragging = false;
       if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
-      setOffset(state.offset, true);
+      setOffset(state.offsets[state.selectedSeries], true);
       showTooltip(event.clientX, event.clientY);
     });
 
@@ -991,7 +1113,7 @@
       if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
       event.preventDefault();
       const amount = event.shiftKey ? 4 : 1;
-      setOffset(state.offset + (event.key === "ArrowRight" ? amount : -amount), true);
+      setOffset(state.offsets[state.selectedSeries] + (event.key === "ArrowRight" ? amount : -amount), true);
     });
 
     function registerWebMCP() {
@@ -999,14 +1121,15 @@
       if (!context?.registerTool) return;
       const tools = [
         {
-          name: "set_recent_trajectory_offset",
-          title: "设置 K线 B 位移",
-          description: "把蓝色的完整 K线 B 向左或向右移动指定周数。",
-          inputSchema: { type: "object", properties: { weeks: { type: "integer", minimum: -52, maximum: 52 } }, required: ["weeks"], additionalProperties: false },
+          name: "set_selected_trajectory_offset",
+          title: "设置选中 K线的位移",
+          description: "把当前选中的完整 K线 A 或 B 向左或向右移动指定周数。",
+          inputSchema: { type: "object", properties: { series: { type: "string", enum: ["A", "B"] }, weeks: { type: "integer", minimum: -104, maximum: 104 } }, required: ["series", "weeks"], additionalProperties: false },
           execute(input) {
-            if (!Number.isInteger(input?.weeks) || input.weeks < -52 || input.weeks > 52) throw new Error("weeks 必须是 -52 到 52 的整数");
+            selectSeries(input?.series);
+            if (!Number.isInteger(input?.weeks) || input.weeks < -104 || input.weeks > 104) throw new Error("weeks 必须是 -104 到 104 的整数");
             setOffset(input.weeks, true);
-            return { offsetWeeks: state.offset };
+            return { series: state.selectedSeries, offsetWeeks: state.offsets[state.selectedSeries] };
           }
         },
         {
@@ -1026,7 +1149,8 @@
     }
 
     renderStats();
-    setOffset(0);
+    selectSeries("B");
+    updateViewControls();
     resizeCanvas();
     new ResizeObserver(resizeCanvas).observe(wrap);
     registerWebMCP();
