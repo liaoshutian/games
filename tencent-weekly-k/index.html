@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07101f">
+  <meta name="description" content="腾讯控股 2020 至今完整前复权周 K 线，分别以 2021 高点与近一年高点对齐比较">
+  <title>腾讯周K回撤轨迹对比</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307101f'/%3E%3Cpath d='M19 13v38M45 9v46' stroke='%236ee7f9' stroke-width='4' stroke-linecap='round'/%3E%3Crect x='12' y='22' width='14' height='18' rx='2' fill='%2307101f' stroke='%236ee7f9' stroke-width='4'/%3E%3Crect x='38' y='18' width='14' height='27' rx='2' fill='%23f6b94a'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050a12;
+      --panel: #0b1423;
+      --panel-2: #0e1a2d;
+      --line: rgba(148, 163, 184, .17);
+      --line-strong: rgba(148, 163, 184, .27);
+      --text: #edf5ff;
+      --muted: #8fa2bb;
+      --muted-2: #6f849f;
+      --old: #f6b94a;
+      --new: #5adcf2;
+      --good: #69e3a6;
+      --bad: #ff7a8a;
+      --radius: 20px;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-synthesis: none;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(900px 440px at 10% -10%, rgba(37, 147, 181, .16), transparent 62%),
+        radial-gradient(760px 420px at 95% 4%, rgba(203, 137, 36, .11), transparent 62%),
+        var(--bg);
+    }
+
+    button, input { font: inherit; }
+
+    button { color: inherit; }
+
+    .app {
+      width: min(1480px, 100%);
+      margin: 0 auto;
+      padding: 26px clamp(16px, 3vw, 38px) 34px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .identity {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(90, 220, 242, .27);
+      border-radius: 13px;
+      color: var(--new);
+      background: linear-gradient(145deg, rgba(90, 220, 242, .14), rgba(90, 220, 242, .035));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .mark svg { width: 24px; height: 24px; }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.36rem, 2vw, 1.82rem);
+      line-height: 1.2;
+      letter-spacing: -.02em;
+      font-weight: 680;
+    }
+
+    .ticker-line {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: .875rem;
+    }
+
+    .ticker {
+      padding: 2px 7px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      color: #c7d5e7;
+      background: rgba(255,255,255,.025);
+      font-size: .75rem;
+      font-weight: 650;
+      letter-spacing: .05em;
+    }
+
+    .freshness {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 36px;
+      padding: 8px 11px;
+      border: 1px solid rgba(105, 227, 166, .2);
+      border-radius: 11px;
+      color: #b6c8da;
+      background: rgba(8, 21, 34, .72);
+      white-space: nowrap;
+      font-size: .8rem;
+    }
+
+    .pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--good);
+      box-shadow: 0 0 0 4px rgba(105, 227, 166, .09);
+    }
+
+    .workspace {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(14, 26, 45, .92), rgba(8, 16, 28, .96));
+      box-shadow: 0 20px 70px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 15px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5, 12, 22, .38);
+    }
+
+    .control-cluster {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .control-label {
+      color: var(--muted-2);
+      font-size: .78rem;
+      font-weight: 650;
+      letter-spacing: .03em;
+    }
+
+    .segmented {
+      display: inline-flex;
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: rgba(2, 8, 16, .55);
+    }
+
+    .segmented button,
+    .reset-button {
+      min-height: 31px;
+      padding: 5px 10px;
+      border: 0;
+      border-radius: 6px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-size: .78rem;
+      font-weight: 620;
+      transition: color .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+
+    .segmented button:hover,
+    .reset-button:hover { color: var(--text); background: rgba(255,255,255,.055); }
+
+    .segmented button[aria-pressed="true"] {
+      color: #f4f9ff;
+      background: #17263a;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.07), 0 3px 9px rgba(0,0,0,.18);
+    }
+
+    .reset-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: rgba(255,255,255,.018);
+    }
+
+    .reset-button svg { width: 14px; height: 14px; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stat {
+      position: relative;
+      min-height: 96px;
+      padding: 17px 18px 16px;
+    }
+
+    .stat + .stat { border-left: 1px solid var(--line); }
+
+    .stat-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .series-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 12px currentColor;
+    }
+
+    .stat-value {
+      margin-top: 7px;
+      font-variant-numeric: tabular-nums;
+      font-size: clamp(1.25rem, 2.2vw, 1.72rem);
+      line-height: 1.1;
+      font-weight: 690;
+      letter-spacing: -.025em;
+    }
+
+    .stat-meta {
+      margin-top: 6px;
+      color: var(--muted-2);
+      font-size: .74rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .old-color { color: var(--old); }
+    .new-color { color: var(--new); }
+    .bad-color { color: var(--bad); }
+    .good-color { color: var(--good); }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 17px 18px 10px;
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      font-size: .82rem;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #c2d0e1;
+      white-space: nowrap;
+    }
+
+    .legend-candle {
+      position: relative;
+      width: 9px;
+      height: 17px;
+      border: 1.5px solid currentColor;
+      border-radius: 1px;
+    }
+
+    .legend-candle::before {
+      content: "";
+      position: absolute;
+      width: 1px;
+      height: 23px;
+      left: 3px;
+      top: -4px;
+      background: currentColor;
+      z-index: -1;
+    }
+
+    .chart-hint {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted-2);
+      font-size: .76rem;
+      text-align: right;
+    }
+
+    .chart-hint svg { width: 15px; height: 15px; flex: 0 0 15px; }
+
+    .chart-wrap {
+      position: relative;
+      margin: 0 10px;
+      height: clamp(390px, 49vw, 570px);
+      min-height: 390px;
+      max-height: 570px;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, .12);
+      border-radius: 14px;
+      background:
+        linear-gradient(180deg, rgba(4, 11, 21, .62), rgba(6, 13, 24, .25));
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      outline: none;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    canvas:active { cursor: grabbing; }
+
+    canvas:focus-visible { box-shadow: inset 0 0 0 2px rgba(90, 220, 242, .55); }
+
+    .tooltip {
+      position: absolute;
+      z-index: 5;
+      min-width: 238px;
+      max-width: min(320px, calc(100% - 18px));
+      padding: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(5px);
+      border: 1px solid rgba(158, 178, 202, .24);
+      border-radius: 12px;
+      background: rgba(7, 14, 25, .94);
+      box-shadow: 0 15px 40px rgba(0,0,0,.38);
+      backdrop-filter: blur(12px);
+      transition: opacity .1s ease, transform .1s ease;
+    }
+
+    .tooltip.visible { opacity: 1; transform: translateY(0); }
+
+    .tip-week {
+      margin-bottom: 8px;
+      color: #f0f6ff;
+      font-size: .8rem;
+      font-weight: 680;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tip-row {
+      display: grid;
+      grid-template-columns: 9px minmax(72px, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 0;
+      border-top: 1px solid rgba(148, 163, 184, .11);
+      font-size: .75rem;
+    }
+
+    .tip-row .swatch { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .tip-title { color: #c2d1e2; }
+    .tip-value { text-align: right; color: #f0f6ff; font-variant-numeric: tabular-nums; }
+    .tip-sub { display: block; margin-top: 2px; color: var(--muted-2); font-size: .68rem; }
+
+    .shift-panel {
+      display: grid;
+      grid-template-columns: minmax(155px, .65fr) minmax(280px, 2fr) auto;
+      align-items: center;
+      gap: 18px;
+      margin: 13px 10px 10px;
+      padding: 13px 15px;
+      border: 1px solid rgba(90, 220, 242, .14);
+      border-radius: 13px;
+      background: rgba(7, 20, 34, .72);
+    }
+
+    .shift-title { font-size: .82rem; font-weight: 650; }
+    .shift-sub { margin-top: 4px; color: var(--muted-2); font-size: .72rem; }
+
+    .range-wrap { display: flex; align-items: center; gap: 12px; }
+
+    input[type="range"] {
+      width: 100%;
+      height: 22px;
+      margin: 0;
+      accent-color: var(--new);
+      cursor: ew-resize;
+    }
+
+    .shift-value {
+      min-width: 70px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--new);
+      background: rgba(90, 220, 242, .055);
+      text-align: center;
+      font-size: .8rem;
+      font-weight: 670;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .data-note {
+      margin: 0 10px 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(3, 9, 17, .35);
+    }
+
+    .data-note summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      color: #aebed0;
+      cursor: pointer;
+      list-style: none;
+      font-size: .77rem;
+      font-weight: 620;
+    }
+
+    .data-note summary::-webkit-details-marker { display: none; }
+    .data-note summary::after { content: "+"; color: var(--muted-2); font-size: 1rem; }
+    .data-note[open] summary::after { content: "−"; }
+
+    .note-content {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      padding: 0 14px 14px;
+      color: var(--muted);
+      font-size: .75rem;
+      line-height: 1.65;
+    }
+
+    .note-content strong { display: block; margin-bottom: 3px; color: #c9d7e8; font-size: .73rem; }
+    .note-content a { color: var(--new); text-decoration: none; }
+    .note-content a:hover { text-decoration: underline; }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 13px;
+      color: var(--muted-2);
+      font-size: .7rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 820px) {
+      .app { padding-top: 18px; }
+      .topbar { align-items: stretch; flex-direction: column; }
+      .freshness { align-self: flex-start; }
+      .toolbar { align-items: flex-start; flex-direction: column; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stat:nth-child(3) { border-left: 0; border-top: 1px solid var(--line); }
+      .stat:nth-child(4) { border-top: 1px solid var(--line); }
+      .chart-header { align-items: flex-start; flex-direction: column; }
+      .chart-hint { text-align: left; }
+      .shift-panel { grid-template-columns: 1fr auto; }
+      .range-wrap { grid-column: 1 / -1; grid-row: 2; }
+      .note-content { grid-template-columns: 1fr; gap: 10px; }
+    }
+
+    @media (max-width: 520px) {
+      .app { padding-inline: 10px; }
+      .workspace { border-radius: 18px; }
+      .toolbar, .chart-header { padding-inline: 13px; }
+      .control-cluster { gap: 10px; }
+      .stats { grid-template-columns: 1fr; }
+      .stat { min-height: 86px; }
+      .stat + .stat { border-left: 0; border-top: 1px solid var(--line); }
+      .chart-wrap { height: 405px; min-height: 405px; margin-inline: 7px; }
+      .shift-panel, .data-note { margin-inline: 7px; }
+      .legend { gap: 12px; }
+      .footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="identity">
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M7 3v18M17 2v20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <rect x="4.25" y="7" width="5.5" height="8" rx="1" fill="#07101f" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="14.25" y="6" width="5.5" height="11" rx="1" fill="#f6b94a" stroke="#f6b94a" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div>
+          <h1>腾讯周 K · 回撤轨迹比对</h1>
+          <div class="ticker-line"><span class="ticker">0700.HK</span><span>两条完整周线 · 各自峰值对齐 X=0</span></div>
+        </div>
+      </div>
+      <div class="freshness" title="页面内置真实历史行情快照，可离线使用">
+        <span class="pulse" aria-hidden="true"></span>
+        <span id="freshnessText">真实行情 · 加载中</span>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="腾讯周 K 线对比工作区">
+      <div class="toolbar">
+        <div class="control-cluster">
+          <span class="control-label">显示方式</span>
+          <div class="segmented" id="modeControl" aria-label="显示方式">
+            <button type="button" data-mode="normalized" aria-pressed="true">峰值 = 100</button>
+            <button type="button" data-mode="price" aria-pressed="false">前复权价</button>
+          </div>
+          <span class="control-label">完整数据</span>
+          <span class="ticker" id="dataRangeTag">2020 至今 · 完整周 K</span>
+        </div>
+        <button class="reset-button" id="resetButton" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 8.5V4m0 0H9M4.5 4l3.2 3.2a7 7 0 1 1-1.4 7.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          峰值重新对齐
+        </button>
+      </div>
+
+      <div class="stats" id="stats" aria-label="关键对比数据"></div>
+
+      <div class="chart-header">
+        <div class="legend" aria-label="图例">
+          <span class="legend-item old-color"><span class="legend-candle" aria-hidden="true"></span><span id="oldLegend">K线 A · 2021 高点为 X=0</span></span>
+          <span class="legend-item new-color"><span class="legend-candle" aria-hidden="true"></span><span id="newLegend">K线 B · 近一年高点为 X=0</span></span>
+          <span class="legend-item" style="color:#8194aa">空心上涨 · 实心下跌</span>
+        </div>
+        <div class="chart-hint">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 11V6.8a1.8 1.8 0 0 1 3.6 0V10m0-2.6a1.8 1.8 0 0 1 3.6 0V10m0-1.3a1.8 1.8 0 0 1 3.6 0v4.7c0 4.2-2.6 7.1-6.6 7.1H11c-2.5 0-4.2-1-5.5-2.8L3.7 15a1.8 1.8 0 0 1 3-2l1.3 1.5V11Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          在图上左右拖动蓝色轨迹；方向键可微调
+        </div>
+      </div>
+
+      <div class="chart-wrap" id="chartWrap">
+        <canvas id="chart" tabindex="0" role="img" aria-label="腾讯控股两段前复权周 K 线叠加图；可左右拖动近一年轨迹"></canvas>
+        <div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
+      </div>
+
+      <div class="shift-panel">
+        <div>
+          <div class="shift-title">K线 B 横向位移</div>
+          <div class="shift-sub">负数向左，正数向右</div>
+        </div>
+        <div class="range-wrap">
+          <span class="control-label">−52</span>
+          <input id="shiftRange" type="range" min="-52" max="52" step="1" value="0" aria-label="K线 B 横向位移周数">
+          <span class="control-label">+52</span>
+        </div>
+        <output class="shift-value" id="shiftValue" for="shiftRange">对齐 0 周</output>
+      </div>
+
+      <details class="data-note">
+        <summary>数据来源与前复权口径</summary>
+        <div class="note-content">
+          <div><strong>行情来源</strong><a href="https://finance.yahoo.com/quote/0700.HK/history/" target="_blank" rel="noreferrer">Yahoo Finance · 0700.HK 历史行情</a>。页面内置逐日真实 OHLC 数据聚合后的周线快照。</div>
+          <div><strong>前复权算法</strong>以每日 Adj Close ÷ Close 得到复权因子，同步调整 Open / High / Low / Close，再按香港交易周聚合；最新价格保持不变。</div>
+          <div><strong>对齐口径</strong>A、B 均绘制 2020 至今全部 350 根周 K。A 以 2021 自然年最高周为 X=0；B 以截止日前滚动 12 个月最高周为 X=0。</div>
+        </div>
+      </details>
+    </section>
+
+    <footer class="footer">
+      <span>横轴为相对峰值周数：负数在峰值前，正数在峰值后；拖动仅改变 B 的时间对齐。</span>
+      <span>仅作历史路径研究，不构成投资建议。</span>
+    </footer>
+  </main>
+
+  <script>
+    const DATA_META = {"symbol":"0700.HK","currency":"HKD","exchange":"HKG","asOf":"2026-09-15","source":"Yahoo Finance Chart API","dailyRows":1651,"weeklyRows":350};
+    const WEEKLY_DATA = [{"d":"2020-01-06","o":334.2601,"h":351.149,"l":330.2138,"c":350.6212,"ro":350.3055,"rh":368.0051,"rl":346.0649,"rc":367.452,"v":93916521},{"d":"2020-01-13","o":351.8527,"h":363.2879,"l":348.3342,"c":350.9731,"ro":368.7426,"rh":380.7267,"rl":365.0551,"rc":367.8207,"v":106065865},{"d":"2020-01-20","o":356.2508,"h":356.2508,"l":333.3804,"c":339.3619,"ro":373.3519,"rh":373.3519,"rl":349.3836,"rc":355.6522,"v":89829658},{"d":"2020-01-27","o":337.9545,"h":342.7045,"l":325.6396,"c":328.1026,"ro":354.1772,"rh":359.1553,"rl":341.2713,"rc":343.8524,"v":83534531},{"d":"2020-02-03","o":332.5007,"h":353.9638,"l":325.1118,"c":353.9638,"ro":348.4617,"rh":370.955,"rl":340.7181,"rc":370.955,"v":121710330},{"d":"2020-02-10","o":347.9822,"h":369.4453,"l":347.4545,"c":365.0472,"ro":364.6864,"rh":387.1797,"rl":364.1333,"rc":382.5704,"v":96653448},{"d":"2020-02-17","o":361.1768,"h":369.2694,"l":351.8526,"c":352.7323,"ro":378.5143,"rh":386.9953,"rl":368.7426,"rc":369.6644,"v":76196692},{"d":"2020-02-24","o":345.8712,"h":355.1953,"l":338.1304,"c":339.5378,"ro":362.474,"rh":372.2456,"rl":354.3616,"rc":355.8366,"v":126574396},{"d":"2020-03-02","o":338.3063,"h":357.8342,"l":338.3063,"c":348.1582,"ro":354.546,"rh":375.0112,"rl":354.546,"rc":364.8708,"v":132221510},{"d":"2020-03-09","o":334.2601,"h":342.5285,"l":295.5563,"c":321.0656,"ro":350.3055,"rh":358.9709,"rl":309.7438,"rc":336.4776,"v":199500602},{"d":"2020-03-16","o":313.1489,"h":320.5378,"l":286.0562,"c":316.3156,"ro":328.1809,"rh":335.9245,"rl":299.7877,"rc":331.4996,"v":269351398},{"d":"2020-03-23","o":299.2507,"h":343.0564,"l":299.2507,"c":336.3712,"ro":313.6156,"rh":359.524,"rl":313.6156,"rc":352.5179,"v":183968040},{"d":"2020-03-30","o":327.047,"h":339.5379,"l":325.1118,"c":331.0934,"ro":342.7462,"rh":355.8366,"rl":340.7181,"rc":346.9868,"v":102034798},{"d":"2020-04-06","o":334.2601,"h":344.2878,"l":331.2693,"c":344.2878,"ro":350.3055,"rh":360.8146,"rl":347.1711,"rc":360.8146,"v":69060033},{"d":"2020-04-13","o":348.3341,"h":369.0935,"l":345.1675,"c":360.2971,"ro":365.0551,"rh":386.811,"rl":361.7365,"rc":377.5924,"v":114100411},{"d":"2020-04-20","o":360.2971,"h":365.0471,"l":348.3341,"c":357.4823,"ro":377.5924,"rh":382.5704,"rl":365.0551,"rc":374.6425,"v":90714146},{"d":"2020-04-27","o":363.1119,"h":368.5656,"l":360.8249,"c":366.8064,"ro":380.5423,"rh":386.2578,"rl":378.1455,"rc":384.4142,"v":45619192},{"d":"2020-05-04","o":359.5934,"h":367.862,"l":351.8527,"c":367.862,"ro":376.8549,"rh":385.5204,"rl":368.7426,"rc":385.5204,"v":99079185},{"d":"2020-05-11","o":373.8434,"h":393.1954,"l":370.5655,"c":371.6243,"ro":391.789,"rh":412.0698,"rl":387.1797,"rc":388.2859,"v":148929730},{"d":"2020-05-18","o":369.6832,"h":388.2115,"l":361.7426,"c":363.86,"ro":386.2578,"rh":405.6169,"rl":377.9612,"rc":380.1736,"v":128349156},{"d":"2020-05-25","o":361.7426,"h":377.9768,"l":356.4488,"c":362.0955,"ro":377.9612,"rh":394.9233,"rl":372.43,"rc":378.3299,"v":124747551},{"d":"2020-06-01","o":370.0362,"h":385.9175,"l":369.8597,"c":383.0942,"ro":386.6266,"rh":403.22,"rl":386.4422,"rc":400.2701,"v":114845946},{"d":"2020-06-08","o":383.8,"h":401.7989,"l":376.7416,"c":389.0938,"ro":401.0076,"rh":419.8134,"rl":393.6327,"rc":406.5387,"v":126424799},{"d":"2020-06-15","o":383.8,"h":410.7984,"l":381.3296,"c":406.2104,"ro":401.0076,"rh":429.2164,"rl":398.4264,"rc":424.4227,"v":104677224},{"d":"2020-06-22","o":405.8575,"h":445.5609,"l":405.1517,"c":427.915,"ro":424.054,"rh":465.5375,"rl":423.3165,"rc":447.1004,"v":106560387},{"d":"2020-06-29","o":424.3858,"h":466.7361,"l":424.3858,"c":462.7657,"ro":443.413,"rh":487.662,"rl":443.413,"rc":483.5137,"v":105231923},{"d":"2020-07-06","o":462.3246,"h":497.6167,"l":451.737,"c":482.1764,"ro":483.0528,"rh":519.9271,"rl":471.9905,"rc":503.7946,"v":136269324},{"d":"2020-07-13","o":476.8825,"h":490.5582,"l":450.8547,"c":459.6777,"ro":498.2634,"rh":512.5522,"rl":471.0686,"rc":480.2872,"v":122208105},{"d":"2020-07-20","o":459.6777,"h":497.6166,"l":452.6193,"c":465.8538,"ro":480.2872,"rh":519.9271,"rl":472.9124,"rc":486.7402,"v":119585882},{"d":"2020-07-27","o":467.6184,"h":485.2644,"l":454.3839,"c":471.1476,"ro":488.5839,"rh":507.0211,"rl":474.7561,"rc":492.2713,"v":88994985},{"d":"2020-08-03","o":472.9122,"h":497.6166,"l":440.6201,"c":465.4127,"ro":494.1151,"rh":519.9271,"rl":460.3751,"rc":486.2793,"v":148426520},{"d":"2020-08-10","o":449.9724,"h":468.5007,"l":442.0317,"c":446.8843,"ro":470.1468,"rh":489.5058,"rl":461.8501,"rc":466.9203,"v":149994493},{"d":"2020-08-17","o":448.649,"h":462.7657,"l":442.914,"c":457.0308,"ro":468.764,"rh":483.5137,"rl":462.7719,"rc":477.5216,"v":77989427},{"d":"2020-08-24","o":474.2356,"h":494.0874,"l":472.0299,"c":476.8825,"ro":495.4978,"rh":516.2396,"rl":493.1932,"rc":498.2634,"v":109156708},{"d":"2020-08-31","o":489.2347,"h":489.6759,"l":452.6193,"c":457.0308,"ro":511.1694,"rh":511.6303,"rl":472.9124,"rc":477.5216,"v":115082612},{"d":"2020-09-07","o":455.2662,"h":462.7657,"l":442.4729,"c":455.2662,"ro":475.6779,"rh":483.5137,"rl":462.311,"rc":475.6779,"v":87582267},{"d":"2020-09-14","o":460.1189,"h":475.1179,"l":450.4136,"c":463.2069,"ro":480.7481,"rh":496.4197,"rl":470.6077,"rc":483.9746,"v":80553341},{"d":"2020-09-21","o":460.56,"h":465.4126,"l":442.914,"c":444.2375,"ro":481.2091,"rh":486.2793,"rl":462.7719,"rc":464.1547,"v":68502625},{"d":"2020-09-28","o":445.5609,"h":458.7954,"l":444.2375,"c":451.2959,"ro":465.5375,"rh":479.3654,"rl":464.1547,"rc":471.5296,"v":35381220},{"d":"2020-10-05","o":467.6184,"h":480.8529,"l":460.1189,"c":476.0002,"ro":488.5839,"rh":502.4118,"rl":480.7481,"rc":497.3416,"v":66097318},{"d":"2020-10-12","o":480.8529,"h":506.4396,"l":479.5294,"c":491.4405,"ro":502.4118,"rh":529.1456,"rl":501.029,"rc":513.4741,"v":76639785},{"d":"2020-10-19","o":495.852,"h":502.4692,"l":487.9113,"c":495.4108,"ro":518.0833,"rh":524.9973,"rl":509.7866,"rc":517.6224,"v":56557402},{"d":"2020-10-26","o":498.4989,"h":541.7314,"l":494.5286,"c":521.4387,"ro":520.8489,"rh":566.0198,"rl":516.7006,"rc":544.8171,"v":109531483},{"d":"2020-11-02","o":523.2032,"h":553.2013,"l":505.9985,"c":542.1726,"ro":546.6609,"rh":578.004,"rl":528.6847,"rc":566.4808,"v":117434963},{"d":"2020-11-09","o":556.2894,"h":558.4952,"l":486.1467,"c":531.1439,"ro":581.2305,"rh":583.5352,"rl":507.9429,"rc":554.9576,"v":195578413},{"d":"2020-11-16","o":529.3794,"h":532.0263,"l":505.5573,"c":518.7917,"ro":553.1139,"rh":555.8795,"rl":528.2238,"rc":542.0516,"v":91684206},{"d":"2020-11-23","o":528.497,"h":529.3794,"l":503.7926,"c":514.3803,"ro":552.192,"rh":553.1139,"rl":526.38,"rc":537.4423,"v":86490735},{"d":"2020-11-30","o":513.498,"h":523.2033,"l":496.7343,"c":519.2329,"ro":536.5204,"rh":546.6609,"rl":519.0052,"rc":542.5125,"v":106774542},{"d":"2020-12-07","o":522.7621,"h":522.7621,"l":509.5276,"c":518.7917,"ro":546.2,"rh":546.2,"rl":532.3721,"rc":542.0516,"v":58632679},{"d":"2020-12-14","o":516.586,"h":517.0272,"l":487.9113,"c":511.7334,"ro":539.7469,"rh":540.2079,"rl":509.7866,"rc":534.6768,"v":102901604},{"d":"2020-12-21","o":512.1745,"h":512.1745,"l":491.8817,"c":491.8817,"ro":535.1377,"rh":535.1377,"rl":513.935,"rc":513.935,"v":37769842},{"d":"2020-12-28","o":476.0003,"h":499.3812,"l":457.9131,"c":499.3812,"ro":497.3416,"rh":521.7708,"rl":478.4435,"rc":521.7708,"v":136672833},{"d":"2021-01-04","o":492.3227,"h":528.4971,"l":491.8816,"c":505.5573,"ro":514.3959,"rh":552.192,"rl":513.935,"rc":528.2238,"v":138748415},{"d":"2021-01-11","o":512.6157,"h":569.9651,"l":512.6157,"c":569.0828,"ro":535.5986,"rh":595.5193,"rl":535.5986,"rc":594.5974,"v":161041864},{"d":"2021-01-18","o":563.3478,"h":617.6092,"l":560.701,"c":609.6686,"ro":588.6053,"rh":645.2995,"rl":585.8398,"rc":637.0028,"v":171526233},{"d":"2021-01-25","o":623.7854,"h":677.1645,"l":600.8455,"c":601.2867,"ro":651.7525,"rh":707.5248,"rl":627.7842,"rc":628.2452,"v":223007894},{"d":"2021-02-01","o":615.8446,"h":667.9002,"l":615.8446,"c":646.725,"ro":643.4558,"rh":697.8453,"rl":643.4558,"rc":675.7208,"v":123939421},{"d":"2021-02-08","o":659.9596,"h":679.3701,"l":648.4898,"c":667.9003,"ro":689.5486,"rh":709.8295,"rl":677.5645,"rc":697.8453,"v":45988502},{"d":"2021-02-15","o":672.7529,"h":684.2227,"l":640.5489,"c":653.7834,"ro":702.9155,"rh":714.8997,"rl":669.2678,"rc":683.0956,"v":93775973},{"d":"2021-02-22","o":661.283,"h":661.283,"l":584.523,"c":584.523,"ro":690.9314,"rh":690.9314,"rl":610.7299,"rc":610.7299,"v":170201742},{"d":"2021-03-01","o":610.5508,"h":637.902,"l":588.4933,"c":599.0809,"ro":637.9247,"rh":666.5022,"rl":614.8782,"rc":625.9406,"v":130257813},{"d":"2021-03-08","o":603.0513,"h":612.7565,"l":540.8492,"c":573.9354,"ro":630.0889,"rh":640.2293,"rl":565.098,"rc":599.6676,"v":157565682},{"d":"2021-03-15","o":573.4942,"h":576.1412,"l":547.9076,"c":554.0837,"ro":599.2067,"rh":601.9723,"rl":572.4728,"rc":578.9258,"v":128608265},{"d":"2021-03-22","o":556.2895,"h":568.6416,"l":519.2329,"c":547.0253,"ro":581.2305,"rh":594.1365,"rl":542.5125,"rc":571.551,"v":125234597},{"d":"2021-03-29","o":547.0253,"h":578.7882,"l":529.8205,"c":577.0236,"ro":571.551,"rh":604.7379,"rl":553.5748,"rc":602.8941,"v":106749611},{"d":"2021-04-05","o":576.1412,"h":580.5527,"l":541.7315,"c":547.4665,"ro":601.9723,"rh":606.5815,"rl":566.0198,"rc":572.0119,"v":322206823},{"d":"2021-04-12","o":543.4961,"h":558.054,"l":532.0262,"c":557.6129,"ro":567.8636,"rh":583.0742,"rl":555.8795,"rc":582.6133,"v":108178931},{"d":"2021-04-19","o":555.8482,"h":568.2004,"l":536.4377,"c":557.6129,"ro":580.7696,"rh":593.6755,"rl":560.4887,"rc":582.6133,"v":95248540},{"d":"2021-04-26","o":557.6129,"h":564.6712,"l":543.9373,"c":549.6722,"ro":582.6133,"rh":589.9881,"rl":568.3245,"rc":574.3166,"v":69085216},{"d":"2021-05-03","o":546.5841,"h":551.4367,"l":529.3793,"c":529.3793,"ro":571.0901,"rh":576.1603,"rl":553.1139,"rc":553.1139,"v":70258490},{"d":"2021-05-10","o":528.497,"h":536.4377,"l":499.8223,"c":514.3803,"ro":552.192,"rh":560.4887,"rl":522.2317,"rc":537.4423,"v":121554039},{"d":"2021-05-17","o":523.2032,"h":543.0549,"l":514.8214,"c":519.2329,"ro":546.6609,"rh":567.4026,"rl":537.9033,"rc":542.5125,"v":94730573},{"d":"2021-05-24","o":518.9989,"h":552.6255,"l":510.1499,"c":532.2726,"ro":540.6688,"rh":575.6993,"rl":531.4503,"rc":554.4966,"v":112064457},{"d":"2021-05-31","o":541.5642,"h":566.3415,"l":534.0425,"c":541.1216,"ro":564.1761,"rh":589.9881,"rl":556.3404,"rc":563.7152,"v":88021038},{"d":"2021-06-07","o":540.6792,"h":541.1217,"l":527.4056,"c":527.4056,"ro":563.2543,"rh":563.7152,"rl":549.4265,"rc":549.4265,"v":69514979},{"d":"2021-06-14","o":535.3697,"h":538.0245,"l":523.4235,"c":533.6,"ro":557.7231,"rh":560.4887,"rl":545.2781,"rc":555.8795,"v":51391920},{"d":"2021-06-21","o":530.9453,"h":530.9453,"l":505.7253,"c":529.6179,"ro":553.1139,"rh":553.1139,"rl":526.8409,"rc":551.7311,"v":111697788},{"d":"2021-06-28","o":533.6,"h":536.2547,"l":506.6102,"c":508.38,"ro":555.8795,"rh":558.645,"rl":527.7628,"rc":529.6065,"v":70246504},{"d":"2021-07-05","o":504.3979,"h":506.1677,"l":450.861,"c":476.5233,"ro":525.4582,"rh":527.3019,"rl":469.6859,"rc":496.4197,"v":197365511},{"d":"2021-07-12","o":486.2573,"h":506.1678,"l":462.3648,"c":499.0886,"ro":506.5601,"rh":527.3019,"rl":481.67,"rc":519.9271,"v":128671552},{"d":"2021-07-19","o":495.5489,"h":495.5489,"l":468.1167,"c":469.8865,"ro":516.2396,"rh":516.2396,"rl":487.662,"rc":489.5058,"v":97065158},{"d":"2021-07-26","o":451.3034,"h":453.5157,"l":373.4315,"c":423.8713,"ro":470.1468,"rh":472.4514,"rl":389.0234,"rc":441.5692,"v":451847172},{"d":"2021-08-02","o":421.2166,"h":423.6943,"l":374.8473,"c":401.3946,"ro":438.8037,"rh":441.3849,"rl":390.4984,"rc":418.1541,"v":319934396},{"d":"2021-08-09","o":396.2621,"h":436.26,"l":391.6606,"c":416.0841,"ro":412.8073,"rh":454.4752,"rl":408.0137,"rc":433.4569,"v":157022795},{"d":"2021-08-16","o":410.2437,"h":412.7214,"l":364.7593,"c":376.4402,"ro":427.3727,"rh":429.9539,"rl":379.9892,"rc":392.1577,"v":219122396},{"d":"2021-08-23","o":389.3599,"h":435.0211,"l":381.9266,"c":412.7214,"ro":405.6169,"rh":453.1846,"rl":397.8732,"rc":429.9539,"v":191058666},{"d":"2021-08-30","o":410.7746,"h":451.3034,"l":395.7312,"c":431.8354,"ro":427.9258,"rh":470.1468,"rl":412.2542,"rc":449.8659,"v":188276087},{"d":"2021-09-06","o":433.0743,"h":468.1167,"l":423.8713,"c":433.6053,"ro":451.1566,"rh":487.662,"rl":441.5692,"rc":451.7097,"v":189286667},{"d":"2021-09-13","o":424.7562,"h":427.2339,"l":393.7844,"c":408.6508,"ro":442.4911,"rh":445.0723,"rl":410.2261,"rc":425.7133,"v":143612035},{"d":"2021-09-20","o":404.0493,"h":418.9158,"l":392.1916,"c":407.235,"ro":420.9196,"rh":436.4068,"rl":408.5668,"rc":424.2383,"v":76951112},{"d":"2021-09-27","o":406.1731,"h":421.3935,"l":398.3859,"c":408.2969,"ro":423.1321,"rh":438.988,"rl":415.0198,"rc":425.3446,"v":80815374},{"d":"2021-10-04","o":415.9071,"h":433.6052,"l":394.1383,"c":426.349,"ro":433.2725,"rh":451.7097,"rl":410.5948,"rc":444.1505,"v":85487084},{"d":"2021-10-11","o":435.906,"h":442.4543,"l":424.9332,"c":438.5608,"ro":454.1065,"rh":460.9282,"rl":442.6755,"rc":456.8721,"v":77863863},{"d":"2021-10-18","o":441.9234,"h":455.728,"l":429.5347,"c":450.861,"ro":460.3751,"rh":474.7561,"rl":447.4691,"rc":469.6859,"v":106641379},{"d":"2021-10-25","o":447.3214,"h":451.3035,"l":425.6411,"c":425.6411,"ro":465.9984,"rh":470.1468,"rl":443.413,"rc":443.413,"v":82872251},{"d":"2021-11-01","o":421.5705,"h":426.526,"l":405.1112,"c":413.6063,"ro":439.1724,"rh":444.3348,"rl":422.0259,"rc":430.8757,"v":120927857},{"d":"2021-11-08","o":407.235,"h":434.8441,"l":401.2177,"c":429.3577,"ro":424.2383,"rh":453.0002,"rl":417.9697,"rc":447.2848,"v":137147668},{"d":"2021-11-15","o":435.3751,"h":450.4185,"l":429.1807,"c":438.9147,"ro":453.5534,"rh":469.2249,"rl":447.1004,"rc":457.2408,"v":112422123},{"d":"2021-11-22","o":440.6846,"h":443.7817,"l":407.058,"c":410.0667,"ro":459.0845,"rh":462.311,"rl":424.054,"rc":427.1883,"v":118521609},{"d":"2021-11-29","o":408.8278,"h":419.0928,"l":397.324,"c":409.3588,"ro":425.8977,"rh":436.5912,"rl":413.9135,"rc":426.4508,"v":125457446},{"d":"2021-12-06","o":397.147,"h":419.8007,"l":396.0851,"c":410.0667,"ro":413.7292,"rh":437.3287,"rl":412.623,"rc":427.1883,"v":106254299},{"d":"2021-12-13","o":416.438,"h":425.6411,"l":387.59,"c":387.59,"ro":433.8257,"rh":443.413,"rl":403.7731,"rc":403.7731,"v":106933394},{"d":"2021-12-20","o":387.0591,"h":414.8452,"l":379.6258,"c":407.235,"ro":403.22,"rh":432.1663,"rl":395.4764,"rc":424.2383,"v":101901831},{"d":"2021-12-27","o":405.1112,"h":408.8278,"l":389.7138,"c":404.2263,"ro":422.0259,"rh":425.8977,"rl":405.9856,"rc":421.104,"v":49984877},{"d":"2022-01-03","o":406.881,"h":409.7127,"l":372.5466,"c":392.0146,"ro":423.8696,"rh":426.8195,"rl":388.1016,"rc":408.3824,"v":102747083},{"d":"2022-01-10","o":396.4391,"h":430.0656,"l":391.4836,"c":418.9157,"ro":412.9917,"rh":448.0222,"rl":407.8293,"rc":436.4068,"v":104432639},{"d":"2022-01-17","o":417.6769,"h":436.1629,"l":398.2089,"c":432.8807,"ro":435.1162,"rh":454.3741,"rl":414.8354,"rc":450.9549,"v":117599857},{"d":"2022-01-24","o":428.5045,"h":434.5218,"l":415.3758,"c":419.3874,"ro":446.3959,"rh":452.6645,"rl":432.7191,"rc":436.8981,"v":101949846},{"d":"2022-01-31","o":429.5985,"h":440.3567,"l":429.4162,"c":436.7099,"ro":447.5356,"rh":458.743,"rl":447.3457,"rc":454.9439,"v":16772866},{"d":"2022-02-07","o":439.445,"h":444.9153,"l":427.5928,"c":434.8864,"ro":457.7933,"rh":463.4919,"rl":445.4461,"rc":453.0444,"v":96689678},{"d":"2022-02-14","o":428.6869,"h":440.1744,"l":424.3107,"c":428.5045,"ro":446.5859,"rh":458.5531,"rl":442.0269,"rc":446.3959,"v":79931418},{"d":"2022-02-21","o":423.2166,"h":425.587,"l":383.1013,"c":386.5658,"ro":440.8872,"rh":443.3566,"rl":399.097,"rc":402.7061,"v":164613819},{"d":"2022-02-28","o":382.9189,"h":400.2414,"l":364.6847,"c":367.6022,"ro":398.907,"rh":416.9528,"rl":379.9114,"rc":382.9507,"v":128022619},{"d":"2022-03-07","o":354.6559,"h":363.5906,"l":328.2162,"c":335.3275,"ro":369.4639,"rh":378.7717,"rl":341.9203,"rc":349.3286,"v":187251377},{"d":"2022-03-14","o":321.8343,"h":365.5964,"l":270.7784,"c":347.3622,"ro":335.2718,"rh":380.8612,"rl":282.0842,"rc":361.8656,"v":421627195},{"d":"2022-03-21","o":357.5733,"h":367.9668,"l":320.0108,"c":324.934,"ro":372.5031,"rh":383.3306,"rl":333.3723,"rc":338.5011,"v":199198525},{"d":"2022-03-28","o":326.3928,"h":354.2912,"l":322.746,"c":345.3564,"ro":340.0207,"rh":369.084,"rl":336.2216,"rc":359.7761,"v":109365924},{"d":"2022-04-04","o":354.4735,"h":356.4792,"l":333.6865,"c":336.9687,"ro":369.2739,"rh":371.3634,"rl":347.619,"rc":351.0381,"v":71878232},{"d":"2022-04-11","o":333.6865,"h":345.5387,"l":321.8342,"c":341.3449,"ro":347.619,"rh":359.9661,"rl":335.2718,"rc":355.5971,"v":90548685},{"d":"2022-04-18","o":333.5041,"h":336.2393,"l":304.694,"c":310.529,"ro":347.429,"rh":350.2783,"rl":317.416,"rc":323.4946,"v":86719760},{"d":"2022-04-25","o":302.8707,"h":353.7441,"l":296.4887,"c":344.08,"ro":315.5164,"rh":368.5141,"rl":308.868,"rc":358.4464,"v":152862641},{"d":"2022-05-02","o":345.5387,"h":350.8266,"l":316.364,"c":318.3697,"ro":359.9661,"rh":365.4748,"rl":329.5732,"rc":331.6627,"v":88431460},{"d":"2022-05-09","o":302.6883,"h":330.0397,"l":300.8649,"c":323.1107,"ro":315.3265,"rh":343.8198,"rl":313.4269,"rc":336.6015,"v":97136326},{"d":"2022-05-16","o":328.2162,"h":342.0742,"l":304.5117,"c":322.6953,"ro":341.9203,"rh":356.3569,"rl":317.226,"rc":334.512,"v":171086008},{"d":"2022-05-23","o":320.3131,"h":321.2293,"l":302.355,"c":313.1665,"ro":332.0426,"rh":332.9924,"rl":313.4269,"rc":324.6343,"v":102702905},{"d":"2022-05-30","o":316.8314,"h":335.5224,"l":315.5487,"c":328.9256,"ro":328.4334,"rh":347.8089,"rl":327.1037,"rc":340.9705,"v":134934354},{"d":"2022-06-06","o":331.6743,"h":372.7213,"l":326.177,"c":363.1926,"ro":343.8198,"rh":386.3699,"rl":338.1212,"rc":376.4922,"v":176216737},{"d":"2022-06-13","o":351.4649,"h":354.3968,"l":331.4911,"c":338.4544,"ro":364.3351,"rh":367.3744,"rl":343.6299,"rc":350.8482,"v":109620361},{"d":"2022-06-20","o":339.0042,"h":353.6638,"l":334.0566,"c":352.0146,"ro":351.4181,"rh":366.6145,"rl":346.2893,"rc":364.9049,"v":74949806},{"d":"2022-06-27","o":354.58,"h":366.6742,"l":324.3445,"c":324.711,"ro":367.5643,"rh":380.1014,"rl":336.2216,"rc":336.6015,"v":194094750},{"d":"2022-07-04","o":324.711,"h":327.2764,"l":312.2503,"c":323.0618,"ro":336.6015,"rh":339.2609,"rl":323.6845,"rc":334.8919,"v":126876413},{"d":"2022-07-11","o":315.5487,"h":317.1979,"l":296.1248,"c":297.774,"ro":327.1037,"rh":328.8133,"rl":306.9684,"rc":308.678,"v":103332443},{"d":"2022-07-18","o":299.0566,"h":314.0827,"l":294.109,"c":304.1875,"ro":310.0077,"rh":325.5841,"rl":304.8789,"rc":315.3265,"v":87598424},{"d":"2022-07-25","o":301.9886,"h":302.7215,"l":279.4494,"c":281.0986,"ro":313.047,"rh":313.8068,"rl":289.6825,"rc":291.3921,"v":108521310},{"d":"2022-08-01","o":276.7007,"h":287.6954,"l":263.8735,"c":281.8316,"ro":286.8331,"rh":298.2305,"rl":273.5362,"rc":292.1519,"v":154060292},{"d":"2022-08-08","o":277.0672,"h":280.1824,"l":267.7217,"c":278.7164,"ro":287.213,"rh":290.4423,"rl":277.5253,"rc":288.9226,"v":74167483},{"d":"2022-08-15","o":276.5175,"h":293.1928,"l":268.0882,"c":288.6116,"ro":286.6432,"rh":303.9291,"rl":277.9052,"rc":299.1802,"v":113964947},{"d":"2022-08-22","o":286.0462,"h":303.088,"l":281.6483,"c":297.041,"ro":296.5209,"rh":314.1867,"rl":291.9619,"rc":307.9182,"v":83570593},{"d":"2022-08-29","o":292.2766,"h":306.5697,"l":287.5122,"c":301.0723,"ro":302.9794,"rh":317.7959,"rl":298.0405,"rc":312.0972,"v":107464665},{"d":"2022-09-05","o":296.8577,"h":297.5907,"l":273.952,"c":281.2819,"ro":307.7282,"rh":308.4881,"rl":283.9838,"rc":291.582,"v":97411871},{"d":"2022-09-12","o":282.7478,"h":282.9311,"l":268.6379,"c":268.6379,"ro":293.1017,"rh":293.2916,"rl":278.4751,"rc":278.4751,"v":77311477},{"d":"2022-09-19","o":267.7216,"h":271.753,"l":251.9626,"c":251.9626,"ro":277.5253,"rh":281.7043,"rl":261.1891,"rc":261.1891,"v":96197009},{"d":"2022-09-26","o":250.3133,"h":263.507,"l":241.5176,"c":244.083,"ro":259.4795,"rh":273.1563,"rl":250.3616,"rc":253.021,"v":118083399},{"d":"2022-10-03","o":241.884,"h":258.9259,"l":237.6694,"c":247.9312,"ro":250.7415,"rh":268.4074,"rl":246.3726,"rc":257.0101,"v":55259013},{"d":"2022-10-10","o":243.7165,"h":245.9154,"l":225.5752,"c":228.3239,"ro":252.6411,"rh":254.9206,"rl":233.8355,"rc":236.6848,"v":129130101},{"d":"2022-10-17","o":224.659,"h":235.104,"l":210.9156,"c":213.2977,"ro":232.8857,"rh":243.7132,"rl":218.639,"rc":221.1084,"v":153049228},{"d":"2022-10-24","o":205.2349,"h":207.0674,"l":181.9628,"c":183.9785,"ro":212.7504,"rh":214.6499,"rl":188.626,"rc":190.7155,"v":307422540},{"d":"2022-10-31","o":184.8947,"h":226.6747,"l":182.3293,"c":218.6119,"ro":191.6653,"rh":234.9752,"rl":189.0059,"rc":226.6172,"v":274054696},{"d":"2022-11-07","o":214.214,"h":238.9521,"l":209.8161,"c":236.7532,"ro":222.0582,"rh":247.7023,"rl":217.4993,"rc":245.4228,"v":184728632},{"d":"2022-11-14","o":246.6484,"h":277.4337,"l":235.6537,"c":263.6903,"ro":255.6804,"rh":287.593,"rl":244.2831,"rc":273.3463,"v":303085491},{"d":"2022-11-21","o":258.5594,"h":265.1562,"l":245.9154,"c":250.1301,"ro":268.0275,"rh":274.8659,"rl":254.9206,"rc":259.2896,"v":138603800},{"d":"2022-11-28","o":237.3029,"h":278.3499,"l":237.3029,"c":271.2033,"ro":245.9926,"rh":288.5427,"rl":245.9926,"rc":281.1345,"v":193635080},{"d":"2022-12-05","o":284.0305,"h":299.2399,"l":273.952,"c":298.3236,"ro":294.4314,"rh":310.1977,"rl":283.9838,"rc":309.2479,"v":215298978},{"d":"2022-12-12","o":291.7268,"h":300.3394,"l":285.4965,"c":290.2609,"ro":302.4095,"rh":311.3374,"rl":295.951,"rc":300.8899,"v":114924042},{"d":"2022-12-19","o":293.5593,"h":301.2556,"l":280.7321,"c":293.376,"ro":304.3091,"rh":312.2872,"rl":291.0121,"rc":304.1191,"v":114797199},{"d":"2022-12-26","o":297.7739,"h":314.999,"l":294.842,"c":306.02,"ro":308.678,"rh":326.5339,"rl":305.6387,"rc":317.226,"v":85795983},{"d":"2023-01-02","o":306.02,"h":349.4052,"l":301.2556,"c":337.0574,"ro":317.226,"rh":362.2,"rl":312.2872,"rc":349.4,"v":138847093},{"d":"2023-01-09","o":342.4595,"h":366.1906,"l":339.1796,"c":358.2802,"ro":355,"rh":379.6,"rl":351.6,"rc":371.4,"v":145418290},{"d":"2023-01-16","o":359.052,"h":378.3455,"l":351.1417,"c":377.9596,"ro":372.2,"rh":392.2,"rl":364,"rc":391.8,"v":97428128},{"d":"2023-01-23","o":385.8699,"h":401.8835,"l":384.3264,"c":400.34,"ro":400,"rh":416.6,"rl":398.4,"rc":415,"v":42354300},{"d":"2023-01-30","o":393.2015,"h":396.4813,"l":360.4025,"c":371.3998,"ro":407.6,"rh":411,"rl":373.6,"rc":385,"v":190499170},{"d":"2023-02-06","o":361.946,"h":383.1689,"l":355.5792,"c":369.8563,"ro":375.2,"rh":397.2,"rl":368.6,"rc":383.4,"v":113929070},{"d":"2023-02-13","o":365.8047,"h":378.9243,"l":359.2449,"c":360.5954,"ro":379.2,"rh":392.8,"rl":372.4,"rc":373.8,"v":94422545},{"d":"2023-02-20","o":358.4732,"h":365.4188,"l":335.128,"c":337.0574,"ro":371.6,"rh":378.8,"rl":347.4,"rc":349.4,"v":118626471},{"d":"2023-02-27","o":332.8128,"h":361.5601,"l":330.6905,"c":354.6145,"ro":345,"rh":374.8,"rl":342.8,"rc":367.6,"v":114674581},{"d":"2023-03-06","o":351.1416,"h":355.772,"l":318.9215,"c":319.8862,"ro":364,"rh":368.8,"rl":330.6,"rc":331.6,"v":105745699},{"d":"2023-03-13","o":328.3753,"h":341.302,"l":322.0084,"c":327.4106,"ro":340.4,"rh":353.8,"rl":333.8,"rc":339.4,"v":117784860},{"d":"2023-03-20","o":325.0954,"h":373.715,"l":318.7285,"c":363.4895,"ro":337,"rh":387.4,"rl":330.4,"rc":376.8,"v":141433931},{"d":"2023-03-27","o":361.3672,"h":383.5547,"l":349.7911,"c":372.1715,"ro":374.6,"rh":397.6,"rl":362.6,"rc":385.8,"v":144432322},{"d":"2023-04-03","o":375.2585,"h":377.1879,"l":367.1552,"c":371.7856,"ro":389,"rh":391,"rl":380.6,"rc":385.4,"v":47973435},{"d":"2023-04-10","o":375.2585,"h":376.2231,"l":335.128,"c":352.4922,"ro":389,"rh":390,"rl":347.4,"rc":365.4,"v":100102869},{"d":"2023-04-17","o":351.7205,"h":358.8591,"l":333.7775,"c":336.8644,"ro":364.6,"rh":372,"rl":346,"rc":349.2,"v":72730446},{"d":"2023-04-24","o":334.9351,"h":342.2666,"l":321.2367,"c":332.234,"ro":347.2,"rh":354.8,"rl":333,"rc":344.4,"v":96590859},{"d":"2023-05-01","o":339.5656,"h":341.8808,"l":321.2367,"c":330.6905,"ro":352,"rh":354.4,"rl":333,"rc":342.8,"v":51594495},{"d":"2023-05-08","o":331.8482,"h":335.321,"l":311.7829,"c":316.6063,"ro":344,"rh":347.6,"rl":323.2,"rc":328.2,"v":85393141},{"d":"2023-05-15","o":313.5193,"h":337.4432,"l":313.5193,"c":323.7161,"ro":325,"rh":349.8,"rl":325,"rc":333.2,"v":114522288},{"d":"2023-05-22","o":322.3559,"h":335.7631,"l":309.3373,"c":313.2234,"ro":331.8,"rh":345.6,"rl":318.4,"rc":322.4,"v":74638098},{"d":"2023-05-29","o":317.8868,"h":324.6876,"l":297.2903,"c":324.6876,"ro":327.2,"rh":334.2,"rl":306,"rc":334.2,"v":137714426},{"d":"2023-06-05","o":326.4364,"h":330.3225,"l":318.8584,"c":326.4363,"ro":336,"rh":340,"rl":328.2,"rc":336,"v":84163843},{"d":"2023-06-12","o":330.3225,"h":354.028,"l":324.6876,"c":352.6678,"ro":340,"rh":364.4,"rl":334.2,"rc":363,"v":119552836},{"d":"2023-06-19","o":349.3646,"h":349.7533,"l":323.5218,"c":327.4079,"ro":359.6,"rh":360,"rl":333,"rc":337,"v":69760937},{"d":"2023-06-26","o":326.0477,"h":334.5973,"l":320.0242,"c":322.1616,"ro":335.6,"rh":344.4,"rl":329.4,"rc":331.6,"v":81250076},{"d":"2023-07-03","o":322.3559,"h":331.4883,"l":310.8917,"c":317.3039,"ro":331.8,"rh":341.2,"rl":320,"rc":326.6,"v":74877230},{"d":"2023-07-10","o":324.299,"h":344.7012,"l":318.0811,"c":342.5639,"ro":333.8,"rh":354.8,"rl":327.4,"rc":352.6,"v":95025422},{"d":"2023-07-17","o":341.7866,"h":341.7866,"l":317.6925,"c":323.5217,"ro":351.8,"rh":351.8,"rl":327,"rc":333,"v":79469684},{"d":"2023-07-24","o":319.247,"h":341.9809,"l":314.5836,"c":340.4265,"ro":328.6,"rh":352,"rl":323.8,"rc":350.4,"v":97492937},{"d":"2023-07-31","o":349.7532,"h":352.6678,"l":329.3509,"c":333.6257,"ro":360,"rh":363,"rl":339,"rc":343.4,"v":117031958},{"d":"2023-08-07","o":330.5168,"h":332.0713,"l":322.5502,"c":326.242,"ro":340.2,"rh":341.8,"rl":332,"rc":335.8,"v":60269410},{"d":"2023-08-14","o":318.6641,"h":326.242,"l":311.4747,"c":315.7495,"ro":328,"rh":335.8,"rl":320.6,"rc":325,"v":89953560},{"d":"2023-08-21","o":311.8633,"h":318.6641,"l":305.4512,"c":310.8918,"ro":321,"rh":328,"rl":314.4,"rc":320,"v":102505005},{"d":"2023-08-28","o":321.1901,"h":324.4933,"l":312.8348,"c":315.7495,"ro":330.6,"rh":334,"rl":322,"rc":325,"v":99712585},{"d":"2023-09-04","o":320.6071,"h":325.4648,"l":311.0861,"c":312.4462,"ro":330,"rh":335,"rl":320.2,"rc":321.6,"v":77212411},{"d":"2023-09-11","o":306.4227,"h":318.6641,"l":306.4227,"c":308.1715,"ro":315.4,"rh":328,"rl":315.4,"rc":317.2,"v":69241367},{"d":"2023-09-18","o":308.1715,"h":309.9203,"l":291.6553,"c":304.6739,"ro":317.2,"rh":319,"rl":300.2,"rc":313.6,"v":84333613},{"d":"2023-09-25","o":297.8732,"h":299.6219,"l":287.9635,"c":297.4846,"ro":306.6,"rh":308.4,"rl":296.4,"rc":306.2,"v":75291711},{"d":"2023-10-02","o":293.4041,"h":298.6504,"l":286.9919,"c":296.513,"ro":302,"rh":307.4,"rl":295.4,"rc":305.2,"v":47943691},{"d":"2023-10-09","o":296.7073,"h":308.1715,"l":293.4041,"c":298.0675,"ro":305.4,"rh":317.2,"rl":302,"rc":306.8,"v":71085068},{"d":"2023-10-16","o":300.0105,"h":300.0105,"l":278.0538,"c":280.7741,"ro":308.8,"rh":308.8,"rl":286.2,"rc":289,"v":70084920},{"d":"2023-10-23","o":278.831,"h":287.9635,"l":274.5563,"c":284.4659,"ro":287,"rh":296.4,"rl":282.6,"rc":292.8,"v":67027931},{"d":"2023-10-30","o":283.3001,"h":295.5415,"l":276.3051,"c":293.987,"ro":291.6,"rh":304.2,"rl":284.4,"rc":302.6,"v":71143785},{"d":"2023-11-06","o":300.9821,"h":305.6455,"l":292.6269,"c":294.1813,"ro":309.8,"rh":314.6,"rl":301.2,"rc":302.8,"v":73284970},{"d":"2023-11-13","o":293.5984,"h":320.6071,"l":291.6553,"c":306.2284,"ro":302.2,"rh":330,"rl":300.2,"rc":315.2,"v":115784297},{"d":"2023-11-20","o":307.1999,"h":323.1332,"l":307.1999,"c":312.0576,"ro":316.2,"rh":332.6,"rl":316.2,"rc":321.2,"v":95908894},{"d":"2023-11-27","o":315.7494,"h":317.6925,"l":304.6739,"c":309.9202,"ro":325,"rh":327,"rl":313.6,"rc":319,"v":89700313},{"d":"2023-12-04","o":313.8064,"h":314.9722,"l":292.4326,"c":296.9016,"ro":323,"rh":324.2,"rl":301,"rc":305.6,"v":84837736},{"d":"2023-12-11","o":292.2383,"h":310.3088,"l":289.9066,"c":305.4511,"ro":300.8,"rh":319.4,"rl":298.4,"rc":314.4,"v":93659889},{"d":"2023-12-18","o":300.7878,"h":309.143,"l":256.0971,"c":266.2011,"ro":309.6,"rh":318.2,"rl":263.6,"rc":274,"v":195994659},{"d":"2023-12-25","o":274.1677,"h":287.3806,"l":274.1677,"c":285.2432,"ro":282.2,"rh":295.8,"rl":282.2,"rc":293.6,"v":121936403},{"d":"2024-01-01","o":291.461,"h":296.3187,"l":281.3571,"c":283.8831,"ro":300,"rh":305,"rl":289.6,"rc":292.2,"v":87708234},{"d":"2024-01-08","o":286.0204,"h":286.2147,"l":268.9214,"c":280.1912,"ro":294.4,"rh":294.6,"rl":276.8,"rc":288.4,"v":89166633},{"d":"2024-01-15","o":281.7456,"h":285.4375,"l":260.5662,"c":263.4808,"ro":290,"rh":293.8,"rl":268.2,"rc":271.2,"v":126186190},{"d":"2024-01-22","o":262.8979,"h":283.6887,"l":252.7939,"c":274.7506,"ro":270.6,"rh":292,"rl":260.2,"rc":282.8,"v":162105813},{"d":"2024-01-29","o":277.8595,"h":280.1912,"l":260.3718,"c":271.4474,"ro":286,"rh":288.4,"rl":268,"rc":279.4,"v":110101211},{"d":"2024-02-05","o":270.4758,"h":288.5464,"l":266.0067,"c":279.0254,"ro":278.4,"rh":297,"rl":273.8,"rc":287.2,"v":100299877},{"d":"2024-02-12","o":278.8311,"h":283.4944,"l":272.4189,"c":283.4944,"ro":287,"rh":291.8,"rl":280.4,"rc":291.8,"v":41350828},{"d":"2024-02-19","o":283.1058,"h":287.9635,"l":272.4189,"c":282.5229,"ro":291.4,"rh":296.4,"rl":280.4,"rc":290.8,"v":80806618},{"d":"2024-02-26","o":279.2196,"h":281.94,"l":264.0637,"c":269.5043,"ro":287.4,"rh":290.2,"rl":271.8,"rc":277.4,"v":119603039},{"d":"2024-03-04","o":269.5043,"h":272.0303,"l":258.2345,"c":262.3149,"ro":277.4,"rh":280,"rl":265.8,"rc":270,"v":92752403},{"d":"2024-03-11","o":263.4808,"h":285.6318,"l":263.4808,"c":275.7221,"ro":271.2,"rh":294,"rl":271.2,"rc":283.8,"v":117882903},{"d":"2024-03-18","o":274.1677,"h":289.7123,"l":274.1677,"c":280.5798,"ro":282.2,"rh":298.2,"rl":282.2,"rc":288.8,"v":114191782},{"d":"2024-03-25","o":280.5798,"h":300.7878,"l":276.888,"c":295.1529,"ro":288.8,"rh":309.6,"rl":285,"rc":303.8,"v":123879666},{"d":"2024-04-01","o":300.2049,"h":303.5081,"l":295.7358,"c":301.1764,"ro":309,"rh":312.4,"rl":304.4,"rc":310,"v":59840920},{"d":"2024-04-08","o":296.513,"h":308.9487,"l":294.3757,"c":300.7878,"ro":305.2,"rh":318,"rl":303,"rc":309.6,"v":106132371},{"d":"2024-04-15","o":295.9301,"h":300.0105,"l":289.3236,"c":295.1529,"ro":304.6,"rh":308.8,"rl":297.8,"rc":303.8,"v":90928978},{"d":"2024-04-22","o":299.2333,"h":341.7866,"l":298.0675,"c":338.4834,"ro":308,"rh":351.8,"rl":306.8,"rc":348.4,"v":183754746},{"d":"2024-04-29","o":338.4834,"h":361.9946,"l":334.2086,"c":354.028,"ro":348.4,"rh":372.6,"rl":344,"rc":364.4,"v":87445501},{"d":"2024-05-06","o":354.2223,"h":363.5491,"l":349.5589,"c":360.4402,"ro":364.6,"rh":374.2,"rl":359.8,"rc":371,"v":97393605},{"d":"2024-05-13","o":358.1085,"h":392.1676,"l":357.5256,"c":387.072,"ro":368.6,"rh":401,"rl":368,"rc":395,"v":128508355},{"d":"2024-05-20","o":389.0318,"h":391.7756,"l":367.2774,"c":369.4333,"ro":397,"rh":399.8,"rl":374.8,"rc":377,"v":112853883},{"d":"2024-05-27","o":364.5336,"h":378.2526,"l":352.5785,"c":352.5785,"ro":372,"rh":386,"rl":359.8,"rc":359.8,"v":138167443},{"d":"2024-06-03","o":359.438,"h":383.1523,"l":359.242,"c":367.2774,"ro":366.8,"rh":391,"rl":366.6,"rc":374.8,"v":110510061},{"d":"2024-06-10","o":360.0259,"h":375.9008,"l":360.0259,"c":372.1771,"ro":367.4,"rh":383.6,"rl":367.4,"rc":379.8,"v":77653211},{"d":"2024-06-17","o":368.6493,"h":384.1322,"l":367.2774,"c":373.745,"ro":376.2,"rh":392,"rl":374.8,"rc":381.4,"v":91777571},{"d":"2024-06-24","o":370.0212,"h":377.2727,"l":363.3577,"c":364.9256,"ro":377.6,"rh":385,"rl":370.8,"rc":372.4,"v":70670849},{"d":"2024-07-01","o":359.634,"h":379.0366,"l":357.8701,"c":372.1771,"ro":367,"rh":386.8,"rl":365.2,"rc":379.8,"v":75482786},{"d":"2024-07-08","o":374.1369,"h":389.2279,"l":368.0614,"c":389.0319,"ro":381.8,"rh":397.2,"rl":375.6,"rc":397,"v":84345677},{"d":"2024-07-15","o":385.3081,"h":389.0319,"l":355.7143,"c":356.6942,"ro":393.2,"rh":397,"rl":363,"rc":364,"v":100632422},{"d":"2024-07-22","o":359.83,"h":368.8453,"l":343.9551,"c":347.2869,"ro":367.2,"rh":376.4,"rl":351,"rc":354.4,"v":79920204},{"d":"2024-07-29","o":352.5785,"h":361.2019,"l":343.9551,"c":351.0106,"ro":359.8,"rh":368.6,"rl":351,"rc":358.2,"v":73046039},{"d":"2024-08-05","o":344.935,"h":368.4533,"l":341.9953,"c":362.5738,"ro":352,"rh":376,"rl":349,"rc":370,"v":91643578},{"d":"2024-08-12","o":364.5336,"h":372.961,"l":356.8902,"c":365.1216,"ro":372,"rh":380.6,"rl":364.2,"rc":372.6,"v":80356540},{"d":"2024-08-19","o":370.0212,"h":371.0012,"l":357.8701,"c":368.0614,"ro":377.6,"rh":378.6,"rl":365.2,"rc":375.6,"v":68552347},{"d":"2024-08-26","o":370.4132,"h":377.8607,"l":361.5938,"c":374.3329,"ro":378,"rh":385.6,"rl":369,"rc":382,"v":88292914},{"d":"2024-09-02","o":372.3731,"h":375.5089,"l":362.9657,"c":365.9055,"ro":380,"rh":383.2,"rl":370.4,"rc":373.4,"v":46548745},{"d":"2024-09-09","o":362.5738,"h":369.4333,"l":357.6741,"c":367.2774,"ro":370,"rh":377,"rl":365,"rc":374.8,"v":69239359},{"d":"2024-09-16","o":365.1216,"h":385.5041,"l":362.9658,"c":380.8004,"ro":372.6,"rh":393.4,"rl":370.4,"rc":388.6,"v":72046121},{"d":"2024-09-23","o":380.2125,"h":435.8725,"l":377.4687,"c":429.013,"ro":388,"rh":444.8,"rl":385.2,"rc":437.8,"v":205663839},{"d":"2024-09-30","o":440.5761,"h":469.974,"l":425.4852,"c":468.0141,"ro":449.6,"rh":479.6,"rl":434.2,"rc":477.6,"v":180490858},{"d":"2024-10-07","o":470.17,"h":472.7178,"l":415.4899,"c":429.9929,"ro":479.8,"rh":482.4,"rl":424,"rc":438.8,"v":175286544},{"d":"2024-10-14","o":431.9527,"h":431.9527,"l":401.7709,"c":422.1534,"ro":440.8,"rh":440.8,"rl":410,"rc":430.8,"v":128726229},{"d":"2024-10-21","o":421.9575,"h":423.5254,"l":408.2385,"c":412.5502,"ro":430.6,"rh":432.2,"rl":416.6,"rc":421,"v":65173386},{"d":"2024-10-28","o":412.5502,"h":414.902,"l":396.4793,"c":410.7863,"ro":421,"rh":423.4,"rl":404.6,"rc":419.2,"v":91085481},{"d":"2024-11-04","o":414.51,"h":427.2491,"l":404.9067,"c":412.3542,"ro":423,"rh":436,"rl":413.2,"rc":420.8,"v":87046039},{"d":"2024-11-11","o":403.7308,"h":407.2585,"l":388.0519,"c":392.9516,"ro":412,"rh":415.6,"rl":396,"rc":401,"v":142428299},{"d":"2024-11-18","o":397.0673,"h":405.4947,"l":391.5797,"c":392.5596,"ro":405.2,"rh":413.8,"rl":399.6,"rc":400.6,"v":78829232},{"d":"2024-11-25","o":391.9716,"h":398.0472,"l":384.1322,"c":390.0118,"ro":400,"rh":406.2,"rl":392,"rc":398,"v":90209114},{"d":"2024-12-02","o":390.0118,"h":406.2786,"l":386.484,"c":404.3188,"ro":398,"rh":414.6,"rl":394.4,"rc":412.6,"v":86776459},{"d":"2024-12-09","o":398.0472,"h":422.3495,"l":398.0472,"c":401.5749,"ro":406.2,"rh":431,"rl":406.2,"rc":409.8,"v":105553315},{"d":"2024-12-16","o":401.7709,"h":421.1735,"l":393.3435,"c":417.8418,"ro":410,"rh":429.8,"rl":401.4,"rc":426.4,"v":125250242},{"d":"2024-12-23","o":421.9575,"h":422.3495,"l":407.2585,"c":409.0224,"ro":430.6,"rh":431,"rl":415.6,"rc":417.4,"v":34401236},{"d":"2024-12-30","o":409.6103,"h":416.4699,"l":402.1629,"c":405.8867,"ro":418,"rh":425,"rl":410.4,"rc":414.2,"v":51091900},{"d":"2025-01-06","o":406.6706,"h":406.6706,"l":357.6741,"c":362.1818,"ro":415,"rh":415,"rl":365,"rc":369.6,"v":352878357},{"d":"2025-01-13","o":357.4781,"h":378.8406,"l":357.4781,"c":372.1771,"ro":364.8,"rh":386.6,"rl":364.8,"rc":379.8,"v":147846479},{"d":"2025-01-20","o":372.5691,"h":384.9161,"l":371.9811,"c":382.7603,"ro":380.2,"rh":392.8,"rl":379.6,"rc":390.6,"v":119586069},{"d":"2025-01-27","o":380.2125,"h":393.9315,"l":380.2125,"c":393.9315,"ro":388,"rh":402,"rl":388,"rc":402,"v":23605938},{"d":"2025-02-03","o":391.9717,"h":423.7213,"l":386.2881,"c":419.6057,"ro":400,"rh":432.4,"rl":394.2,"rc":428.2,"v":145476136},{"d":"2025-02-10","o":420.9776,"h":465.2703,"l":417.0578,"c":465.2703,"ro":429.6,"rh":474.8,"rl":425.6,"rc":474.8,"v":236074735},{"d":"2025-02-17","o":495.8441,"h":506.6234,"l":472.9138,"c":506.6234,"ro":506,"rh":517,"rl":482.6,"rc":517,"v":330974512},{"d":"2025-02-24","o":511.523,"h":511.523,"l":466.4463,"c":468.9941,"ro":522,"rh":522,"rl":476,"rc":478.6,"v":255605589},{"d":"2025-03-03","o":473.8937,"h":536.0212,"l":463.7024,"c":522.7922,"ro":483.6,"rh":547,"rl":473.2,"rc":533.5,"v":225221059},{"d":"2025-03-10","o":517.4026,"h":526.7119,"l":489.1806,"c":511.033,"ro":528,"rh":537.5,"rl":499.2,"rc":521.5,"v":154337498},{"d":"2025-03-17","o":521.3223,"h":534.0613,"l":495.3542,"c":501.2337,"ro":532,"rh":545,"rl":505.5,"rc":511.5,"v":179445655},{"d":"2025-03-24","o":503.6836,"h":507.1133,"l":490.9445,"c":499.2739,"ro":514,"rh":517.5,"rl":501,"rc":509.5,"v":105844083},{"d":"2025-03-31","o":494.8642,"h":501.2337,"l":481.3412,"c":487.8087,"ro":505,"rh":511.5,"rl":491.2,"rc":497.8,"v":91022150},{"d":"2025-04-07","o":432.9326,"h":453.1192,"l":410.5903,"c":434.5005,"ro":441.8,"rh":462.4,"rl":419,"rc":443.4,"v":359363011},{"d":"2025-04-14","o":443.9079,"h":455.2751,"l":431.3648,"c":448.8075,"ro":453,"rh":464.6,"rl":440.2,"rc":458,"v":102394482},{"d":"2025-04-21","o":450.7674,"h":476.0495,"l":444.1039,"c":468.6021,"ro":460,"rh":485.8,"rl":453.2,"rc":478.2,"v":98704112},{"d":"2025-04-28","o":472.7178,"h":479.9693,"l":459.5868,"c":478.0094,"ro":482.4,"rh":489.8,"rl":469,"rc":487.8,"v":58726132},{"d":"2025-05-05","o":481.7332,"h":499.2739,"l":475.4616,"c":484.6729,"ro":491.6,"rh":509.5,"rl":485.2,"rc":494.6,"v":79022672},{"d":"2025-05-12","o":493.8842,"h":521.3223,"l":488.9846,"c":502.1495,"ro":504,"rh":532,"rl":499,"rc":508,"v":137395358},{"d":"2025-05-19","o":502.1495,"h":518.4595,"l":496.7128,"c":512.0343,"ro":508,"rh":524.5,"rl":502.5,"rc":518,"v":87717727},{"d":"2025-05-26","o":509.0689,"h":511.0458,"l":490.2877,"c":492.4624,"ro":515,"rh":517,"rl":496,"rc":498.2,"v":96739723},{"d":"2025-06-02","o":487.3222,"h":511.5401,"l":483.9614,"c":509.0689,"ro":493,"rh":517.5,"rl":489.6,"rc":515,"v":78540657},{"d":"2025-06-09","o":514.0113,"h":514.9998,"l":500.1725,"c":504.1265,"ro":520,"rh":521,"rl":506,"rc":510,"v":82758743},{"d":"2025-06-16","o":501.161,"h":508.0804,"l":490.2877,"c":499.6783,"ro":507,"rh":514,"rl":496,"rc":505.5,"v":80505908},{"d":"2025-06-23","o":492.4624,"h":509.0689,"l":488.9038,"c":507.0919,"ro":498.2,"rh":515,"rl":494.6,"rc":513,"v":79796516},{"d":"2025-06-30","o":503.138,"h":505.6092,"l":487.3222,"c":491.0785,"ro":509,"rh":511.5,"rl":493,"rc":496.8,"v":70282203},{"d":"2025-07-07","o":489.4969,"h":499.1841,"l":488.3107,"c":490.8808,"ro":495.2,"rh":505,"rl":494,"rc":496.6,"v":75883095},{"d":"2025-07-14","o":491.2762,"h":519.9422,"l":490.2877,"c":513.0228,"ro":497,"rh":526,"rl":496,"rc":519,"v":89919154},{"d":"2025-07-21","o":516.4825,"h":553.5506,"l":508.5746,"c":544.16,"ro":522.5,"rh":560,"rl":514.5,"rc":550.5,"v":121685662},{"d":"2025-07-28","o":544.16,"h":552.5621,"l":527.3558,"c":528.8386,"ro":550.5,"rh":559,"rl":533.5,"rc":535,"v":92528308},{"d":"2025-08-04","o":529.827,"h":565.4124,"l":526.8616,"c":554.5391,"ro":536,"rh":572,"rl":533,"rc":561,"v":85671064},{"d":"2025-08-11","o":554.5391,"h":593.09,"l":547.1255,"c":585.1821,"ro":561,"rh":600,"rl":553.5,"rc":592,"v":121730853},{"d":"2025-08-18","o":587.1591,"h":599.5151,"l":576.2857,"c":593.09,"ro":594,"rh":606.5,"rl":583,"rc":600,"v":83572025},{"d":"2025-08-25","o":601.4921,"h":613.8481,"l":583.2051,"c":589.6302,"ro":608.5,"rh":621,"rl":590,"rc":596.5,"v":107561700},{"d":"2025-09-01","o":598.0323,"h":605.9402,"l":584.1936,"c":598.5266,"ro":605,"rh":613,"rl":591,"rc":605.5,"v":83342642},{"d":"2025-09-08","o":598.5266,"h":641.5256,"l":598.0324,"c":636.089,"ro":605.5,"rh":649,"rl":605,"rc":643.5,"v":99852560},{"d":"2025-09-15","o":638.5602,"h":656.8471,"l":628.1811,"c":635.1005,"ro":646,"rh":664.5,"rl":635.5,"rc":642.5,"v":102855481},{"d":"2025-09-22","o":634.6062,"h":651.4104,"l":619.779,"c":636.5832,"ro":642,"rh":659,"rl":627,"rc":644,"v":83522739},{"d":"2025-09-29","o":642.0199,"h":675.1341,"l":640.0429,"c":665.7435,"ro":649.5,"rh":683,"rl":647.5,"rc":673.5,"v":65363027},{"d":"2025-10-06","o":667.2262,"h":674.6398,"l":640.0429,"c":643.9968,"ro":675,"rh":682.5,"rl":647.5,"rc":651.5,"v":52728463},{"d":"2025-10-13","o":622.7445,"h":641.0314,"l":595.5611,"c":600.9978,"ro":630,"rh":648.5,"rl":602.5,"rc":608,"v":116131045},{"d":"2025-10-20","o":616.8136,"h":636.5832,"l":609.4,"c":630.1581,"ro":624,"rh":644,"rl":616.5,"rc":637.5,"v":63531178},{"d":"2025-10-27","o":641.5256,"h":656.3529,"l":621.756,"c":621.756,"ro":649,"rh":664,"rl":629,"rc":629,"v":74690503},{"d":"2025-11-03","o":623.2387,"h":638.0659,"l":605.9402,"c":626.6984,"ro":630.5,"rh":645.5,"rl":613,"rc":634,"v":66268587},{"d":"2025-11-10","o":633.6178,"h":654.3759,"l":632.6293,"c":633.6177,"ro":641,"rh":662,"rl":640,"rc":641,"v":78516512},{"d":"2025-11-17","o":632.6293,"h":635.1005,"l":599.0209,"c":602.9748,"ro":640,"rh":642.5,"rl":606,"rc":610,"v":84320832},{"d":"2025-11-24","o":607.9172,"h":627.6868,"l":601.4921,"c":604.4575,"ro":615,"rh":635,"rl":608.5,"rc":611.5,"v":80393470},{"d":"2025-12-01","o":606.4345,"h":618.7905,"l":597.0439,"c":602.9748,"ro":613.5,"rh":626,"rl":604,"rc":610,"v":65073821},{"d":"2025-12-08","o":600.5036,"h":608.9057,"l":588.1476,"c":608.9057,"ro":607.5,"rh":616,"rl":595,"rc":616,"v":75909773},{"d":"2025-12-15","o":599.0209,"h":610.3884,"l":585.1821,"c":606.9287,"ro":606,"rh":617.5,"rl":592,"rc":614,"v":73897331},{"d":"2025-12-22","o":612.8596,"h":614.3424,"l":594.5727,"c":595.5612,"ro":620,"rh":621.5,"rl":601.5,"rc":602.5,"v":29491452},{"d":"2025-12-29","o":599.0208,"h":617.3078,"l":587.1591,"c":615.8251,"ro":606,"rh":624.5,"rl":594,"rc":623,"v":48285243},{"d":"2026-01-05","o":616.8136,"h":631.1465,"l":602.9748,"c":603.9633,"ro":624,"rh":638.5,"rl":610,"rc":611,"v":102050286},{"d":"2026-01-12","o":608.9057,"h":631.6408,"l":606.4345,"c":610.3884,"ro":616,"rh":639,"rl":613.5,"rc":617.5,"v":127231160},{"d":"2026-01-19","o":606.4345,"h":607.423,"l":588.1475,"c":588.1475,"ro":613.5,"rh":614.5,"rl":595,"rc":595,"v":99915362},{"d":"2026-01-26","o":588.1475,"h":617.8021,"l":587.159,"c":599.0209,"ro":595,"rh":625,"rl":594,"rc":606,"v":111335548},{"d":"2026-02-02","o":591.113,"h":597.5381,"l":534.7694,"c":541.1946,"ro":598,"rh":604.5,"rl":541,"rc":547.5,"v":268139650},{"d":"2026-02-09","o":543.6658,"h":559.4815,"l":518.9537,"c":525.8731,"ro":550,"rh":566,"rl":525,"rc":532,"v":146038166},{"d":"2026-02-16","o":528.3443,"h":528.3443,"l":512.0343,"c":515.9883,"ro":534.5,"rh":534.5,"rl":518,"rc":522,"v":21351884},{"d":"2026-02-23","o":522.9077,"h":536.7464,"l":504.6207,"c":512.0343,"ro":529,"rh":543,"rl":510.5,"rc":518,"v":138887351},{"d":"2026-03-02","o":505.6092,"h":519.4479,"l":493.0554,"c":513.0228,"ro":511.5,"rh":525.5,"rl":498.8,"rc":519,"v":145467479},{"d":"2026-03-09","o":496.7128,"h":571.3433,"l":496.7128,"c":541.1946,"ro":502.5,"rh":578,"rl":502.5,"rc":547.5,"v":173716773},{"d":"2026-03-16","o":544.6542,"h":559.4815,"l":499.1841,"c":502.1495,"ro":551,"rh":566,"rl":505,"rc":508,"v":152798645},{"d":"2026-03-23","o":492.0669,"h":515.494,"l":481.9844,"c":487.7176,"ro":497.8,"rh":521.5,"rl":487.6,"rc":493.4,"v":144805622},{"d":"2026-03-30","o":479.4144,"h":498.1956,"l":470.518,"c":483.566,"ro":485,"rh":504,"rl":476,"rc":489.2,"v":92518248},{"d":"2026-04-06","o":498.6898,"h":508.5746,"l":495.2301,"c":498.6898,"ro":504.5,"rh":514.5,"rl":501,"rc":504.5,"v":74250793},{"d":"2026-04-13","o":492.66,"h":511.0458,"l":480.6006,"c":504.6207,"ro":498.4,"rh":517,"rl":486.2,"rc":510.5,"v":95569748},{"d":"2026-04-20","o":503.6322,"h":520.4364,"l":481.3913,"c":487.7176,"ro":509.5,"rh":526.5,"rl":487,"rc":493.4,"v":101776403},{"d":"2026-04-27","o":484.3568,"h":485.3453,"l":457.8654,"c":462.4124,"ro":490,"rh":491,"rl":463.2,"rc":467.8,"v":128569040},{"d":"2026-05-04","o":464.3894,"h":475.4604,"l":454.9,"c":465.971,"ro":469.8,"rh":481,"rl":460.2,"rc":471.4,"v":147327280},{"d":"2026-05-11","o":459.6447,"h":474.0766,"l":448.7714,"c":456.4,"ro":465,"rh":479.6,"rl":454,"rc":456.4,"v":152689790},{"d":"2026-05-18","o":455,"h":468.8,"l":438.4,"c":441.4,"ro":455,"rh":468.8,"rl":438.4,"rc":441.4,"v":145813397},{"d":"2026-05-25","o":438,"h":442.6,"l":420.4,"c":427.2,"ro":438,"rh":442.6,"rl":420.4,"rc":427.2,"v":147861201},{"d":"2026-06-01","o":432.4,"h":484.8,"l":430,"c":453.2,"ro":432.4,"rh":484.8,"rl":430,"rc":453.2,"v":246846675},{"d":"2026-06-08","o":447.8,"h":475.6,"l":443.2,"c":463.6,"ro":447.8,"rh":475.6,"rl":443.2,"rc":463.6,"v":153109997},{"d":"2026-06-15","o":475,"h":476.8,"l":435.6,"c":440.2,"ro":475,"rh":476.8,"rl":435.6,"rc":440.2,"v":91153531},{"d":"2026-06-22","o":439,"h":439.8,"l":411,"c":411.8,"ro":439,"rh":439.8,"rl":411,"rc":411.8,"v":176302525},{"d":"2026-06-29","o":417,"h":447,"l":415,"c":431.2,"ro":417,"rh":447,"rl":415,"rc":431.2,"v":137922875},{"d":"2026-07-06","o":432.8,"h":485,"l":425.4,"c":460.2,"ro":432.8,"rh":485,"rl":425.4,"rc":460.2,"v":236041594},{"d":"2026-07-13","o":463.2,"h":494.8,"l":447.4,"c":461.6,"ro":463.2,"rh":494.8,"rl":447.4,"rc":461.6,"v":162702370},{"d":"2026-07-20","o":465.6,"h":482.6,"l":432,"c":434.6,"ro":465.6,"rh":482.6,"rl":432,"rc":434.6,"v":164413621},{"d":"2026-07-27","o":438.8,"h":479.8,"l":435.4,"c":475.2,"ro":438.8,"rh":479.8,"rl":435.4,"rc":475.2,"v":131693961},{"d":"2026-08-03","o":482,"h":497.8,"l":475.4,"c":478.8,"ro":482,"rh":497.8,"rl":475.4,"rc":478.8,"v":127294323},{"d":"2026-08-10","o":479,"h":483.8,"l":436,"c":440,"ro":479,"rh":483.8,"rl":436,"rc":440,"v":159685501},{"d":"2026-08-17","o":444.8,"h":457.4,"l":437.6,"c":457,"ro":444.8,"rh":457.4,"rl":437.6,"rc":457,"v":104782977},{"d":"2026-08-24","o":450,"h":462.2,"l":438,"c":455.2,"ro":450,"rh":462.2,"rl":438,"rc":455.2,"v":96085027},{"d":"2026-08-31","o":451,"h":456.2,"l":433,"c":442.8,"ro":451,"rh":456.2,"rl":433,"rc":442.8,"v":103193261},{"d":"2026-09-07","o":440.6,"h":442.6,"l":419.4,"c":428.4,"ro":440.6,"rh":442.6,"rl":419.4,"rc":428.4,"v":76463326},{"d":"2026-09-14","o":423.8,"h":446,"l":423.8,"c":438.8,"ro":423.8,"rh":446,"rl":423.8,"rc":438.8,"v":33155102}];
+
+    const COLORS = {
+      old: "#f6b94a",
+      recent: "#5adcf2",
+      grid: "rgba(143, 162, 187, .13)",
+      gridStrong: "rgba(143, 162, 187, .22)",
+      text: "#8598af",
+      textBright: "#cbd9e9",
+      cross: "rgba(210, 225, 241, .34)"
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+    const canvas = $("#chart");
+    const ctx = canvas.getContext("2d");
+    const tooltip = $("#tooltip");
+    const wrap = $("#chartWrap");
+    const range = $("#shiftRange");
+    const shiftValue = $("#shiftValue");
+
+    const state = {
+      mode: "normalized",
+      offset: 0,
+      hoverWeek: null,
+      dragging: false,
+      dragStartX: 0,
+      dragStartOffset: 0,
+      plot: null
+    };
+
+    const asOf = new Date(DATA_META.asOf + "T00:00:00Z");
+    const trailingStart = new Date(asOf);
+    trailingStart.setUTCFullYear(trailingStart.getUTCFullYear() - 1);
+    const trailingStartISO = trailingStart.toISOString().slice(0, 10);
+
+    const peak2021Index = findPeakIndex((row) => row.d.startsWith("2021-"));
+    const recentPeakIndex = findPeakIndex((row) => row.d >= trailingStartISO);
+    const peak2021 = WEEKLY_DATA[peak2021Index];
+    const recentPeak = WEEKLY_DATA[recentPeakIndex];
+    const oldSeries = WEEKLY_DATA;
+    const recentSeries = WEEKLY_DATA;
+    const domainPadding = 52;
+    const baseDomain = {
+      min: Math.min(-peak2021Index, -recentPeakIndex) - domainPadding,
+      max: Math.max(WEEKLY_DATA.length - 1 - peak2021Index, WEEKLY_DATA.length - 1 - recentPeakIndex) + domainPadding
+    };
+
+    function findPeakIndex(predicate) {
+      let index = -1;
+      let value = -Infinity;
+      WEEKLY_DATA.forEach((row, i) => {
+        if (predicate(row) && row.h > value) {
+          value = row.h;
+          index = i;
+        }
+      });
+      return index;
+    }
+
+    function formatDate(iso) {
+      const [y, m, d] = iso.split("-");
+      return `${y}/${m}/${d}`;
+    }
+
+    function formatPrice(value) {
+      return `HK$${value.toFixed(2)}`;
+    }
+
+    function formatPct(value, signed = true) {
+      const sign = signed && value > 0 ? "+" : "";
+      return `${sign}${value.toFixed(1)}%`;
+    }
+
+    function pathPct(row, peak) {
+      return (row.c / peak.h - 1) * 100;
+    }
+
+    function renderStats() {
+      const recentPct = pathPct(WEEKLY_DATA.at(-1), recentPeak);
+      const statHTML = [
+        {
+          label: `<span class="series-dot old-color"></span>K线 A · X=0`,
+          value: formatPrice(peak2021.h),
+          valueClass: "old-color",
+          meta: `2021 峰值周 ${formatDate(peak2021.d)} · 原始 High ${formatPrice(peak2021.rh)}`
+        },
+        {
+          label: `<span class="series-dot new-color"></span>K线 B · X=0`,
+          value: formatPrice(recentPeak.h),
+          valueClass: "new-color",
+          meta: `近一年峰值周 ${formatDate(recentPeak.d)} · 原始 High ${formatPrice(recentPeak.rh)}`
+        },
+        {
+          label: `完整周 K 数据`,
+          value: `${WEEKLY_DATA.length} 根`,
+          valueClass: "",
+          meta: `${formatDate(WEEKLY_DATA[0].d)} — ${formatDate(WEEKLY_DATA.at(-1).d)}`
+        },
+        {
+          label: `当前距 B 峰值`,
+          value: formatPct(recentPct),
+          valueClass: recentPct < 0 ? "bad-color" : "good-color",
+          meta: `${formatDate(WEEKLY_DATA.at(-1).d)} · 前复权收盘 ${formatPrice(WEEKLY_DATA.at(-1).c)}`
+        }
+      ];
+
+      $("#stats").innerHTML = statHTML.map((item) => `
+        <div class="stat">
+          <div class="stat-label">${item.label}</div>
+          <div class="stat-value ${item.valueClass}">${item.value}</div>
+          <div class="stat-meta">${item.meta}</div>
+        </div>`).join("");
+
+      $("#oldLegend").textContent = `K线 A · 全部数据 · ${formatDate(peak2021.d)} 为 X=0`;
+      $("#newLegend").textContent = `K线 B · 全部数据 · ${formatDate(recentPeak.d)} 为 X=0`;
+      $("#dataRangeTag").textContent = `2020 至今 · ${WEEKLY_DATA.length} 根周 K`;
+      $("#freshnessText").textContent = `真实行情 · 更新至 ${formatDate(DATA_META.asOf)}`;
+    }
+
+    function resizeCanvas() {
+      const rect = wrap.getBoundingClientRect();
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(rect.width * ratio);
+      canvas.height = Math.round(rect.height * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      draw();
+    }
+
+    function valueOf(row, peak, key) {
+      return state.mode === "normalized" ? row[key] / peak.h * 100 : row[key];
+    }
+
+    function calculateBounds() {
+      const values = [];
+      const collect = (series, peak) => {
+        series.forEach((row) => {
+          values.push(valueOf(row, peak, "h"), valueOf(row, peak, "l"));
+        });
+      };
+      collect(oldSeries, peak2021);
+      collect(recentSeries, recentPeak);
+      let min = Math.min(...values);
+      let max = Math.max(...values);
+      const span = Math.max(1, max - min);
+      min -= span * .08;
+      max += span * .08;
+      if (state.mode === "normalized") max = Math.max(max, 103);
+      return { min, max };
+    }
+
+    function draw() {
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      if (!w || !h) return;
+      ctx.clearRect(0, 0, w, h);
+
+      const mobile = w < 560;
+      const margin = { top: 22, right: mobile ? 50 : 68, bottom: 42, left: mobile ? 15 : 22 };
+      const plot = {
+        x: margin.left,
+        y: margin.top,
+        w: w - margin.left - margin.right,
+        h: h - margin.top - margin.bottom
+      };
+      const bounds = calculateBounds();
+      plot.bounds = bounds;
+      state.plot = plot;
+
+      plot.domain = baseDomain;
+      const xAt = (week) => plot.x + ((week - baseDomain.min) / (baseDomain.max - baseDomain.min)) * plot.w;
+      const yAt = (value) => plot.y + (1 - (value - bounds.min) / (bounds.max - bounds.min)) * plot.h;
+      plot.xAt = xAt;
+      plot.yAt = yAt;
+
+      drawGrid(plot, bounds, xAt, yAt);
+      drawSeries(oldSeries, peak2021, peak2021Index, 0, COLORS.old, plot, xAt, yAt);
+      drawSeries(recentSeries, recentPeak, recentPeakIndex, state.offset, COLORS.recent, plot, xAt, yAt);
+
+      if (state.hoverWeek !== null && !state.dragging) drawCrosshair(state.hoverWeek, plot, xAt);
+    }
+
+    function drawGrid(plot, bounds, xAt, yAt) {
+      ctx.save();
+      ctx.font = "11px Inter, system-ui, sans-serif";
+      ctx.lineWidth = 1;
+      ctx.textBaseline = "middle";
+
+      const yTicks = 5;
+      for (let i = 0; i <= yTicks; i++) {
+        const value = bounds.min + (bounds.max - bounds.min) * (i / yTicks);
+        const y = yAt(value);
+        ctx.beginPath();
+        ctx.strokeStyle = i === yTicks ? COLORS.gridStrong : COLORS.grid;
+        ctx.moveTo(plot.x, y);
+        ctx.lineTo(plot.x + plot.w, y);
+        ctx.stroke();
+        ctx.fillStyle = COLORS.text;
+        ctx.textAlign = "left";
+        const label = state.mode === "normalized" ? value.toFixed(0) : value.toFixed(0);
+        ctx.fillText(label, plot.x + plot.w + 9, y);
+      }
+
+      const targetTicks = plot.w < 540 ? 5 : 9;
+      const rawStep = (baseDomain.max - baseDomain.min) / targetTicks;
+      const candidates = [26, 52, 78, 104, 156];
+      const step = candidates.reduce((a, b) => Math.abs(b - rawStep) < Math.abs(a - rawStep) ? b : a);
+      const firstTick = Math.ceil(baseDomain.min / step) * step;
+      for (let week = firstTick; week <= baseDomain.max; week += step) {
+        const x = xAt(week);
+        ctx.beginPath();
+        ctx.strokeStyle = week === 0 ? COLORS.gridStrong : COLORS.grid;
+        ctx.moveTo(x, plot.y);
+        ctx.lineTo(x, plot.y + plot.h);
+        ctx.stroke();
+        ctx.fillStyle = COLORS.text;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillText(week === 0 ? "X=0" : `${week > 0 ? "+" : ""}${week}周`, x, plot.y + plot.h + 12);
+      }
+
+      const zeroX = xAt(0);
+      ctx.setLineDash([6, 5]);
+      ctx.strokeStyle = "rgba(232, 241, 252, .48)";
+      ctx.beginPath();
+      ctx.moveTo(zeroX, plot.y);
+      ctx.lineTo(zeroX, plot.y + plot.h);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = COLORS.textBright;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.fillText("峰值轴 X=0", zeroX, plot.y + 7);
+
+      if (state.mode === "normalized" && bounds.min <= 100 && bounds.max >= 100) {
+        const y = yAt(100);
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = "rgba(224, 236, 249, .28)";
+        ctx.beginPath();
+        ctx.moveTo(plot.x, y);
+        ctx.lineTo(plot.x + plot.w, y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = COLORS.textBright;
+        ctx.textAlign = "right";
+        ctx.textBaseline = "bottom";
+        ctx.fillText("峰值 100", plot.x + plot.w - 5, y - 5);
+      }
+
+      ctx.restore();
+    }
+
+    function drawSeries(series, peak, anchorIndex, offset, color, plot, xAt, yAt) {
+      const slot = plot.w / Math.max(1, baseDomain.max - baseDomain.min);
+      const candleW = Math.max(.9, Math.min(5, slot * .72));
+      ctx.save();
+      ctx.lineWidth = Math.max(.65, Math.min(1.15, slot * .55));
+
+      series.forEach((row, i) => {
+        const week = i - anchorIndex + offset;
+        if (week < baseDomain.min || week > baseDomain.max) return;
+        const x = xAt(week);
+        const open = valueOf(row, peak, "o");
+        const high = valueOf(row, peak, "h");
+        const low = valueOf(row, peak, "l");
+        const close = valueOf(row, peak, "c");
+        const yOpen = yAt(open);
+        const yHigh = yAt(high);
+        const yLow = yAt(low);
+        const yClose = yAt(close);
+        const rising = close >= open;
+        const top = Math.min(yOpen, yClose);
+        const bodyH = Math.max(1.4, Math.abs(yClose - yOpen));
+
+        ctx.globalAlpha = color === COLORS.recent ? .9 : .74;
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(x, yHigh);
+        ctx.lineTo(x, yLow);
+        ctx.stroke();
+
+        ctx.fillStyle = rising ? "rgba(5, 10, 18, .78)" : color;
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+        ctx.rect(x - candleW / 2, top, candleW, bodyH);
+        ctx.fill();
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+
+    function drawCrosshair(week, plot, xAt) {
+      const x = xAt(week);
+      ctx.save();
+      ctx.setLineDash([3, 4]);
+      ctx.strokeStyle = COLORS.cross;
+      ctx.beginPath();
+      ctx.moveTo(x, plot.y);
+      ctx.lineTo(x, plot.y + plot.h);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function rowAt(series, anchorIndex, week, offset) {
+      const i = Math.round(week - offset + anchorIndex);
+      return i >= 0 && i < series.length ? series[i] : null;
+    }
+
+    function showTooltip(clientX, clientY) {
+      if (!state.plot || state.dragging) return;
+      const rect = canvas.getBoundingClientRect();
+      const localX = clientX - rect.left;
+      const localY = clientY - rect.top;
+      const plot = state.plot;
+      if (localX < plot.x || localX > plot.x + plot.w || localY < plot.y || localY > plot.y + plot.h) {
+        hideTooltip();
+        return;
+      }
+      const week = Math.max(baseDomain.min, Math.min(baseDomain.max, Math.round(baseDomain.min + (localX - plot.x) / plot.w * (baseDomain.max - baseDomain.min))));
+      state.hoverWeek = week;
+      const oldRow = rowAt(oldSeries, peak2021Index, week, 0);
+      const recentRow = rowAt(recentSeries, recentPeakIndex, week, state.offset);
+      const rows = [
+        oldRow && tooltipRow("old-color", "K线 A", oldRow, peak2021),
+        recentRow && tooltipRow("new-color", "K线 B", recentRow, recentPeak)
+      ].filter(Boolean).join("");
+      tooltip.innerHTML = `<div class="tip-week">X = ${week > 0 ? "+" : ""}${week} 周</div>${rows || '<div class="tip-row"><span></span><span class="tip-title">该位置无数据</span><span></span></div>'}`;
+      tooltip.classList.add("visible");
+      const tipRect = tooltip.getBoundingClientRect();
+      let left = localX + 14;
+      if (left + tipRect.width > rect.width - 8) left = localX - tipRect.width - 14;
+      left = Math.max(8, left);
+      let top = localY - tipRect.height / 2;
+      top = Math.max(8, Math.min(rect.height - tipRect.height - 8, top));
+      tooltip.style.left = `${left}px`;
+      tooltip.style.top = `${top}px`;
+      draw();
+    }
+
+    function tooltipRow(colorClass, title, row, peak) {
+      const pct = pathPct(row, peak);
+      const value = state.mode === "normalized" ? `${(row.c / peak.h * 100).toFixed(1)} · ${formatPct(pct)}` : formatPrice(row.c);
+      return `<div class="tip-row ${colorClass}"><span class="swatch"></span><span class="tip-title">${title}<span class="tip-sub">${formatDate(row.d)} · O ${row.o.toFixed(2)} H ${row.h.toFixed(2)} L ${row.l.toFixed(2)} C ${row.c.toFixed(2)}</span></span><span class="tip-value">${value}</span></div>`;
+    }
+
+    function hideTooltip() {
+      tooltip.classList.remove("visible");
+      state.hoverWeek = null;
+      draw();
+    }
+
+    function setOffset(value, announce = false) {
+      state.offset = Math.max(-52, Math.min(52, Math.round(value)));
+      range.value = String(state.offset);
+      shiftValue.value = state.offset === 0 ? "对齐 0 周" : `${state.offset > 0 ? "+" : ""}${state.offset} 周`;
+      shiftValue.textContent = shiftValue.value;
+      if (announce) canvas.setAttribute("aria-label", `腾讯控股两段前复权周 K 线叠加图；近一年轨迹位移 ${state.offset} 周`);
+      draw();
+    }
+
+    function setMode(mode) {
+      if (!["normalized", "price"].includes(mode)) throw new Error("mode 必须是 normalized 或 price");
+      state.mode = mode;
+      $$("#modeControl button").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.mode === mode)));
+      hideTooltip();
+    }
+
+    $$("#modeControl button").forEach((button) => button.addEventListener("click", () => setMode(button.dataset.mode)));
+    $("#resetButton").addEventListener("click", () => setOffset(0, true));
+    range.addEventListener("input", () => setOffset(Number(range.value)));
+
+    canvas.addEventListener("pointerdown", (event) => {
+      if (!state.plot) return;
+      state.dragging = true;
+      state.dragStartX = event.clientX;
+      state.dragStartOffset = state.offset;
+      canvas.setPointerCapture(event.pointerId);
+      tooltip.classList.remove("visible");
+    });
+
+    canvas.addEventListener("pointermove", (event) => {
+      if (!state.dragging) {
+        showTooltip(event.clientX, event.clientY);
+        return;
+      }
+      const pxPerWeek = state.plot.w / Math.max(1, baseDomain.max - baseDomain.min);
+      const delta = Math.round((event.clientX - state.dragStartX) / pxPerWeek);
+      setOffset(state.dragStartOffset + delta);
+    });
+
+    canvas.addEventListener("pointerup", (event) => {
+      state.dragging = false;
+      if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+      setOffset(state.offset, true);
+      showTooltip(event.clientX, event.clientY);
+    });
+
+    canvas.addEventListener("pointercancel", () => { state.dragging = false; });
+    canvas.addEventListener("pointerleave", () => { if (!state.dragging) hideTooltip(); });
+    canvas.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+      event.preventDefault();
+      const amount = event.shiftKey ? 4 : 1;
+      setOffset(state.offset + (event.key === "ArrowRight" ? amount : -amount), true);
+    });
+
+    function registerWebMCP() {
+      const context = document.modelContext;
+      if (!context?.registerTool) return;
+      const tools = [
+        {
+          name: "set_recent_trajectory_offset",
+          title: "设置 K线 B 位移",
+          description: "把蓝色的完整 K线 B 向左或向右移动指定周数。",
+          inputSchema: { type: "object", properties: { weeks: { type: "integer", minimum: -52, maximum: 52 } }, required: ["weeks"], additionalProperties: false },
+          execute(input) {
+            if (!Number.isInteger(input?.weeks) || input.weeks < -52 || input.weeks > 52) throw new Error("weeks 必须是 -52 到 52 的整数");
+            setOffset(input.weeks, true);
+            return { offsetWeeks: state.offset };
+          }
+        },
+        {
+          name: "set_chart_price_mode",
+          title: "设置价格显示方式",
+          description: "在峰值归一化与前复权港币价格之间切换。",
+          inputSchema: { type: "object", properties: { mode: { type: "string", enum: ["normalized", "price"] } }, required: ["mode"], additionalProperties: false },
+          execute(input) {
+            setMode(input?.mode);
+            return { mode: state.mode, weeklyCandlesPerSeries: WEEKLY_DATA.length };
+          }
+        }
+      ];
+      tools.forEach((tool) => {
+        try { void Promise.resolve(context.registerTool({ ...tool, annotations: { readOnlyHint: false, untrustedContentHint: false } })).catch(() => {}); } catch (_) {}
+      });
+    }
+
+    renderStats();
+    setOffset(0);
+    resizeCanvas();
+    new ResizeObserver(resizeCanvas).observe(wrap);
+    registerWebMCP();
+  </script>
+</body>
+</html>

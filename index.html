@@ -16,6 +16,9 @@
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px}
     .card{position:relative;min-height:290px;display:flex;flex-direction:column;justify-content:flex-end;padding:28px;border-radius:34px;overflow:hidden;text-decoration:none;color:#fff;background:radial-gradient(circle at 75% 24%,#f6c2ffbb 0 4%,transparent 26%),linear-gradient(150deg,#854be6,#402080 58%,#21114f);border:2px solid #ffffff55;box-shadow:0 20px 55px #05000f88,inset 0 1px #ffffff88;transition:.25s ease}
     .card:hover,.card:focus-visible{transform:translateY(-7px);box-shadow:0 28px 70px #05000faa,0 0 0 5px #ffffff33}.card:focus-visible{outline:3px solid #fff}
+    .card.market{background:radial-gradient(circle at 78% 18%,#2ba8c955 0 5%,transparent 30%),linear-gradient(150deg,#12314b,#0b172a 58%,#07101f);border-color:#70dff277}
+    .market-art{position:absolute;right:28px;top:26px;width:148px;height:148px;color:#68deef;filter:drop-shadow(0 14px 18px #020812)}
+    .market-art .amber{stroke:#f6b94a;fill:#f6b94a}.market-art .cyan{stroke:currentColor}
     .art{position:absolute;inset:0 0 auto auto;width:70%;height:72%;display:grid;place-items:center;font-size:clamp(80px,14vw,145px);filter:drop-shadow(0 14px 12px #24064e);transform:rotate(5deg)}
     .notes{position:absolute;inset:0;pointer-events:none}.notes i{position:absolute;font-style:normal;font-size:34px;color:#ffdff8;text-shadow:0 0 16px #fff}.notes i:nth-child(1){top:17%;left:12%}.notes i:nth-child(2){top:42%;right:12%;color:#9be2ff}.notes i:nth-child(3){top:8%;right:38%;color:#ffe889}
     .tag{position:relative;width:max-content;padding:7px 13px;border-radius:999px;background:#ffffff22;border:1px solid #ffffff55;font-size:14px;margin-bottom:12px}
@@ -32,6 +35,18 @@
         <div class="art">🐰</div>
         <span class="tag">iPad · 音乐节奏</span>
         <h2>星光萌可捕捉</h2>
+        <span class="play">▶</span>
+      </a>
+      <a class="card market" href="./tencent-weekly-k/">
+        <svg class="market-art" viewBox="0 0 160 160" fill="none" aria-hidden="true">
+          <path d="M28 18v118M72 34v108M118 12v126" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          <rect x="18" y="48" width="20" height="50" rx="3" fill="#0b172a" stroke="currentColor" stroke-width="5"/>
+          <rect class="amber" x="62" y="59" width="20" height="45" rx="3" stroke-width="5"/>
+          <rect x="108" y="36" width="20" height="67" rx="3" fill="#0b172a" stroke="currentColor" stroke-width="5"/>
+          <path d="M14 144h132" stroke="#ffffff55" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="tag">腾讯 · 完整周 K</span>
+        <h2>高点回撤对比</h2>
         <span class="play">▶</span>
       </a>
     </section>
