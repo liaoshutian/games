@@ -1,5 +1,6 @@
 (()=>{
-  const mq=window.matchMedia('(min-width:700px) and (max-width:1180px) and (min-height:600px) and (orientation:landscape)');
+  // Keep in sync with ipad-landscape.css.
+  const mq=window.matchMedia('(min-width:900px), (min-width:700px) and (max-width:1180px) and (min-height:600px) and (orientation:landscape)');
   let lastFactor='铝价';
 
   function factorButtonByName(name){
@@ -12,6 +13,7 @@
   function openLast(){
     if(!mq.matches) return;
     requestAnimationFrame(()=>{
+      if(!mq.matches) return;
       const btn=factorButtonByName(lastFactor)||factorButtonByName('铝价');
       if(btn) btn.click();
     });
@@ -34,6 +36,7 @@
 
   function onModeChange(){
     if(mq.matches) openLast();
+    else document.querySelector('#sheetClose')?.click();
   }
   if(mq.addEventListener) mq.addEventListener('change',onModeChange);
   else if(mq.addListener) mq.addListener(onModeChange);
