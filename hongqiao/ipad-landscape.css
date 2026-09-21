@@ -9,43 +9,46 @@
     max-width:none;
     width:60vw;
     margin:0;
-    padding-top:calc(10px + env(safe-area-inset-top));
-    padding-left:max(14px,env(safe-area-inset-left));
-    padding-right:10px;
-    padding-bottom:18px;
+    padding-top:calc(14px + env(safe-area-inset-top));
+    padding-left:max(18px,env(safe-area-inset-left));
+    padding-right:12px;
+    padding-bottom:24px;
   }
-  .topbar{padding:2px 4px 8px}
-  .topbar h1{font-size:30px;margin-top:3px}
-  .topbar p{font-size:14px;max-width:640px}
-  .eyebrow{font-size:12px}
-  .section-label{font-size:12px}
-  .scenario-card{padding:9px;margin-bottom:8px}
-  .scenario{padding:8px 6px;min-height:42px}
-  .scenario span{font-size:14px}.scenario b{font-size:11px}
-  .price-card{padding:9px;gap:7px;margin-bottom:8px}
-  .spot-box,.result-box{padding:10px}
-  .spot-box>span,.result-box>span{font-size:12px}
-  .spot-input input,.result-box strong{font-size:26px}
-  .result-box b{font-size:12px}
-  .calc-strip{padding:8px;gap:5px;margin-bottom:8px}.calc-strip div{padding:7px 5px}
-  .calc-strip span{font-size:10px}.calc-strip b{font-size:13px}
-  .tree-card{padding:10px 7px 13px;margin-bottom:8px}
-  .tree-columns{gap:4px}.tree-head{padding-bottom:6px}
-  .tree-head b{font-size:16px}.tree-head span{font-size:11px}
-  .tree-head button{font-size:11px;padding:7px 10px}
-  .branch-label{font-size:10px}
-  .root-node{width:164px;height:118px}
-  .root-node small{font-size:10px}.root-node b{font-size:13px}
-  .root-node strong{font-size:22px}.root-node em{font-size:10px}
-  .circle-node{--size:70px}
-  .circle-node .w{font-size:8px}.circle-node .name{font-size:10px}.circle-node .val{font-size:8.5px}
-  .factor-line{min-height:54px}
-  .tree-foot{font-size:11px}
-  .method-card{padding:10px;margin-bottom:0}
-  .method-title{font-size:14px}
-  .method-grid{grid-template-columns:repeat(3,1fr);gap:5px}.method-grid div{padding:7px}
-  .method-grid b{font-size:11px}.method-grid span{font-size:10px}
-  .disclaimer{font-size:10px}
+  .topbar{padding:4px 4px 12px}
+  .topbar h1{font-size:36px;margin-top:4px}
+  .topbar p{font-size:16px;max-width:700px}
+  .eyebrow{font-size:13px;letter-spacing:.1em}
+  .section-label{font-size:13px}
+  .scenario-card{padding:12px;margin-bottom:10px}
+  .scenario{padding:10px 8px;min-height:48px;border-radius:14px}
+  .scenario span{font-size:16px}.scenario b{font-size:13px}
+  .price-card{padding:12px;gap:10px;margin-bottom:10px}
+  .spot-box,.result-box{padding:14px;border-radius:16px}
+  .spot-box>span,.result-box>span{font-size:13px}
+  .spot-input i{font-size:14px}
+  .spot-input input,.result-box strong{font-size:30px}
+  .result-box b{font-size:14px}
+  .calc-strip{padding:10px;gap:8px;margin-bottom:10px}.calc-strip div{padding:10px 7px;border-radius:14px}
+  .calc-strip span{font-size:12px}.calc-strip b{font-size:15px}
+  .tree-card{padding:14px 10px 16px;margin-bottom:10px}
+  .tree-columns{gap:6px}.tree-head{padding-bottom:8px}
+  .tree-head b{font-size:18px}.tree-head span{font-size:13px}
+  .tree-head button{font-size:13px;padding:8px 12px;border-radius:10px}
+  .branch-label{font-size:12px;margin-bottom:6px}
+  .root-node{width:185px;height:135px}
+  .root-node small{font-size:12px}.root-node b{font-size:15px}
+  .root-node strong{font-size:26px}.root-node em{font-size:12px}
+  .root-trunk{height:22px}
+  .circle-node{--size:82px;padding:5px}
+  .circle-node .w{font-size:9px}.circle-node .name{font-size:12px}.circle-node .val{font-size:10px}
+  .factor-line{min-height:62px;margin-bottom:4px}
+  .child-pair{gap:4px;padding:5px 0 2px}
+  .tree-foot{font-size:12px;padding:10px 8px 2px}
+  .method-card{padding:14px;margin-bottom:0}
+  .method-title{font-size:16px;margin-bottom:8px}
+  .method-grid{grid-template-columns:repeat(3,1fr);gap:6px}.method-grid div{padding:10px;border-radius:14px}
+  .method-grid b{font-size:13px}.method-grid span{font-size:12px}
+  .disclaimer{font-size:12px;margin-top:8px}
 
   /* Right control pane: always present in dual-column mode */
   .sheet-scrim{display:none!important}
@@ -63,7 +66,7 @@
     transform:none!important;
     border:1px solid var(--line);
     border-radius:22px;
-    padding:14px 14px 14px;
+    padding:16px;
     overflow-y:auto;
     overscroll-behavior:contain;
     -webkit-overflow-scrolling:touch;
@@ -71,23 +74,24 @@
   }
   .sheet.open{transform:none!important}
   .sheet .grab,.sheet-close{display:none!important}
-  .sheet-head{position:sticky;top:-14px;z-index:4;margin:-14px -14px 0;padding:14px 14px 9px;background:var(--card);border-bottom:1px solid var(--line)}
-  .sheet-kicker{font-size:11px}
+  .sheet-head{position:sticky;top:-16px;z-index:4;margin:-16px -16px 0;padding:16px 16px 10px;background:var(--card);border-bottom:1px solid var(--line)}
+  .sheet-kicker{font-size:12px}
   .sheet-kicker:before{content:'右侧调控面板 · ';font-weight:900}
-  .sheet h2{font-size:22px}.sheet-head p{font-size:11px}
-  .sheet-summary{position:sticky;top:69px;z-index:3;background:var(--card);margin:0 -14px 9px;padding:9px 14px;border-bottom:1px solid var(--line)}
-  .sheet-summary>span:nth-child(2){font-size:12px}
-  .sheet-summary>b{font-size:12px}
-  .state-pill{font-size:10px}
-  .dimension-list{gap:9px}.dimension{padding:10px}
-  .dim-name{font-size:14px}.dim-current{font-size:14px}
-  .dim-meta{font-size:10px}
-  .dim-desc{font-size:11px}.dim-impact{font-size:10px}
-  .range{height:28px;margin:7px 0 3px}
-  .level-chip{padding:6px 3px}.level-chip b{font-size:10px}.level-chip span{font-size:9px}
-  .group-control{padding:11px}
-  .group-control h3{font-size:14px}.group-control p{font-size:11px}
-  .group-levels button{font-size:10px;padding:8px 3px}
+  .sheet h2{font-size:24px}.sheet-head p{font-size:13px}
+  .sheet-summary{position:sticky;top:74px;z-index:3;background:var(--card);margin:0 -16px 10px;padding:10px 16px;border-bottom:1px solid var(--line)}
+  .sheet-summary>span:nth-child(2){font-size:13px}
+  .sheet-summary>b{font-size:14px}
+  .state-pill{font-size:12px;padding:6px 9px}
+  .dimension-list{gap:10px}.dimension{padding:14px;border-radius:16px}
+  .dim-name{font-size:16px}.dim-current{font-size:16px}
+  .dim-meta{font-size:12px}
+  .dim-desc{font-size:13px}.dim-impact{font-size:12px}
+  .range{height:32px;margin:8px 0 5px}
+  .levels{gap:5px}
+  .level-chip{padding:8px 4px;border-radius:10px}.level-chip b{font-size:12px}.level-chip span{font-size:11px;margin-top:3px;line-height:1.2}
+  .group-control{padding:14px;border-radius:16px}
+  .group-control h3{font-size:16px;margin-bottom:6px}.group-control p{font-size:13px}
+  .group-levels{gap:5px}.group-levels button{font-size:12px;padding:10px 4px;border-radius:11px}
 }
 
 @media (min-width:900px) and (prefers-color-scheme:dark), (min-width:700px) and (max-width:1180px) and (min-height:600px) and (orientation:landscape) and (prefers-color-scheme:dark){
