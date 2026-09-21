@@ -15,20 +15,37 @@
     padding-bottom:18px;
   }
   .topbar{padding:2px 4px 8px}
-  .topbar h1{font-size:25px;margin-top:3px}
-  .topbar p{font-size:10.5px;max-width:640px}
+  .topbar h1{font-size:30px;margin-top:3px}
+  .topbar p{font-size:14px;max-width:640px}
+  .eyebrow{font-size:12px}
+  .section-label{font-size:12px}
   .scenario-card{padding:9px;margin-bottom:8px}
   .scenario{padding:8px 6px;min-height:42px}
-  .scenario span{font-size:12px}.scenario b{font-size:9px}
+  .scenario span{font-size:14px}.scenario b{font-size:11px}
   .price-card{padding:9px;gap:7px;margin-bottom:8px}
-  .spot-box,.result-box{padding:9px}.spot-input input,.result-box strong{font-size:22px}
-  .calc-strip{padding:7px;gap:4px;margin-bottom:8px}.calc-strip div{padding:6px 4px}
+  .spot-box,.result-box{padding:10px}
+  .spot-box>span,.result-box>span{font-size:12px}
+  .spot-input input,.result-box strong{font-size:26px}
+  .result-box b{font-size:12px}
+  .calc-strip{padding:8px;gap:5px;margin-bottom:8px}.calc-strip div{padding:7px 5px}
+  .calc-strip span{font-size:10px}.calc-strip b{font-size:13px}
   .tree-card{padding:10px 7px 13px;margin-bottom:8px}
-  .tree-columns{gap:3px}.tree-head{padding-bottom:6px}.tree-head b{font-size:13px}.tree-head span{font-size:8.5px}
-  .root-node{width:145px;height:102px}.root-node strong{font-size:18px}
-  .circle-node .name{font-size:7.6px}.circle-node .val{font-size:6.5px}.circle-node .w{font-size:6.2px}
-  .factor-line{min-height:47px}
-  .method-card{padding:9px;margin-bottom:0}.method-grid{grid-template-columns:repeat(3,1fr);gap:4px}.method-grid div{padding:6px}.method-grid span{font-size:7.3px}
+  .tree-columns{gap:4px}.tree-head{padding-bottom:6px}
+  .tree-head b{font-size:16px}.tree-head span{font-size:11px}
+  .tree-head button{font-size:11px;padding:7px 10px}
+  .branch-label{font-size:10px}
+  .root-node{width:164px;height:118px}
+  .root-node small{font-size:10px}.root-node b{font-size:13px}
+  .root-node strong{font-size:22px}.root-node em{font-size:10px}
+  .circle-node{--size:70px}
+  .circle-node .w{font-size:8px}.circle-node .name{font-size:10px}.circle-node .val{font-size:8.5px}
+  .factor-line{min-height:54px}
+  .tree-foot{font-size:11px}
+  .method-card{padding:10px;margin-bottom:0}
+  .method-title{font-size:14px}
+  .method-grid{grid-template-columns:repeat(3,1fr);gap:5px}.method-grid div{padding:7px}
+  .method-grid b{font-size:11px}.method-grid span{font-size:10px}
+  .disclaimer{font-size:10px}
 
   /* Right control pane: always present in dual-column mode */
   .sheet-scrim{display:none!important}
@@ -55,13 +72,22 @@
   .sheet.open{transform:none!important}
   .sheet .grab,.sheet-close{display:none!important}
   .sheet-head{position:sticky;top:-14px;z-index:4;margin:-14px -14px 0;padding:14px 14px 9px;background:var(--card);border-bottom:1px solid var(--line)}
+  .sheet-kicker{font-size:11px}
   .sheet-kicker:before{content:'右侧调控面板 · ';font-weight:900}
-  .sheet h2{font-size:19px}.sheet-head p{font-size:9.5px}
+  .sheet h2{font-size:22px}.sheet-head p{font-size:11px}
   .sheet-summary{position:sticky;top:69px;z-index:3;background:var(--card);margin:0 -14px 9px;padding:9px 14px;border-bottom:1px solid var(--line)}
-  .dimension-list{gap:9px}.dimension{padding:10px}.dim-name{font-size:11.5px}.dim-current{font-size:11.5px}.dim-desc{font-size:8.5px}
+  .sheet-summary>span:nth-child(2){font-size:12px}
+  .sheet-summary>b{font-size:12px}
+  .state-pill{font-size:10px}
+  .dimension-list{gap:9px}.dimension{padding:10px}
+  .dim-name{font-size:14px}.dim-current{font-size:14px}
+  .dim-meta{font-size:10px}
+  .dim-desc{font-size:11px}.dim-impact{font-size:10px}
   .range{height:28px;margin:7px 0 3px}
-  .level-chip{padding:5px 2px}.level-chip b{font-size:6.7px}.level-chip span{font-size:6.2px}
+  .level-chip{padding:6px 3px}.level-chip b{font-size:10px}.level-chip span{font-size:9px}
   .group-control{padding:11px}
+  .group-control h3{font-size:14px}.group-control p{font-size:11px}
+  .group-levels button{font-size:10px;padding:8px 3px}
 }
 
 @media (min-width:900px) and (prefers-color-scheme:dark), (min-width:700px) and (max-width:1180px) and (min-height:600px) and (orientation:landscape) and (prefers-color-scheme:dark){

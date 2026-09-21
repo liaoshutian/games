@@ -32,7 +32,7 @@
   .dimension-list{gap:6px!important}
   .dimension{padding:8px 5px!important;border-radius:12px}
   .dim-top{gap:4px}
-  .dim-name,.dim-current{font-size:10.5px!important}
+  .dim-name,.dim-current{font-size:12px!important}
   .dim-meta{font-size:7.2px}
   .range{margin:5px 0 2px!important}
   .levels{gap:2px!important}
@@ -41,8 +41,8 @@
     min-width:0;
     border-radius:8px;
   }
-  .level-chip b{font-size:6.5px!important}
-  .level-chip span{font-size:6px!important;word-break:normal!important}
+  .level-chip b{font-size:8px!important}
+  .level-chip span{font-size:7.5px!important;word-break:normal!important}
   .dim-desc{margin-top:4px!important;font-size:8px!important}
   .dim-impact{margin-top:3px!important}
   .group-control{padding:8px 5px!important}
