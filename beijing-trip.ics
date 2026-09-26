@@ -28,11 +28,11 @@ END:VEVENT
 BEGIN:VEVENT
 UID:bk-tam-nb
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20260926T090000
-DTEND;TZID=Asia/Shanghai:20260926T092000
-SUMMARY:🎫 天安门+国博 开约
+DTSTART;TZID=Asia/Shanghai:20260927T090000
+DTEND;TZID=Asia/Shanghai:20260927T092000
+SUMMARY:🎫 天安门+国博 开约（10.4用）
 LOCATION:天安门广场预约参观小程序
-DESCRIPTION:天安门广场预约（选10.3上午场）；国博选10.3上午场。注意：大人小孩都要预约，用身份证号；国博免费但必须约。
+DESCRIPTION:天安门广场预约（选10.4上午场）；国博选10.4上午场。注意：大人小孩都要预约，用身份证号；国博免费但必须约。
 BEGIN:VALARM
 TRIGGER:-PT10M
 ACTION:DISPLAY
@@ -42,11 +42,11 @@ END:VEVENT
 BEGIN:VEVENT
 UID:bk-gugong
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20260927T195000
-DTEND;TZID=Asia/Shanghai:20260927T201000
-SUMMARY:🏯 20:00 抢故宫+纪念堂
+DTSTART;TZID=Asia/Shanghai:20260926T195000
+DTEND;TZID=Asia/Shanghai:20260926T201000
+SUMMARY:🏯 20:00 抢故宫（10.3用）
 LOCATION:故宫博物院小程序
-DESCRIPTION:20:00准时在'故宫博物院'小程序抢10.4上午场（成人60元，4岁娃免票）。同时开约10.3毛主席纪念堂（免费，提前1-6天）。注意：故宫放票秒没，提前登录、填好参观人。
+DESCRIPTION:20:00准时在'故宫博物院'小程序抢10.3上午场（成人60元，4岁娃免票）。注意：故宫放票秒没，提前登录、填好参观人。
 BEGIN:VALARM
 TRIGGER:-PT10M
 ACTION:DISPLAY
@@ -58,9 +58,9 @@ UID:bk-kjg
 DTSTAMP:20260922T120000Z
 DTSTART;TZID=Asia/Shanghai:20260928T175000
 DTEND;TZID=Asia/Shanghai:20260928T181000
-SUMMARY:🔬 18:00 抢科技馆+颐和园/圆明园
+SUMMARY:🔬 18:00 抢科技馆+颐和园/圆明园+纪念堂
 LOCATION:中国科技馆公众号
-DESCRIPTION:18:00中国科技馆官方渠道实名购票（10.5主展厅30元+儿童乐园20元/人）；顺手买颐和园联票（30元）和圆明园通票（25元）。注意：儿童乐园票紧张。
+DESCRIPTION:18:00中国科技馆官方渠道实名购票（10.5主展厅30元+儿童乐园20元/人）；顺手买颐和园联票（30元）和圆明园通票（25元）。今天也是预约10.4毛主席纪念堂（免费，提前1-6天）。注意：儿童乐园票紧张。
 BEGIN:VALARM
 TRIGGER:-PT10M
 ACTION:DISPLAY
@@ -70,9 +70,9 @@ END:VEVENT
 BEGIN:VEVENT
 UID:bk-gwf
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261001T090000
-DTEND;TZID=Asia/Shanghai:20261001T092000
-SUMMARY:🏯 恭王府开约（10.4用）
+DTSTART;TZID=Asia/Shanghai:20260930T090000
+DTEND;TZID=Asia/Shanghai:20260930T092000
+SUMMARY:🏯 恭王府开约（10.3用）
 LOCATION:恭王府博物馆公众号
 DESCRIPTION:恭王府博物馆公众号实名购票（40元）。注意：4岁娃也需预约，含福字碑、大戏楼。
 BEGIN:VALARM
@@ -86,9 +86,9 @@ UID:bk-mty
 DTSTAMP:20260922T120000Z
 DTSTART;TZID=Asia/Shanghai:20261002T090000
 DTEND;TZID=Asia/Shanghai:20261002T092000
-SUMMARY:🏔️ 慕田峪开约+纪念堂截止
+SUMMARY:🏔️ 慕田峪开约
 LOCATION:慕田峪长城官网/巴士达公众号
-DESCRIPTION:买慕田峪门票+索道/滑道套票（成人约140元含上下索道）；订巴士达直通车（和平西桥发车，往返约80元/人）。注意：今天也是预约10.3毛主席纪念堂的最后期限。
+DESCRIPTION:买慕田峪门票+索道/滑道套票（成人约140元含上下索道）；订巴士达直通车（和平西桥发车，往返约80元/人）。
 BEGIN:VALARM
 TRIGGER:-PT10M
 ACTION:DISPLAY
@@ -100,9 +100,9 @@ UID:bk-rest
 DTSTAMP:20260922T120000Z
 DTSTART;TZID=Asia/Shanghai:20261003T090000
 DTEND;TZID=Asia/Shanghai:20261003T092000
-SUMMARY:🍽️ 慕田峪最晚+餐饮订位
+SUMMARY:🍽️ 慕田峪最晚+纪念堂截止+餐饮订位
 LOCATION:美团/大众点评
-DESCRIPTION:慕田峪门票和直通车最后购买；给小吊梨汤、南门涮肉、烤肉季提前电话订位或线上取号。注意：国庆餐厅排队2小时起。
+DESCRIPTION:慕田峪门票和直通车最后购买；今天也是预约10.3毛主席纪念堂的最后期限；给小吊梨汤、南门涮肉、烤肉季提前电话订位或线上取号。注意：国庆餐厅排队2小时起。
 BEGIN:VALARM
 TRIGGER:-PT10M
 ACTION:DISPLAY
@@ -154,8 +154,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d2-out
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261003T090000
-DTEND;TZID=Asia/Shanghai:20261003T093000
+DTSTART;TZID=Asia/Shanghai:20261004T090000
+DTEND;TZID=Asia/Shanghai:20261004T093000
 SUMMARY:🚇 出发→天安门
 LOCATION:东大桥地铁站
 DESCRIPTION:东大桥地铁1号线到天安门东（约20分钟）。必带：所有人身份证、水杯、湿巾、甜甜零食、防晒帽。注意：天安门广场安检严，大包过机。
@@ -168,8 +168,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d2-mem
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261003T093000
-DTEND;TZID=Asia/Shanghai:20261003T110000
+DTSTART;TZID=Asia/Shanghai:20261004T093000
+DTEND;TZID=Asia/Shanghai:20261004T110000
 SUMMARY:🏛️ 天安门广场+毛主席纪念堂
 LOCATION:天安门广场，北京市东城区长安街
 DESCRIPTION:必看：天安门城楼、人民英雄纪念碑合影；排队进纪念堂（仅上午开放）。注意：纪念堂不能带包（存包处）、不能穿拖鞋背心；排队约30-40分钟，甜甜推车不能进。
@@ -182,8 +182,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d2-nb
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261003T110000
-DTEND;TZID=Asia/Shanghai:20261003T123000
+DTSTART;TZID=Asia/Shanghai:20261004T110000
+DTEND;TZID=Asia/Shanghai:20261004T123000
 SUMMARY:🏺 国家博物馆（付费讲解）
 LOCATION:中国国家博物馆，北京市东城区东长安街16号
 DESCRIPTION:必看：古代中国基本陈列（后母戊鼎、四羊方尊）、甜甜可能喜欢的甲骨文展品。注意：北门进；付费讲解器更值；自备水和零食，馆内餐厅贵。
@@ -196,8 +196,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d2-lunch
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261003T123000
-DTEND;TZID=Asia/Shanghai:20261003T133000
+DTSTART;TZID=Asia/Shanghai:20261004T123000
+DTEND;TZID=Asia/Shanghai:20261004T133000
 SUMMARY:🍚 午餐+吴裕泰冰淇淋
 LOCATION:前门大街，北京市东城区前门大街
 DESCRIPTION:必吃：吴裕泰茉莉冰淇淋（10元，甜甜最爱）、锦芳小吃艾窝窝、驴打滚。注意：前门大街人多，看好甜甜。
@@ -210,8 +210,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d2-tiantan
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261003T140000
-DTEND;TZID=Asia/Shanghai:20261003T163000
+DTSTART;TZID=Asia/Shanghai:20261004T140000
+DTEND;TZID=Asia/Shanghai:20261004T163000
 SUMMARY:🛕 天坛公园（联票）
 LOCATION:天坛公园东门，北京市东城区天坛东里甲1号
 DESCRIPTION:必玩：祈年殿（蓝顶拍照超美）、回音壁（贴墙说话）、圜丘天心石（站中间说话听回声）。注意：一定要买联票（别只买大门票20元，联票34元含三个景点）；公园大，推车友好。
@@ -224,8 +224,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d2-dinner
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261003T170000
-DTEND;TZID=Asia/Shanghai:20261003T183000
+DTSTART;TZID=Asia/Shanghai:20261004T170000
+DTEND;TZID=Asia/Shanghai:20261004T183000
 SUMMARY:🍲 晚餐：宏源南门涮肉
 LOCATION:宏源南门涮肉(天坛总店)，北京市东城区天坛路87号
 DESCRIPTION:必吃：老北京铜锅涮羊肉、麻酱烧饼。注意：线上提前取号，国庆排队2小时起；人均100元。
@@ -238,8 +238,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d3-out
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261004T090000
-DTEND;TZID=Asia/Shanghai:20261004T093000
+DTSTART;TZID=Asia/Shanghai:20261003T090000
+DTEND;TZID=Asia/Shanghai:20261003T093000
 SUMMARY:🚇 出发→故宫午门
 LOCATION:东大桥地铁站
 DESCRIPTION:东大桥地铁到天安门东，步行至午门。注意：故宫单向通行（午门进神武门出），所有人身份证必带；甜甜免票但要带户口本/身份证。
@@ -252,8 +252,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d3-gugong
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261004T093000
-DTEND;TZID=Asia/Shanghai:20261004T123000
+DTSTART;TZID=Asia/Shanghai:20261003T093000
+DTEND;TZID=Asia/Shanghai:20261003T123000
 SUMMARY:🏯 故宫（付费讲解深度游）
 LOCATION:故宫博物院午门，北京市东城区景山前街4号
 DESCRIPTION:必看：太和殿广场、乾清宫、东六宫（珍宝馆必去）、御花园。注意：租讲解器（20元）或人工讲解；带水杯（故宫里水10元/瓶）；甜甜走累了可租推车（午门入口处）。
@@ -266,8 +266,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d3-lunch
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261004T123000
-DTEND;TZID=Asia/Shanghai:20261004T133000
+DTSTART;TZID=Asia/Shanghai:20261003T123000
+DTEND;TZID=Asia/Shanghai:20261003T133000
 SUMMARY:🍢 午餐：护国寺小吃
 LOCATION:护国寺小吃总店，北京市西城区护国寺大街80号
 DESCRIPTION:必吃：炸酱面、艾窝窝、豌豆黄；大人可挑战豆汁焦圈。注意：神武门出来打车约10分钟到。
@@ -280,8 +280,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d3-jingshan
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261004T133000
-DTEND;TZID=Asia/Shanghai:20261004T143000
+DTSTART;TZID=Asia/Shanghai:20261003T133000
+DTEND;TZID=Asia/Shanghai:20261003T143000
 SUMMARY:⛰️ 景山公园万春亭
 LOCATION:景山公园，北京市西城区景山西街44号
 DESCRIPTION:必玩：登万春亭俯瞰故宫全景（拍照最佳机位）。注意：山不高，15分钟爬到顶；门票2元；甜甜自己能走。
@@ -294,8 +294,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d3-beihai
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261004T143000
-DTEND;TZID=Asia/Shanghai:20261004T160000
+DTSTART;TZID=Asia/Shanghai:20261003T143000
+DTEND;TZID=Asia/Shanghai:20261003T160000
 SUMMARY:🚣 北海公园划船
 LOCATION:北海公园南门，北京市西城区文津街1号
 DESCRIPTION:必玩：脚踏船（甜甜最爱，约80元/小时）、白塔下合影、九龙壁。注意：从景山侧门步行10分钟到北海南门；傍晚风大，给甜甜加外套。
@@ -308,8 +308,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d3-gwf
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261004T160000
-DTEND;TZID=Asia/Shanghai:20261004T173000
+DTSTART;TZID=Asia/Shanghai:20261003T160000
+DTEND;TZID=Asia/Shanghai:20261003T173000
 SUMMARY:🏯 恭王府
 LOCATION:恭王府博物馆，北京市西城区前海西街17号
 DESCRIPTION:必看：康熙福字碑（摸一下沾福气）、大戏楼、和珅藏宝楼。注意：人多，跟着讲解走；40元门票；推车轮流进。
@@ -322,8 +322,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:d3-dinner
 DTSTAMP:20260922T120000Z
-DTSTART;TZID=Asia/Shanghai:20261004T180000
-DTEND;TZID=Asia/Shanghai:20261004T193000
+DTSTART;TZID=Asia/Shanghai:20261003T180000
+DTEND;TZID=Asia/Shanghai:20261003T193000
 SUMMARY:🦆 晚餐：烤肉季
 LOCATION:烤肉季饭庄，北京市西城区前海东沿14号
 DESCRIPTION:必吃：烤羊肉、烤腰子；预约临湖位看什刹海夜景。注意：提前电话订位；人均150元。
