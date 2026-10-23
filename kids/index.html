@@ -21,6 +21,45 @@
 @media(max-width:850px){.hero{padding:27px;grid-template-columns:1.1fr .8fr}.hero-art{min-height:190px}.games-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.game-layout{grid-template-columns:minmax(0,1fr) 190px}.scene-wrap{height:48vh;min-height:320px}.game-card{min-height:290px}}
 @media(max-width:620px){.page{width:calc(100% - 20px);padding-top:12px}.topbar{margin-bottom:13px}.brand-mark{width:48px;height:48px;border-radius:17px;font-size:26px}.brand-subtitle{font-size:10px}.soft-button{padding:9px 10px;font-size:12px}.hero{grid-template-columns:1fr;padding:24px 21px 0;border-radius:29px;min-height:0}.hero-copy p{font-size:14px;max-width:360px}.hero-art{min-height:160px;margin-top:-4px}.hero-bunny{font-size:116px}.rainbow{width:220px;height:125px}.hero-cloud{font-size:33px}.hero-star{font-size:23px}.hero-notes{margin:13px 0 0}.section-heading{margin-top:22px}.games-grid{gap:11px}.game-card{padding:9px 9px 12px;min-height:260px;border-radius:23px}.game-art{height:125px;border-radius:17px}.art-emoji{font-size:64px}.art-mini{font-size:19px}.game-info{padding:11px 4px 0}.game-info h3{font-size:17px}.game-info p{font-size:11px;line-height:1.5}.game-tag{font-size:9px;padding:5px 8px}.play-link{font-size:11px;padding:8px 9px}.play-link b{width:22px;height:22px}.bottom-note{font-size:11px;padding:13px}.overlay{padding:0;align-items:stretch}.dialog{width:100%;height:100%;max-height:100%;border:0;border-radius:0}.dialog-head{padding:11px 13px}.dialog-title h2{font-size:17px}.dialog-icon{width:38px;height:38px;font-size:22px}.game-layout{display:flex;flex-direction:column;gap:10px;padding:10px;overflow:auto}.scene-wrap{height:44vh;min-height:270px;flex:none}.game-side{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mission{grid-column:1/-1;padding:12px}.mission h3{font-size:17px;margin:4px 0}.mission p{font-size:12px}.buddy-card{padding:8px}.buddy-face{font-size:30px}.actions{display:grid;grid-template-columns:1fr 1fr;align-content:start}.action-button{padding:11px 6px;font-size:12px}.fashion-options{grid-column:1/-1}.shape-prompt{grid-column:1/-1}.reward-screen h2{font-size:26px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
+
+/* Immersive, child-first play mode */
+#gameOverlay.overlay{position:fixed!important;inset:0!important;width:100vw;width:100dvw;height:100vh;height:100dvh;z-index:1000;display:none;align-items:stretch;justify-content:stretch;padding:0!important;border:0;border-radius:0;background:#b7dff9;overflow:hidden;backdrop-filter:none}
+#gameOverlay.overlay.is-open{display:block!important}
+#gameOverlay .immersive-dialog{position:absolute;inset:0;width:100%;height:100%;max-height:none;margin:0;padding:0;border:0;border-radius:0;background:#c8edff;box-shadow:none;overflow:hidden}
+#gameOverlay .dialog-head{display:none!important}
+#gameOverlay .immersive-layout{position:absolute;inset:0;display:block;width:100%;height:100%;padding:0;margin:0;overflow:hidden}
+#gameOverlay .immersive-scene{position:absolute;inset:0;width:100%;height:100%;min-height:0;margin:0;border:0;border-radius:0;box-shadow:none;overflow:hidden;background:linear-gradient(#a8e3ff,#e7e1ff 67%,#b9edcf)}
+#gameOverlay #worldCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+#gameOverlay .immersive-top{position:absolute;z-index:12;left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));top:max(10px,env(safe-area-inset-top));display:flex;align-items:center;gap:10px;pointer-events:none}
+#gameOverlay .icon-button,#gameOverlay .game-world-badge,#gameOverlay .icon-progress{pointer-events:auto;display:grid;place-items:center;flex:0 0 auto;width:clamp(44px,6vw,60px);height:clamp(44px,6vw,60px);border:3px solid #fff;border-radius:21px;background:#ffffffdf;color:#715585;box-shadow:0 5px 0 #9b7ab633,0 9px 24px #7356a322;font-size:clamp(23px,3vw,32px);font-weight:1000;backdrop-filter:blur(12px)}
+#gameOverlay .game-world-badge{background:linear-gradient(145deg,#fff0f8,#e9e2ff);font-size:clamp(26px,3vw,36px)}
+#gameOverlay .icon-progress{margin-left:auto;width:auto;min-width:60px;padding:0 14px;border-radius:999px;font-size:clamp(16px,2vw,22px);color:#c76ba6}
+#gameOverlay .hint-float{background:#fff3b8;color:#a97932}
+#gameOverlay .scene-hint{display:none!important}
+#gameOverlay .immersive-bottom{position:absolute;z-index:14;left:max(8px,env(safe-area-inset-left));right:max(8px,env(safe-area-inset-right));bottom:max(8px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
+#gameOverlay .tool-tray{pointer-events:auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;max-width:min(100%,900px);padding:8px 10px;border:2px solid #fff;border-radius:24px;background:#ffffffd9;box-shadow:0 8px 30px #58417c22;backdrop-filter:blur(12px)}
+#gameOverlay .tool-tray[hidden]{display:none!important}
+#gameOverlay .tool-row{display:flex;align-items:center;justify-content:center;gap:7px;max-width:100%;flex-wrap:wrap}
+#gameOverlay .tool-row.ingredients{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;max-width:min(100%,780px);padding:2px 1px 5px;scrollbar-width:none}
+#gameOverlay .tool-row.ingredients::-webkit-scrollbar{display:none}
+#gameOverlay .tool-chip{display:grid;place-items:center;flex:0 0 auto;width:clamp(42px,5.7vw,58px);height:clamp(42px,5.7vw,58px);padding:0;border:3px solid #fff;border-radius:18px;background:linear-gradient(145deg,#fff,#fff0f8);box-shadow:0 4px 0 #c4acd633;color:#755785;font-size:clamp(22px,3.1vw,34px);line-height:1;transition:transform .12s,box-shadow .12s}
+#gameOverlay .tool-chip:active{transform:translateY(3px) scale(.95);box-shadow:0 1px 0 #c4acd633}
+#gameOverlay .tool-chip.selected{border-color:#a994ff;background:linear-gradient(145deg,#f0eaff,#fff0f9);box-shadow:0 4px 0 #a994ff77}
+#gameOverlay .action-chip{background:linear-gradient(145deg,#e9f9ff,#f3efff)}
+#gameOverlay .cook-chip{background:linear-gradient(145deg,#ffe8a9,#ffb5c9);box-shadow:0 5px 0 #e88aa8;color:#fff}
+#gameOverlay .fashion-tools{max-width:min(100%,760px)}
+#gameOverlay .shape-tools{min-width:180px}
+#gameOverlay .shape-target-icon{display:grid;place-items:center;min-width:48px;height:48px;font-size:37px;filter:drop-shadow(0 3px 0 #e4c6f3)}
+#gameOverlay .general-tools{gap:10px;padding:7px 11px}
+#gameOverlay .general-tools .tool-chip{width:45px;height:45px;font-size:25px;border-radius:16px}
+#gameOverlay .reward-screen{position:absolute;inset:0;z-index:30;gap:10px;background:#fff5f9c9;backdrop-filter:blur(7px)}
+#gameOverlay .reward-sparkle{font-size:clamp(64px,12vw,110px)}
+#gameOverlay .reward-again{width:clamp(60px,9vw,86px);height:clamp(60px,9vw,86px);padding:0;font-size:clamp(30px,5vw,42px);border:4px solid white;border-radius:50%;box-shadow:0 7px 0 #d65b9b}
+body.game-open{overflow:hidden!important;overscroll-behavior:none;touch-action:none}
+@media(orientation:landscape) and (max-height:600px){#gameOverlay .immersive-bottom{gap:5px;bottom:max(5px,env(safe-area-inset-bottom))}#gameOverlay .tool-tray{padding:5px 8px;gap:5px;border-radius:18px}#gameOverlay .tool-chip{width:43px;height:43px;border-radius:14px;font-size:25px}#gameOverlay .tool-row{gap:5px}#gameOverlay .tool-row.ingredients{max-width:560px}#gameOverlay .general-tools .tool-chip{width:39px;height:39px}#gameOverlay .immersive-top{top:max(5px,env(safe-area-inset-top))}#gameOverlay .icon-button,#gameOverlay .game-world-badge{width:43px;height:43px;border-radius:15px}}
+@media(orientation:portrait){#gameOverlay .immersive-bottom{gap:5px}#gameOverlay .tool-tray{max-width:100%;padding:6px 8px;gap:5px;border-radius:19px}#gameOverlay .tool-row{gap:5px}#gameOverlay .tool-row.ingredients{flex-wrap:nowrap;justify-content:flex-start;width:100%}#gameOverlay .tool-chip{width:clamp(40px,8vw,54px);height:clamp(40px,8vw,54px);border-radius:15px}#gameOverlay .kitchen-tools{width:100%;max-width:100%}#gameOverlay .general-tools .tool-chip{width:42px;height:42px}#gameOverlay .immersive-top{gap:7px}}
+@media(max-width:430px){#gameOverlay .tool-row.ingredients{justify-content:flex-start}#gameOverlay .tool-chip{width:42px;height:42px;font-size:23px}#gameOverlay .immersive-top{left:max(7px,env(safe-area-inset-left));right:max(7px,env(safe-area-inset-right));gap:6px}#gameOverlay .icon-button,#gameOverlay .game-world-badge{width:43px;height:43px;border-radius:15px}#gameOverlay .icon-progress{min-width:48px;padding:0 10px}#gameOverlay .tool-tray{padding:5px 6px}}
+
 </style>
 </head>
 <body>
