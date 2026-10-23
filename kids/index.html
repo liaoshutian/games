@@ -102,7 +102,7 @@ body.game-open{overflow:hidden!important;overscroll-behavior:none;touch-action:n
 <div class="overlay" id="gameOverlay" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"><section class="dialog immersive-dialog" id="fullGameShell">
 <div class="game-layout immersive-layout"><div class="scene-wrap immersive-scene" id="sceneWrap">
 <canvas id="worldCanvas" aria-label="可互动的3D游戏世界"></canvas>
-<div class="immersive-top"><button class="icon-button close-float" id="closeGame" aria-label="返回游戏大厅">⌂</button><div class="game-world-badge" id="dialogIcon">🌟</div><div class="icon-progress" id="sceneProgress">⭐ 0</div><button class="icon-button hint-float" id="hintButton" aria-label="提示">💡</button></div>
+<div class="immersive-top"><button class="icon-button close-float" id="closeGame" aria-label="返回游戏大厅">⌂</button><div class="game-world-badge" id="dialogIcon">🌟</div><div class="icon-progress" id="sceneProgress">⭐ 0</div><button class="icon-button sound-float" id="gameSoundToggle" aria-label="音效开关">🔊</button><button class="icon-button hint-float" id="hintButton" aria-label="提示">💡</button></div>
 <div class="scene-hint" id="sceneHint" hidden>✨</div><div class="world-pop" id="worldPop">✨</div><div class="recipe-status" id="recipeStatus" hidden>🥣</div>
 <div class="immersive-bottom">
 <div class="tool-tray kitchen-tools" id="kitchenTools" hidden>
@@ -132,7 +132,7 @@ const games={
 };
 const order=Object.keys(games);
 let current="forest",progress=0,stickers=0,soundOn=true,renderer=null,scene=null,camera=null,raycaster=null,mouse=null,worldRoot=null,mascot=null,targets=[],targetMeshes=[],clock=null,animFrame=0,activeOutfit="fairy",shapeTarget="star",completed=false,particles=[],lastWidth=0;
-let currentBase="cake",recipeIngredients=[],bowlGroup=null,gardenTool="seed",grownFlowers=[],shapeRound=0,accessory="",dragPointer=null;
+let currentBase="cake",recipeIngredients=[],bowlGroup=null,gardenTool="seed",grownFlowers=[],shapeRound=0,accessory="",dragPointer=null,kitchenFriend=null,kitchenFriendType="bear",kitchenBakeRound=0,characterActions=[],butterflies=[];
 try{stickers=Number(localStorage.getItem("candyPlanetStickers")||0)}catch(e){stickers=0}
 $("stickerTotal").textContent=stickers;
 
