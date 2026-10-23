@@ -60,6 +60,25 @@ body.game-open{overflow:hidden!important;overscroll-behavior:none;touch-action:n
 @media(orientation:portrait){#gameOverlay .immersive-bottom{gap:5px}#gameOverlay .tool-tray{max-width:100%;padding:6px 8px;gap:5px;border-radius:19px}#gameOverlay .tool-row{gap:5px}#gameOverlay .tool-row.ingredients{flex-wrap:nowrap;justify-content:flex-start;width:100%}#gameOverlay .tool-chip{width:clamp(40px,8vw,54px);height:clamp(40px,8vw,54px);border-radius:15px}#gameOverlay .kitchen-tools{width:100%;max-width:100%}#gameOverlay .general-tools .tool-chip{width:42px;height:42px}#gameOverlay .immersive-top{gap:7px}}
 @media(max-width:430px){#gameOverlay .tool-row.ingredients{justify-content:flex-start}#gameOverlay .tool-chip{width:42px;height:42px;font-size:23px}#gameOverlay .immersive-top{left:max(7px,env(safe-area-inset-left));right:max(7px,env(safe-area-inset-right));gap:6px}#gameOverlay .icon-button,#gameOverlay .game-world-badge{width:43px;height:43px;border-radius:15px}#gameOverlay .icon-progress{min-width:48px;padding:0 10px}#gameOverlay .tool-tray{padding:5px 6px}}
 
+
+/* iPad-first full-screen controls and icon-only game HUD */
+#gameOverlay .immersive-bottom{bottom:max(10px,env(safe-area-inset-bottom));}
+#gameOverlay .tool-tray{max-width:min(100%,1040px);}
+#gameOverlay .kitchen-tools{gap:7px;}
+#gameOverlay .kitchen-tools .tool-row:first-child{padding-bottom:3px;border-bottom:1px solid #eadcf4;}
+#gameOverlay .kitchen-tools .tool-chip[data-ingredient]{background:linear-gradient(145deg,#fff,#f2faff);}
+#gameOverlay .kitchen-tools .tool-chip[data-ingredient].selected{border-color:#ff9ccf;background:#ffeaf5;}
+#gameOverlay .recipe-dots{display:flex;align-items:center;justify-content:center;gap:6px;min-width:50px;}
+#gameOverlay .recipe-dot{display:grid;place-items:center;width:35px;height:35px;border-radius:12px;background:#fff4fa;border:2px dashed #edc8e5;font-size:20px;}
+#gameOverlay .recipe-dot.filled{border-style:solid;background:#f0eaff;}
+#gameOverlay .world-pop{position:absolute;z-index:8;left:50%;top:47%;transform:translate(-50%,-50%) scale(.7);opacity:0;pointer-events:none;font-size:clamp(48px,9vw,96px);filter:drop-shadow(0 9px 8px #71446b44);transition:transform .22s,opacity .22s;}
+#gameOverlay .world-pop.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
+#gameOverlay .recipe-status{position:absolute;left:50%;bottom:clamp(150px,21vh,220px);transform:translateX(-50%);z-index:15;padding:8px 14px;border:2px solid #fff;border-radius:999px;background:#ffffffdf;color:#76578e;font-size:clamp(18px,2.6vw,27px);font-weight:1000;box-shadow:0 5px 18px #74528d22;pointer-events:none;white-space:nowrap;}
+#gameOverlay .tool-chip[aria-pressed="true"]{border-color:#ff9ccf;background:#ffe5f3;box-shadow:0 4px 0 #d98dbb77;}
+#gameOverlay .tool-tray .tool-chip{user-select:none;-webkit-user-select:none;}
+@media(orientation:landscape) and (min-width:700px){#gameOverlay .kitchen-tools{display:grid;grid-template-columns:auto auto auto;gap:7px;max-width:calc(100vw - 24px);}#gameOverlay .kitchen-tools .tool-row:first-child{border:0;padding:0}#gameOverlay .kitchen-tools .tool-row.ingredients{max-width:min(53vw,700px)}#gameOverlay .recipe-status{bottom:clamp(100px,16vh,145px)}}
+@media(orientation:portrait) and (min-height:700px){#gameOverlay .immersive-bottom{bottom:max(12px,env(safe-area-inset-bottom))}#gameOverlay .kitchen-tools{max-width:100%;gap:6px}#gameOverlay .kitchen-tools .tool-row.ingredients{max-width:100%}#gameOverlay .recipe-status{bottom:clamp(190px,25vh,250px)}}
+
 </style>
 </head>
 <body>
@@ -113,6 +132,7 @@ const games={
 };
 const order=Object.keys(games);
 let current="forest",progress=0,stickers=0,soundOn=true,renderer=null,scene=null,camera=null,raycaster=null,mouse=null,worldRoot=null,mascot=null,targets=[],targetMeshes=[],clock=null,animFrame=0,activeOutfit="fairy",shapeTarget="star",completed=false,particles=[],lastWidth=0;
+let currentBase="cake",recipeIngredients=[],bowlGroup=null,gardenTool="seed",grownFlowers=[],shapeRound=0,accessory="",dragPointer=null;
 try{stickers=Number(localStorage.getItem("candyPlanetStickers")||0)}catch(e){stickers=0}
 $("stickerTotal").textContent=stickers;
 
