@@ -43,3 +43,21 @@
 </main>
 <div class="overlay" id="gameOverlay" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"><section class="dialog"><header class="dialog-head"><div class="dialog-title"><div class="dialog-icon" id="dialogIcon">🌟</div><div><h2 id="dialogTitle">星星森林寻宝</h2><p id="dialogSubtitle">和星芽一起玩一会儿</p></div></div><button class="close-button" id="closeGame" aria-label="返回游戏大厅">×</button></header>
 <div class="game-layout"><div class="scene-wrap" id="sceneWrap"><canvas id="worldCanvas" aria-label="可互动的3D游戏世界"></canvas><div class="scene-hint" id="sceneHint">👆 点一点发光的星星</div><div class="scene-progress" id="sceneProgress">⭐ 0 / 5</div><div class="reward-screen" id="rewardScreen"><div class="reward-sparkle">🎉✨</div><h2 id="rewardTitle">太棒啦！</h2><p id="rewardText">你找到所有星星啦！</p><button class="primary-button" id="playAgain">再玩一次 ↻</button><div class="sticker-count" id="rewardSticker">🎖️ 获得一枚星星贴纸</div></div></div>
+<aside class="game-side"><section class="mission"><div class="mission-kicker">✨ 小小任务</div><h3 id="missionTitle">收集 5 颗星星</h3><p id="missionText">点击场景里闪闪发光的星星。没有时间限制，慢慢来！</p><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></section><section class="buddy-card"><div class="buddy-face">🐰</div><div><strong>星芽陪你玩</strong><small id="buddyLine">你想先点哪里都可以！</small></div></section><div class="shape-prompt" id="shapePrompt" hidden>请找出：⭐ 星星</div><div class="fashion-options" id="fashionOptions" hidden><button class="fashion-choice selected" data-outfit="fairy"><span>🧚</span>星光精灵</button><button class="fashion-choice" data-outfit="ocean"><span>🧜‍♀️</span>海洋公主</button><button class="fashion-choice" data-outfit="garden"><span>🌷</span>花园漫步</button></div><div class="actions"><button class="action-button primary" id="hintButton">✨ 给我提示</button><button class="action-button blue" id="resetButton">↻ 重新开始</button><button class="action-button green" id="homeButton">🏡 回到大厅</button><button class="action-button" id="nextWorldButton">🎲 随便逛逛</button></div></aside></div></section></div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const games={
+ forest:{title:"星星森林寻宝",icon:"🌳",subtitle:"森林里藏着亮晶晶的小礼物",mission:"收集 5 颗星星",desc:"点一点场景里闪闪发光的星星。没有时间限制，慢慢来！",hint:"找一找金黄色、会发光的小星星 ✨",goal:5,kind:"collect",theme:"forest"},
+ ocean:{title:"泡泡海湾",icon:"🐬",subtitle:"和海底朋友一起玩耍",mission:"戳破 5 个泡泡",desc:"轻轻点点透明泡泡，让它们变成小小水花！",hint:"找找蓝色海水里的透明圆泡泡 🫧",goal:5,kind:"bubble",theme:"ocean"},
+ fashion:{title:"云朵换装屋",icon:"👗",subtitle:"今天的星芽想穿什么呢？",mission:"试穿 3 套漂亮造型",desc:"选择你最喜欢的造型，星芽会换上新衣服！",hint:"试试三种不同的造型，每种都很漂亮 💖",goal:3,kind:"fashion",theme:"fashion"},
+ garden:{title:"魔法花园",icon:"🌻",subtitle:"种下一颗小小的希望",mission:"种好 3 盆小花",desc:"点击空花盆，种下种子，再看花朵长大！",hint:"找一找地面上的小花盆，点它就能种花 🌷",goal:3,kind:"garden",theme:"garden"},
+ kitchen:{title:"糖果小厨房",icon:"🧁",subtitle:"做一份送给好朋友的点心",mission:"收集 3 种点心材料",desc:"点击你喜欢的水果和甜点材料，装进彩虹碗！",hint:"点一点击厨房里的水果、糖果和饼干 🍓",goal:3,kind:"kitchen",theme:"kitchen"},
+ shapes:{title:"星星积木工坊",icon:"🧩",subtitle:"用眼睛发现形状的小秘密",mission:"找到 3 个目标形状",desc:"看一看提示，点击和它一样的3D积木。",hint:"看左边提示是什么形状，再去找同样的积木 🔎",goal:3,kind:"shapes",theme:"shapes"}
+};
+const order=Object.keys(games);
+let current="forest",progress=0,stickers=0,soundOn=true,renderer=null,scene=null,camera=null,raycaster=null,mouse=null,worldRoot=null,mascot=null,targets=[],targetMeshes=[],clock=null,animFrame=0,activeOutfit="fairy",shapeTarget="star",completed=false,particles=[],lastWidth=0;
+try{stickers=Number(localStorage.getItem("candyPlanetStickers")||0)}catch(e){stickers=0}
+$("stickerTotal").textContent=stickers;
