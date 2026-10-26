@@ -199,5 +199,5 @@ if(toyMarble&&toyMarble.userData.running){const elapsed=t-toyMarble.userData.sta
 particles=particles.filter(p=>{p.position.x+=p.userData.vx;p.position.y+=p.userData.vy;p.position.z+=p.userData.vz;p.userData.vy-=.003;p.userData.life-=.025;p.scale.multiplyScalar(.97);if(p.userData.life<=0){disposeGroup(p);return false}return true});
 if(root){root.children.forEach((o,i)=>{if(o.userData.floatPhase!==undefined)o.position.y=3.8+Math.sin(t*1.7+o.userData.floatPhase)*.12})}
 renderer.render(scene,camera)}
-init3D();buildTown();setupEvents();animate();
+init3D();buildTown();setupEvents();animate();if("serviceWorker" in navigator&&location.protocol!=="file:"){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}))}
 })();
