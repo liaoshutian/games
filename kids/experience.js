@@ -176,3 +176,30 @@ window.addEventListener("pointermove",e=>{if(!dragIngredient)return;const d=drag
 window.addEventListener("pointerup",e=>{if(!dragIngredient)return;const d=dragIngredient;dragIngredient=null;if(d.dragging){const r=$("scene").getBoundingClientRect();if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom)addIngredient(d.kind);suppressIngredientClick=true;setTimeout(()=>suppressIngredientClick=false,180)}},{capture:true});
 $("mixButton").addEventListener("click",()=>{if(currentWorld!=="bakery")return;if(ingredients.length<2){pop("🥣🍓");playSfx("curious");return}playSfx("twirl");animateActor(mascot,"twirl",.9);if(dishGroup){dishGroup.rotation.y+=Math.PI*2;dishGroup.scale.setScalar(1.05);setTimeout(()=>{if(dishGroup)dishGroup.scale.setScalar(1)},350)}pop("🥣✨")});
 $("bakeButton").addEventListener("click",cookDish);$("clearButton").addEventListener("click",()=>{ingredients=[];updateDish();updateRecipe();playSfx("pop");pop("🧹✨")});$("newGuestButton").addEventListener("click",chooseGuest);
+
+document.querySelectorAll("[data-garden-tool]").forEach(b=>b.addEventListener("click",()=>{gardenTool=b.dataset.gardenTool;document.querySelectorAll("[data-garden-tool]").forEach(x=>x.classList.toggle("selected",x===b));playSfx("pop");pop(({seed:"🌰",water:"💧",sun:"☀️",harvest:"🧺"})[gardenTool])}));
+document.querySelectorAll("[data-ocean-tool]").forEach(b=>b.addEventListener("click",()=>{oceanTool=b.dataset.oceanTool;document.querySelectorAll("[data-ocean-tool]").forEach(x=>x.classList.toggle("selected",x===b));playSfx("bubble");pop(({bubble:"🫧",feed:"🐠",clean:"🌿",shell:"🐚"})[oceanTool])}));
+$("forestLantern").addEventListener("click",()=>{const fires=targets.filter(t=>t.userData.targetType==="firefly"&&!t.userData.done);fires.forEach(t=>t.traverse(o=>{if(o.isMesh&&o.material.emissive)o.material.emissive.set("#fff2a0")}));playSfx("sparkle");animateActor(mascot,"wave",.9);pop("🏮✨")});
+$("forestCall").addEventListener("click",()=>{animateActor(mascot,"wave",1);const h=targets.find(t=>t.userData.targetType==="hedgehog"&&!t.userData.done);if(h)animateActor(h,"curious",1);playSfx("cheer");pop("🐿️💗")});
+$("forestBasket").addEventListener("click",()=>{const t=targets.find(t=>["forestStar","firefly"].includes(t.userData.targetType)&&!t.userData.done);if(t)handleTarget(t);else pop("🧺✨")});
+$("dressPose").addEventListener("click",()=>{animateActor(mascot,"twirl",1.4);playSfx("cheer");pop("📸✨");foundItems++;addStar(1);updateProgress("💖");if(foundItems>=worlds.dress.goal)setTimeout(()=>finishWorld("👑💖✨"),1200)});
+document.querySelectorAll("[data-outfit]").forEach(b=>b.addEventListener("click",()=>{if(currentWorld!=="dress")return;setOutfit(b.dataset.outfit);foundItems++;updateProgress("💖");if(foundItems>=worlds.dress.goal)setTimeout(()=>finishWorld("👗💖✨"),1200)}));
+document.querySelectorAll("[data-accessory]").forEach(b=>b.addEventListener("click",()=>{if(currentWorld==="dress")addAccessory(b.dataset.accessory)}));
+document.querySelectorAll("[data-toy-piece]").forEach(b=>b.addEventListener("click",()=>{shapeType=b.dataset.toyPiece;document.querySelectorAll("[data-toy-piece]").forEach(x=>x.classList.toggle("selected",x===b));playSfx("pop");pop(({block:"🧱",ramp:"🛝",gear:"⚙️",bridge:"🌉"})[shapeType])}));
+$("toyLaunch").addEventListener("click",launchToy);$("toyClear").addEventListener("click",()=>{toyPieces.slice().forEach(disposeGroup);toyPieces=[];if(toyMarble)disposeGroup(toyMarble);toyMarble=null;updateProgress("🧸");pop("🧹✨");playSfx("pop")});
+$("rewardContinue").addEventListener("click",goTown);
+$("scene").addEventListener("pointerdown",handleCanvasTap);
+}
+function animate(){requestAnimationFrame(animate);if(!renderer||!scene)return;const t=clock.getElapsedTime();actorList=actorList.filter(a=>a&&a.parent);actorList.forEach(a=>updateActor(a,t));
+if(mode==="town"&&mascot){mascot.position.x=mascot.userData.home.x+Math.sin(t*.45)*.12}
+butterflies.forEach((b,i)=>{const home=b.userData.home||b.position;b.position.set(home.x+Math.sin(t*1.7+i)*.32,home.y+Math.sin(t*3+i)*.18,home.z+Math.cos(t*1.5+i)*.2);if(b.userData.wings){b.userData.wings[0].rotation.y=Math.sin(t*18)*.7;b.userData.wings[1].rotation.y=-Math.sin(t*18)*.7}});
+targets.forEach((g,i)=>{if(g.userData.done)return;if(["forestStar","firefly","bubble"].includes(g.userData.targetType)){if(g.userData.homeY===undefined)g.userData.homeY=g.position.y;g.rotation.y=Math.sin(t*1.3+i)*.16;g.position.y=g.userData.homeY+Math.sin(t*2+i)*.05}});
+gardenPlots.forEach(p=>{if(p.userData.grow&&p.userData.plant){const q=Math.min(1,(t-p.userData.grow.start)/.9);p.userData.plant.scale.setScalar(q);if(q>=1)p.userData.grow=null}});
+movingThings.forEach((g,i)=>{const home=g.userData.home;if(home){g.position.x=home.x+Math.sin(t*1.3+i)*.65;g.position.y=home.y+Math.sin(t*2+i)*.12;g.rotation.y=Math.sin(t*1.8+i)*.16}});
+toyPieces.forEach((g,i)=>{if(g.userData.gear)g.rotation.y=t*1.8+i});
+if(toyMarble&&toyMarble.userData.running){const elapsed=t-toyMarble.userData.start;const pieces=toyPieces;if(pieces.length){const u=(elapsed%2.4)/2.4*(pieces.length-1),i=Math.floor(u),q=u-i,a=pieces[i].position,b=pieces[Math.min(i+1,pieces.length-1)].position;toyMarble.position.set(a.x+(b.x-a.x)*q,1.15+Math.abs(Math.sin(q*Math.PI))*.55,a.z+(b.z-a.z)*q);if(elapsed>2.4){toyMarble.userData.running=false;burst(toyMarble.position.x,toyMarble.position.y,toyMarble.position.z,"#ffd56e",20);playSfx("cheer");pop("🚂✨")}}}
+particles=particles.filter(p=>{p.position.x+=p.userData.vx;p.position.y+=p.userData.vy;p.position.z+=p.userData.vz;p.userData.vy-=.003;p.userData.life-=.025;p.scale.multiplyScalar(.97);if(p.userData.life<=0){disposeGroup(p);return false}return true});
+if(root){root.children.forEach((o,i)=>{if(o.userData.floatPhase!==undefined)o.position.y=3.8+Math.sin(t*1.7+o.userData.floatPhase)*.12})}
+renderer.render(scene,camera)}
+init3D();buildTown();setupEvents();animate();
+})();
