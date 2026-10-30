@@ -2,6 +2,8 @@
   --ink: #294c47;
   --mint: #2d8872;
   --cream: #f7f5eb;
+  --tool-width: 88px;
+  --tool-height: 96px;
   --safe-top: max(18px, env(safe-area-inset-top));
   --safe-bottom: max(16px, env(safe-area-inset-bottom));
 }
@@ -381,7 +383,7 @@ a {
 }
 .dock-wrap {
   position: absolute;
-  bottom: calc(var(--safe-bottom) + 48px);
+  bottom: calc(var(--safe-bottom) + 20px);
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
@@ -392,18 +394,18 @@ a {
   gap: 10px;
 }
 #caption {
-  font-size: 14px;
+  font-size: 16px;
   letter-spacing: 1px;
   font-weight: 650;
   color: #5f7b6b;
-  min-height: 20px;
+  min-height: 24px;
   text-shadow: 0 1px white;
 }
 #dock {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 14px;
   padding: 14px 18px;
   background: #fffcf4f2;
   border: 2px solid #fff;
@@ -413,8 +415,8 @@ a {
   pointer-events: auto;
 }
 .tool {
-  width: 72px;
-  height: 76px;
+  width: var(--tool-width);
+  height: var(--tool-height);
   flex-shrink: 0;
   position: relative;
   background: #f0f1e4;
@@ -428,11 +430,11 @@ a {
   box-shadow: 0 3px 0 #3c59300b;
 }
 .tool .emoji {
-  font-size: 31px;
+  font-size: 42px;
   line-height: 1.2;
 }
 .tool .text {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 650;
   color: #637465;
   letter-spacing: 0.5px;
@@ -446,8 +448,8 @@ a {
   position: absolute;
   top: -5px;
   right: 2px;
-  width: 19px;
-  height: 19px;
+  width: 24px;
+  height: 24px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -467,14 +469,17 @@ a {
 }
 #secondary {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+  gap: 14px;
   align-items: center;
   pointer-events: auto;
 }
 #secondary .tool {
-  min-width: 64px;
-  min-height: 64px;
-  height: 76px;
+  min-width: var(--tool-width);
+  min-height: var(--tool-height);
+  height: var(--tool-height);
 }
 #gameFooter {
   position: absolute;
@@ -489,11 +494,11 @@ a {
   letter-spacing: 0.8px;
 }
 #restartBtn {
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 80px;
   background: #fffaf1c0;
-  border-radius: 24px;
-  font-size: 27px;
+  border-radius: 50%;
+  font-size: 34px;
 }
 #labels {
   position: absolute;
@@ -590,9 +595,9 @@ a {
   position: absolute;
   right: 14px;
   top: 14px;
-  width: 52px;
-  height: 52px;
-  font-size: 29px;
+  width: 80px;
+  height: 80px;
+  font-size: 36px;
 }
 .modal-card h2 {
   font-size: 27px;
@@ -615,12 +620,12 @@ a {
   margin-top: 24px;
 }
 #modalActions button {
-  min-width: 100px;
-  min-height: 64px;
+  min-width: 128px;
+  min-height: 88px;
   padding: 12px 24px;
   border-radius: 23px;
   background: #e6eddd;
-  font-size: 26px;
+  font-size: 36px;
 }
 #modalActions button.primary {
   background: var(--mint);
@@ -965,15 +970,15 @@ a {
     min-height: 44px;
   }
   .dock-wrap {
-    bottom: 60px;
-    gap: 5px;
+    bottom: calc(var(--safe-bottom) + 20px);
+    gap: 8px;
   }
   #dock {
     padding: 9px 14px;
   }
   .tool {
-    height: 72px;
-    width: 68px;
+    height: var(--tool-height);
+    width: var(--tool-width);
   }
   #caption {
     font-size: 12px;
@@ -986,5 +991,69 @@ a {
   *:after {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* Larger visible controls, with dedicated rows on narrower iPads. */
+.game-header .round {
+  width: 80px;
+  height: 80px;
+  font-size: 34px;
+}
+#dock:empty,
+#secondary:empty {
+  display: none;
+}
+@media (orientation: portrait) {
+  #steps {
+    top: 92px;
+  }
+  #task {
+    top: calc(var(--safe-top) + 172px);
+  }
+}
+@media (min-width: 701px) and (max-width: 900px) {
+  #dock[data-count="5"],
+  #dock[data-count="6"],
+  #dock[data-count="7"],
+  #dock[data-count="8"] {
+    display: grid;
+    grid-template-columns: repeat(4, var(--tool-width));
+    gap: 14px;
+    padding: 14px 18px;
+  }
+}
+@media (max-width: 700px) {
+  :root {
+    --tool-width: 80px;
+    --tool-height: 88px;
+  }
+  #dock {
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+  .tool {
+    width: var(--tool-width);
+    height: var(--tool-height);
+  }
+  #dock[data-count="4"],
+  #dock[data-count="5"],
+  #dock[data-count="6"],
+  #dock[data-count="7"],
+  #dock[data-count="8"] {
+    display: grid;
+    grid-template-columns: repeat(3, var(--tool-width));
+  }
+  .tool .emoji {
+    font-size: 38px;
+  }
+  .tool .text {
+    font-size: 13px;
+  }
+  .game-header .round,
+  #restartBtn {
+    width: 72px;
+    height: 72px;
+    font-size: 32px;
   }
 }

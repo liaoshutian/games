@@ -1,4 +1,4 @@
-const CACHE = "poolo-kids-v1.0.1";
+const CACHE = "poolo-kids-v1.0.2";
 const SHELL = [
   "./",
   "./index.html",
@@ -18,7 +18,7 @@ self.addEventListener("install", (event) =>
   event.waitUntil(
     (async () => {
       const c = await caches.open(CACHE);
-      await c.addAll(SHELL);
+      await c.addAll(SHELL.map((url) => new Request(url, { cache: "reload" })));
       await self.skipWaiting();
     })(),
   ),
@@ -50,7 +50,7 @@ self.addEventListener("fetch", (event) => {
     (async () => {
       const c = await caches.open(CACHE);
       try {
-        const r = await fetch(event.request);
+        const r = await fetch(event.request, { cache: "no-cache" });
         if (r.ok) await c.put(event.request, r.clone());
         return r;
       } catch {

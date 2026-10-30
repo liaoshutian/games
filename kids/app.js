@@ -180,6 +180,7 @@
     return b;
   }
   function dock(items, secondary = []) {
+    $("dock").dataset.count = String(items.length);
     $("dock").replaceChildren(...items.map(tool));
     $("secondary").replaceChildren(...secondary.map(tool));
     e.after(0.4, () => {

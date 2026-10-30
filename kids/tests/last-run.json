@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-30T06:46:22.049Z",
+  "date": "2026-10-30T07:44:44.383Z",
   "checks": [
     {
       "name": "Four homepage cards open their 3D worlds",
@@ -42,7 +42,7 @@
       "passed": true
     },
     {
-      "name": "Four iPad sizes keep tools on screen and at least 64px including 3D targets",
+      "name": "Four iPad sizes keep enlarged controls on screen (88px tools, 80px header)",
       "passed": true
     },
     {
@@ -58,5 +58,26 @@
       "passed": true
     }
   ],
-  "errors": []
+  "errors": [],
+  "controlsReview": {
+    "toolCSSPixels": [
+      88,
+      96
+    ],
+    "iconCSSPixels": 42,
+    "headerCSSPixels": [
+      80,
+      80
+    ],
+    "modalCloseCSSPixels": [
+      80,
+      80
+    ],
+    "resultActionMinimum": [
+      128,
+      88
+    ],
+    "portraitRows": "four columns for five to eight tools",
+    "focusedChecks": "popup sizing, restart action and fresh-worker offline reopening passed"
+  }
 }

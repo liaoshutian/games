@@ -340,7 +340,7 @@ async function cake({
       },
     );
     await check(
-      "Four iPad sizes keep tools on screen and at least 64px including 3D targets",
+      "Four iPad sizes keep enlarged controls on screen (88px tools, 80px header)",
       async () => {
         for (const v of [
           { width: 1133, height: 744 },
@@ -362,6 +362,7 @@ async function cake({
                   const r = b.getBoundingClientRect();
                   return {
                     id: b.id,
+                    tool: b.classList.contains("tool"),
                     x: r.x,
                     y: r.y,
                     w: r.width,
@@ -373,8 +374,8 @@ async function cake({
             );
             for (const r of bounds)
               assert.ok(
-                r.w >= 64 &&
-                  r.h >= 64 &&
+                r.w >= (r.tool ? 88 : 80) &&
+                  r.h >= (r.tool ? 96 : 80) &&
                   r.x >= 0 &&
                   r.y >= 0 &&
                   r.right <= v.width &&
