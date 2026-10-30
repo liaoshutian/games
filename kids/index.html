@@ -1,6 +1,154 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f7f5eb"><meta name="description" content="为3至6岁孩子设计的四个原创3D互动世界，和噗噜一起烘焙、种植、造车、照顾海洋朋友。"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="噗噜小世界"><title>噗噜小世界 · 玩出新发现</title><link rel="icon" href="./icon.svg"><link rel="apple-touch-icon" href="./apple-touch-icon.png"><link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./app.css"></head><body>
-<canvas id="scene" aria-label="噗噜的立体游戏世界"></canvas><div id="loading"><span>☁</span><strong>小世界正在醒来…</strong><small>● ● ●</small></div><div id="error" hidden><span>☁️</span><h1>小世界还没准备好</h1><p>请使用支持 WebGL 的 Safari 或 Chrome，重新打开试试。</p><button onclick="location.reload()">重新打开</button></div>
-<section id="home" class="screen"><header class="home-header"><div class="wordmark"><i>✳</i><div>噗噜小世界<small>POOLO'S LITTLE WORLD</small></div></div><div class="header-actions"><button id="albumBtn" class="round" aria-label="打开作品册">📒<b id="albumCount">0</b></button><button class="round sound" aria-label="切换声音">🔊</button><button id="parentBtn" class="round" aria-label="按住两秒打开家长设置">⚙</button></div></header><div class="hero"><div class="eyebrow">● &nbsp; FOR LITTLE EXPLORERS · 3–6</div><h1>小小世界，<br><em>大大奇遇。</em></h1><p>和噗噜一起，玩出新发现。</p><small>☁ &nbsp; 每一次好奇，都有小惊喜</small></div><div class="greeting">你好呀！ <em>♡</em></div>
-<nav class="worlds" aria-label="选择冒险世界"><button class="world-card bakery" data-world="bakery" aria-label="进入烘焙厨房"><div class="illustration"><i>✦</i><span>🧁</span><b>🍓</b></div><small>01 · MIX & BAKE</small><h2>烘焙厨房</h2><p>把好奇，烤成香香的</p><strong>↗</strong></button><button class="world-card garden" data-world="garden" aria-label="进入四季花园"><div class="illustration"><i>✧</i><span>🌷</span><b>🦋</b></div><small>02 · PLANT & GROW</small><h2>四季花园</h2><p>种一颗小小的期待</p><strong>↗</strong></button><button class="world-card workshop" data-world="workshop" aria-label="进入奇想车间"><div class="illustration"><i>✦</i><span>🚙</span><b>⚙️</b></div><small>03 · BUILD & GO</small><h2>奇想车间</h2><p>自己的车，自己造</p><strong>↗</strong></button><button class="world-card ocean" data-world="ocean" aria-label="进入蔚蓝海湾"><div class="illustration"><i>✧</i><span>🐢</span><b>🫧</b></div><small>04 · CARE & PLAY</small><h2>蔚蓝海湾</h2><p>认识温柔的海洋朋友</p><strong>↗</strong></button></nav><footer class="home-footer"><span>● &nbsp; 没有广告，只有小小的快乐</span><span>触碰一个小世界，冒险就开始啦 ✦</span></footer></section>
-<section id="game" class="screen" hidden><header class="game-header"><div class="game-brand"><button id="homeBtn" class="round" aria-label="回到首页">⌂</button><span id="worldIcon"></span><b id="worldName"></b></div><div id="steps" aria-label="游戏步骤"></div><div class="header-actions"><button id="helpBtn" class="round" aria-label="再看一次操作示范">💡</button><button class="round sound" aria-label="切换声音">🔊</button></div></header><div id="task" aria-live="polite"></div><div id="labels" aria-hidden="true"></div><div id="toast" role="status"></div><div id="guide" aria-hidden="true"><span>☝</span><i></i></div><div class="dock-wrap"><div id="caption"></div><div id="dock" role="toolbar" aria-label="当前工具"></div><div id="secondary"></div></div><footer id="gameFooter"><span id="hint"></span><button id="restartBtn" aria-label="重新开始当前游戏">↻</button></footer></section>
-<div id="modal" hidden><section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button id="modalClose" class="round close" aria-label="关闭">×</button><div id="modalArt"></div><h2 id="modalTitle"></h2><div id="modalBody"></div><div id="modalActions"></div></section></div><div id="sr" class="sr" aria-live="polite"></div><script src="./vendor/three.min.js" defer></script><script src="./rules.js" defer></script><script src="./engine.js" defer></script><script src="./app.js" defer></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#f7f5eb" />
+    <meta
+      name="description"
+      content="为3至6岁孩子设计的四个原创3D互动世界，和噗噜一起烘焙、种植、造车、照顾海洋朋友。"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="噗噜小世界" />
+    <title>噗噜小世界 · 玩出新发现</title>
+    <link rel="icon" href="./icon.svg" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./app.css" />
+  </head>
+  <body>
+    <canvas id="scene" aria-label="噗噜的立体游戏世界"></canvas>
+    <div id="loading">
+      <span>☁</span><strong>小世界正在醒来…</strong><small>● ● ●</small>
+    </div>
+    <div id="error" hidden>
+      <span>☁️</span>
+      <h1>小世界还没准备好</h1>
+      <p>请使用支持 WebGL 的 Safari 或 Chrome，重新打开试试。</p>
+      <button onclick="location.reload()">重新打开</button>
+    </div>
+    <section id="home" class="screen">
+      <header class="home-header">
+        <div class="wordmark">
+          <i>✳</i>
+          <div>噗噜小世界<small>POOLO'S LITTLE WORLD</small></div>
+        </div>
+        <div class="header-actions">
+          <button id="albumBtn" class="round" aria-label="打开作品册">
+            📒<b id="albumCount">0</b></button
+          ><button class="round sound" aria-label="切换声音">🔊</button
+          ><button
+            id="parentBtn"
+            class="round"
+            aria-label="按住两秒打开家长设置"
+          >
+            ⚙
+          </button>
+        </div>
+      </header>
+      <div class="hero">
+        <div class="eyebrow">● &nbsp; FOR LITTLE EXPLORERS · 3–6</div>
+        <h1>小小世界，<br /><em>大大奇遇。</em></h1>
+        <p>和噗噜一起，玩出新发现。</p>
+        <small>☁ &nbsp; 每一次好奇，都有小惊喜</small>
+      </div>
+      <div class="greeting">你好呀！ <em>♡</em></div>
+      <nav class="worlds" aria-label="选择冒险世界">
+        <button
+          class="world-card bakery"
+          data-world="bakery"
+          aria-label="进入烘焙厨房"
+        >
+          <div class="illustration"><i>✦</i><span>🧁</span><b>🍓</b></div>
+          <small>01 · MIX & BAKE</small>
+          <h2>烘焙厨房</h2>
+          <p>把好奇，烤成香香的</p>
+          <strong>↗</strong></button
+        ><button
+          class="world-card garden"
+          data-world="garden"
+          aria-label="进入四季花园"
+        >
+          <div class="illustration"><i>✧</i><span>🌷</span><b>🦋</b></div>
+          <small>02 · PLANT & GROW</small>
+          <h2>四季花园</h2>
+          <p>种一颗小小的期待</p>
+          <strong>↗</strong></button
+        ><button
+          class="world-card workshop"
+          data-world="workshop"
+          aria-label="进入奇想车间"
+        >
+          <div class="illustration"><i>✦</i><span>🚙</span><b>⚙️</b></div>
+          <small>03 · BUILD & GO</small>
+          <h2>奇想车间</h2>
+          <p>自己的车，自己造</p>
+          <strong>↗</strong></button
+        ><button
+          class="world-card ocean"
+          data-world="ocean"
+          aria-label="进入蔚蓝海湾"
+        >
+          <div class="illustration"><i>✧</i><span>🐢</span><b>🫧</b></div>
+          <small>04 · CARE & PLAY</small>
+          <h2>蔚蓝海湾</h2>
+          <p>认识温柔的海洋朋友</p>
+          <strong>↗</strong>
+        </button>
+      </nav>
+      <footer class="home-footer">
+        <span>● &nbsp; 没有广告，只有小小的快乐</span
+        ><span>触碰一个小世界，冒险就开始啦 ✦</span>
+      </footer>
+    </section>
+    <section id="game" class="screen" hidden>
+      <header class="game-header">
+        <div class="game-brand">
+          <button id="homeBtn" class="round" aria-label="回到首页">⌂</button
+          ><span id="worldIcon"></span><b id="worldName"></b>
+        </div>
+        <div id="steps" aria-label="游戏步骤"></div>
+        <div class="header-actions">
+          <button id="helpBtn" class="round" aria-label="再看一次操作示范">
+            💡</button
+          ><button class="round sound" aria-label="切换声音">🔊</button>
+        </div>
+      </header>
+      <div id="task" aria-live="polite"></div>
+      <div id="labels" aria-hidden="true"></div>
+      <div id="toast" role="status"></div>
+      <div id="guide" aria-hidden="true"><span>☝</span><i></i></div>
+      <div class="dock-wrap">
+        <div id="caption"></div>
+        <div id="dock" role="toolbar" aria-label="当前工具"></div>
+        <div id="secondary"></div>
+      </div>
+      <footer id="gameFooter">
+        <span id="hint"></span
+        ><button id="restartBtn" aria-label="重新开始当前游戏">↻</button>
+      </footer>
+    </section>
+    <div id="modal" hidden>
+      <section
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <button id="modalClose" class="round close" aria-label="关闭">×</button>
+        <div id="modalArt"></div>
+        <h2 id="modalTitle"></h2>
+        <div id="modalBody"></div>
+        <div id="modalActions"></div>
+      </section>
+    </div>
+    <div id="sr" class="sr" aria-live="polite"></div>
+    <script src="./vendor/three.min.js" defer></script>
+    <script src="./rules.js" defer></script>
+    <script src="./engine.js" defer></script>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

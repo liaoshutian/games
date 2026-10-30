@@ -1,63 +1,274 @@
 <!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#16082f">
-  <title>小游戏乐园</title>
-  <style>
-    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:ui-rounded,"Arial Rounded MT Bold","PingFang SC",system-ui,sans-serif;color:#fff}
-    body{min-height:100dvh;background:radial-gradient(circle at 18% 12%,#7552db 0,transparent 28%),radial-gradient(circle at 86% 70%,#c44cba44 0,transparent 28%),linear-gradient(145deg,#18082f,#0b1432);overflow-x:hidden}
-    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.55;background-image:radial-gradient(circle,#fff 0 1px,transparent 1.5px);background-size:46px 46px;mask-image:linear-gradient(#000,transparent 75%)}
-    main{position:relative;width:min(1100px,calc(100% - 36px));margin:auto;padding:max(42px,env(safe-area-inset-top)) 0 72px}
-    header{display:flex;align-items:center;gap:18px;margin-bottom:36px}
-    .logo{width:76px;height:76px;display:grid;place-items:center;border-radius:24px;font-size:42px;background:linear-gradient(145deg,#ff91dc,#885cff);border:2px solid #ffffff88;box-shadow:0 14px 32px #09001877,inset 0 1px #fff}
-    h1{margin:0;font-size:clamp(32px,6vw,54px);letter-spacing:.04em}p{margin:8px 0 0;color:#d9ccec;font-size:17px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px}
-    .card{position:relative;min-height:290px;display:flex;flex-direction:column;justify-content:flex-end;padding:28px;border-radius:34px;overflow:hidden;text-decoration:none;color:#fff;background:radial-gradient(circle at 75% 24%,#f6c2ffbb 0 4%,transparent 26%),linear-gradient(150deg,#854be6,#402080 58%,#21114f);border:2px solid #ffffff55;box-shadow:0 20px 55px #05000f88,inset 0 1px #ffffff88;transition:.25s ease}
-    .card:hover,.card:focus-visible{transform:translateY(-7px);box-shadow:0 28px 70px #05000faa,0 0 0 5px #ffffff33}.card:focus-visible{outline:3px solid #fff}
-    .card.market{background:radial-gradient(circle at 78% 18%,#2ba8c955 0 5%,transparent 30%),linear-gradient(150deg,#12314b,#0b172a 58%,#07101f);border-color:#70dff277}
-    .market-art{position:absolute;right:28px;top:26px;width:148px;height:148px;color:#68deef;filter:drop-shadow(0 14px 18px #020812)}
-    .market-art .amber{stroke:#f6b94a;fill:#f6b94a}.market-art .cyan{stroke:currentColor}
-    .art{position:absolute;inset:0 0 auto auto;width:70%;height:72%;display:grid;place-items:center;font-size:clamp(80px,14vw,145px);filter:drop-shadow(0 14px 12px #24064e);transform:rotate(5deg)}
-    .notes{position:absolute;inset:0;pointer-events:none}.notes i{position:absolute;font-style:normal;font-size:34px;color:#ffdff8;text-shadow:0 0 16px #fff}.notes i:nth-child(1){top:17%;left:12%}.notes i:nth-child(2){top:42%;right:12%;color:#9be2ff}.notes i:nth-child(3){top:8%;right:38%;color:#ffe889}
-    .tag{position:relative;width:max-content;padding:7px 13px;border-radius:999px;background:#ffffff22;border:1px solid #ffffff55;font-size:14px;margin-bottom:12px}
-    h2{position:relative;margin:0;font-size:29px}.play{position:absolute;right:24px;bottom:24px;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;padding-left:4px;background:linear-gradient(145deg,#ff94dd,#b44eff);border:3px solid #ffeaff;box-shadow:0 7px 0 #4e2080;font-size:28px}
-    @media(max-width:600px){main{width:min(100% - 24px,1100px);padding-top:24px}header{margin:8px 6px 28px}.logo{width:62px;height:62px;border-radius:20px;font-size:34px}.card{min-height:270px}}
-  </style>
-</head>
-<body>
-  <main>
-    <header><div class="logo">🎮</div><div><h1>小游戏乐园</h1><p>选择一个游戏开始玩</p></div></header>
-    <section class="grid" aria-label="游戏列表">
-      <a class="card kids" href="./kids/">
-        <div class="notes"><i>✦</i><i>♡</i><i>★</i></div>
-        <div class="art">🐰</div>
-        <span class="tag">3D · 6 款小游戏</span>
-        <h2>糖果星球</h2>
-        <p style="position:relative;color:#f1dfff;font-size:14px;max-width:260px;line-height:1.6">和原创伙伴星芽一起穿越森林、海底、花园与糖果世界。</p>
-        <span class="play">▶</span>
-      </a>
-      <a class="card" href="./mengke/">
-        <div class="notes"><i>♪</i><i>♫</i><i>★</i></div>
-        <div class="art">🐰</div>
-        <span class="tag">iPad · 音乐节奏</span>
-        <h2>星光萌可捕捉</h2>
-        <span class="play">▶</span>
-      </a>
-      <a class="card market" href="./tencent-weekly-k/">
-        <svg class="market-art" viewBox="0 0 160 160" fill="none" aria-hidden="true">
-          <path d="M28 18v118M72 34v108M118 12v126" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-          <rect x="18" y="48" width="20" height="50" rx="3" fill="#0b172a" stroke="currentColor" stroke-width="5"/>
-          <rect class="amber" x="62" y="59" width="20" height="45" rx="3" stroke-width="5"/>
-          <rect x="108" y="36" width="20" height="67" rx="3" fill="#0b172a" stroke="currentColor" stroke-width="5"/>
-          <path d="M14 144h132" stroke="#ffffff55" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <span class="tag">腾讯 · 完整周 K</span>
-        <h2>高点回撤对比</h2>
-        <span class="play">▶</span>
-      </a>
-    </section>
-  </main>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#f5f4ed" />
+    <title>Games · 项目目录</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f5f4ed;
+        color: #283e38;
+        font-family: "PingFang SC", system-ui, sans-serif;
+      }
+      main {
+        max-width: 1020px;
+        margin: auto;
+        padding: 64px 30px;
+      }
+      .eyebrow {
+        font:
+          12px ui-monospace,
+          monospace;
+        letter-spacing: 2px;
+        color: #768b80;
+      }
+      header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        margin: 25px 0 40px;
+        gap: 20px;
+      }
+      h1 {
+        font-size: 52px;
+        margin: 0;
+        font-weight: 650;
+        letter-spacing: -2px;
+      }
+      header p {
+        font-size: 14px;
+        color: #7d8c81;
+        line-height: 1.8;
+        margin: 0;
+      }
+      .featured {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 25px;
+        background: #e3e9d9;
+        border: 1px solid #d5ddca;
+        border-radius: 28px;
+        padding: 30px;
+        text-decoration: none;
+        color: inherit;
+        margin-bottom: 38px;
+      }
+      .featured .art {
+        font-size: 70px;
+      }
+      .featured small {
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: #6d8973;
+      }
+      .featured h2 {
+        margin: 10px 0;
+        font-size: 29px;
+      }
+      .featured p {
+        font-size: 14px;
+        color: #738474;
+        margin: 0;
+      }
+      .featured .go {
+        background: #2f7d65;
+        color: white;
+        padding: 17px 25px;
+        border-radius: 20px;
+        white-space: nowrap;
+        font-size: 15px;
+      }
+      .table-head {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        letter-spacing: 1px;
+        color: #899486;
+        margin-bottom: 15px;
+        padding: 0 18px;
+      }
+      .directory {
+        background: #fffdf6;
+        border: 1px solid #dfe3d7;
+        border-radius: 24px;
+        overflow: hidden;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 40px 1fr auto;
+        gap: 15px;
+        align-items: center;
+        padding: 23px 24px;
+        border-bottom: 1px solid #e9ecdf;
+        color: inherit;
+        text-decoration: none;
+        min-height: 88px;
+      }
+      .row:last-child {
+        border-bottom: 0;
+      }
+      .row:hover,
+      .row:focus-visible {
+        background: #edf2e3;
+        outline: 2px solid #63977b;
+        outline-offset: -3px;
+      }
+      .row .icon {
+        font-size: 25px;
+      }
+      .row strong {
+        font:
+          600 16px ui-monospace,
+          monospace;
+      }
+      .row small {
+        display: block;
+        font-size: 12px;
+        color: #8b9588;
+        margin-top: 6px;
+      }
+      .row .type {
+        font-size: 11px;
+        color: #8b9588;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .arrow {
+        font-size: 20px;
+        color: #67967c;
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        color: #929a8c;
+        font-size: 11px;
+        margin-top: 28px;
+        gap: 20px;
+      }
+      footer a {
+        color: #62816b;
+        text-decoration: none;
+      }
+      @media (max-width: 650px) {
+        main {
+          padding: 36px 20px;
+        }
+        header {
+          display: block;
+          margin-bottom: 28px;
+        }
+        h1 {
+          font-size: 42px;
+        }
+        header p {
+          margin-top: 14px;
+        }
+        .featured {
+          padding: 22px;
+          flex-wrap: wrap;
+          gap: 15px;
+        }
+        .featured .art {
+          font-size: 50px;
+        }
+        .featured h2 {
+          font-size: 24px;
+        }
+        .featured p {
+          font-size: 12px;
+        }
+        .featured .go {
+          margin-left: auto;
+        }
+        .row {
+          padding: 20px 17px;
+          grid-template-columns: 30px 1fr auto;
+          gap: 10px;
+        }
+        .kind {
+          display: none;
+        }
+        .row strong {
+          font-size: 14px;
+        }
+        .row small {
+          font-size: 11px;
+        }
+        footer {
+          line-height: 1.8;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="eyebrow">● &nbsp; LIAOSHUTIAN / GAMES</div>
+      <header>
+        <h1>项目目录<span style="color: #adbd9f">.</span></h1>
+        <p>小游戏、互动体验与实用工具<br />选择一个目录，打开它的小世界。</p>
+      </header>
+      <a class="featured" href="./kids/"
+        ><div class="art">☁️</div>
+        <div style="flex: 1">
+          <small>NEW · ORIGINAL 3D WORLDS</small>
+          <h2>噗噜小世界</h2>
+          <p>为 3–6 岁孩子设计的四个原创 3D 互动世界</p>
+        </div>
+        <span class="go">进入小世界 ↗</span></a
+      >
+      <div class="table-head">
+        <span>INDEX OF /GAMES</span><span>4 DIRECTORIES · 2 FILES</span>
+      </div>
+      <nav class="directory" aria-label="仓库目录索引">
+        <a class="row" href="./kids/"
+          ><span class="icon">📁</span
+          ><span
+            ><strong>kids/</strong
+            ><small>噗噜小世界 · 烘焙 / 花园 / 车间 / 海湾</small></span
+          ><span class="type"
+            ><span class="kind">儿童 3D 游戏</span
+            ><span class="arrow">↗</span></span
+          ></a
+        ><a class="row" href="./mengke/"
+          ><span class="icon">📁</span
+          ><span
+            ><strong>mengke/</strong
+            ><small>星光萌可捕捉 · 触屏小游戏</small></span
+          ><span class="arrow">↗</span></a
+        ><a class="row" href="./hongqiao/"
+          ><span class="icon">📁</span
+          ><span
+            ><strong>hongqiao/</strong
+            ><small>中国宏桥 · 经营与估值因子推演</small></span
+          ><span class="arrow">↗</span></a
+        ><a class="row" href="./tencent-weekly-k/"
+          ><span class="icon">📁</span
+          ><span
+            ><strong>tencent-weekly-k/</strong
+            ><small>腾讯 · 历史高点与周 K 回撤对比</small></span
+          ><span class="arrow">↗</span></a
+        ><a class="row" href="./README.md"
+          ><span class="icon">📄</span
+          ><span
+            ><strong>README.md</strong><small>仓库说明与项目入口</small></span
+          ><span class="arrow">↗</span></a
+        ><a class="row" href="./beijing-trip.ics"
+          ><span class="icon">📅</span
+          ><span><strong>beijing-trip.ics</strong><small>日历文件</small></span
+          ><span class="arrow">↓</span></a
+        >
+      </nav>
+      <footer>
+        <span>GitHub Pages · 所有项目独立运行</span
+        ><a href="https://github.com/liaoshutian/games">查看仓库 ↗</a>
+      </footer>
+    </main>
+  </body>
 </html>

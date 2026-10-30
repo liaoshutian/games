@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-30T06:46:22.049Z",
+  "checks": [
+    {
+      "name": "Four homepage cards open their 3D worlds",
+      "passed": true
+    },
+    {
+      "name": "Ingredient size and picture recipe guide remain correct",
+      "passed": true
+    },
+    {
+      "name": "Cake succeeds and rabbit eats the actual pieces",
+      "passed": true
+    },
+    {
+      "name": "Burnt, raw, missing-ingredient and unmixed results differ physically",
+      "passed": true
+    },
+    {
+      "name": "Cat rejects sweet recipe and leaves food visible",
+      "passed": true
+    },
+    {
+      "name": "Leaving cancels all delayed completion and reward callbacks",
+      "passed": true
+    },
+    {
+      "name": "Garden grows three species, recovers overwatering, removes bug and pollinates",
+      "passed": true
+    },
+    {
+      "name": "Hill failure changes to success after fitting larger wheels",
+      "passed": true
+    },
+    {
+      "name": "Water failure changes to success after fitting a boat hull",
+      "passed": true
+    },
+    {
+      "name": "Ocean completes trash, feeding, brushing, reverse coral repair, memory and high-five",
+      "passed": true
+    },
+    {
+      "name": "Four iPad sizes keep tools on screen and at least 64px including 3D targets",
+      "passed": true
+    },
+    {
+      "name": "Sound and album survive refresh; parent gate requires holding",
+      "passed": true
+    },
+    {
+      "name": "Same-origin cached game reopens offline",
+      "passed": true
+    },
+    {
+      "name": "No unhandled browser runtime errors",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

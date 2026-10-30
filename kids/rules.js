@@ -1,3 +1,91 @@
-(function(root){'use strict';const ingredients={flour:['面粉','🌾','#f8e7b7'],egg:['鸡蛋','🥚','#ffc452'],milk:['牛奶','🥛','#fff7ea'],berry:['草莓','🍓','#f57686'],cocoa:['可可','🍫','#95634f'],carrot:['胡萝卜','🥕','#f59a48'],cheese:['芝士','🧀','#f9cf63'],fish:['小鱼','🐟','#87ccd5'],honey:['蜂蜜','🍯','#f5b956'],mushroom:['蘑菇','🍄','#d29cb7']};function bake(base,items,mixed,heat,guest,toppings=[]){const has=k=>items.includes(k),structure=base==='cake'?has('flour')&&has('egg')&&has('milk'):base==='pizza'?has('flour')&&has('cheese'):has('milk')||has('mushroom')||has('carrot'),quality=heat===2?'burnt':heat===0?'raw':!structure?'flat':mixed<3?'lumpy':'good',sweet=has('berry')||has('honey'),fish=has('fish'),preference=guest==='rabbit'?!fish:guest==='cat'?!sweet:!(fish&&sweet);return{quality,likes:quality==='good'&&preference,favorite:({rabbit:['carrot','berry'],cat:['fish','cheese'],bear:['honey','cocoa']})[guest].some(k=>items.includes(k)||toppings.includes(k)),icon:({cake:'🧁',pizza:'🍕',soup:'🍲'})[base],guest,base,items:[...items],toppings:[...toppings]}}
-function drive(p,r){return{pass:r==='grass'||r==='hill'&&(p.wheels===1||p.roof===2)||r==='water'&&(p.body===1||p.wheels===2),icon:r==='hill'?'🛞':'🛶',speed:r==='water'&&p.roof===1?1.4:1}}
-function readSave(raw){try{const s=JSON.parse(raw);if(!s||typeof s!=='object')return null;return{stickers:Array.isArray(s.stickers)?s.stickers.filter(x=>x&&['bakery','garden','workshop','ocean'].includes(x.world)&&typeof x.icon==='string').slice(-48):[],sound:s.sound!==false,reduced:s.reduced===true}}catch{return null}}const api={ingredients,bake,drive,readSave};root.KidsRules=api;if(typeof module!=='undefined')module.exports=api})(typeof window!=='undefined'?window:globalThis);
+(function (root) {
+  "use strict";
+  const ingredients = {
+    flour: ["面粉", "🌾", "#f8e7b7"],
+    egg: ["鸡蛋", "🥚", "#ffc452"],
+    milk: ["牛奶", "🥛", "#fff7ea"],
+    berry: ["草莓", "🍓", "#f57686"],
+    cocoa: ["可可", "🍫", "#95634f"],
+    carrot: ["胡萝卜", "🥕", "#f59a48"],
+    cheese: ["芝士", "🧀", "#f9cf63"],
+    fish: ["小鱼", "🐟", "#87ccd5"],
+    honey: ["蜂蜜", "🍯", "#f5b956"],
+    mushroom: ["蘑菇", "🍄", "#d29cb7"],
+  };
+  function bake(base, items, mixed, heat, guest, toppings = []) {
+    const has = (k) => items.includes(k),
+      structure =
+        base === "cake"
+          ? has("flour") && has("egg") && has("milk")
+          : base === "pizza"
+            ? has("flour") && has("cheese")
+            : has("milk") || has("mushroom") || has("carrot"),
+      quality =
+        heat === 2
+          ? "burnt"
+          : heat === 0
+            ? "raw"
+            : !structure
+              ? "flat"
+              : mixed < 3
+                ? "lumpy"
+                : "good",
+      sweet = has("berry") || has("honey"),
+      fish = has("fish"),
+      preference =
+        guest === "rabbit"
+          ? !fish
+          : guest === "cat"
+            ? !sweet
+            : !(fish && sweet);
+    return {
+      quality,
+      likes: quality === "good" && preference,
+      favorite: {
+        rabbit: ["carrot", "berry"],
+        cat: ["fish", "cheese"],
+        bear: ["honey", "cocoa"],
+      }[guest].some((k) => items.includes(k) || toppings.includes(k)),
+      icon: { cake: "🧁", pizza: "🍕", soup: "🍲" }[base],
+      guest,
+      base,
+      items: [...items],
+      toppings: [...toppings],
+    };
+  }
+  function drive(p, r) {
+    return {
+      pass:
+        r === "grass" ||
+        (r === "hill" && (p.wheels === 1 || p.roof === 2)) ||
+        (r === "water" && (p.body === 1 || p.wheels === 2)),
+      icon: r === "hill" ? "🛞" : "🛶",
+      speed: r === "water" && p.roof === 1 ? 1.4 : 1,
+    };
+  }
+  function readSave(raw) {
+    try {
+      const s = JSON.parse(raw);
+      if (!s || typeof s !== "object") return null;
+      return {
+        stickers: Array.isArray(s.stickers)
+          ? s.stickers
+              .filter(
+                (x) =>
+                  x &&
+                  ["bakery", "garden", "workshop", "ocean"].includes(x.world) &&
+                  typeof x.icon === "string",
+              )
+              .slice(-48)
+          : [],
+        sound: s.sound !== false,
+        reduced: s.reduced === true,
+      };
+    } catch {
+      return null;
+    }
+  }
+  const api = { ingredients, bake, drive, readSave };
+  root.KidsRules = api;
+  if (typeof module !== "undefined") module.exports = api;
+})(typeof window !== "undefined" ? window : globalThis);

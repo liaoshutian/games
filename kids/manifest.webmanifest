@@ -1,1 +1,16 @@
-{"name":"糖果星球 · 星芽的奇妙旅程","short_name":"糖果星球","description":"为小小探险家设计的原创3D互动游戏宇宙。","start_url":"./","scope":"./","display":"standalone","orientation":"any","background_color":"#e8f6ff","theme_color":"#e8f6ff","lang":"zh-CN","categories":["games","education"],"icons":[{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
+{
+  "id": "./",
+  "name": "噗噜小世界",
+  "short_name": "噗噜小世界",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5eb",
+  "theme_color": "#f7f5eb",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
